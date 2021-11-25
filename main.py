@@ -6,8 +6,6 @@ from PySide6.QtWidgets import QFileDialog
 
 
 # https://stackoverflow.com/a/44508342
-
-
 class Label(QtWidgets.QWidget):
     def __init__(self, parent=None):
         QtWidgets.QWidget.__init__(self, parent=parent)
@@ -27,8 +25,9 @@ class Label(QtWidgets.QWidget):
 class MyWidget(QtWidgets.QWidget):
     def __init__(self, parent=None):
         QtWidgets.QWidget.__init__(self, parent=parent)
-        self.setFixedSize(QtCore.QSize(1280, 720))
+        # self.setFixedSize(QtCore.QSize(1280, 720))
         self.layout = QtWidgets.QVBoxLayout(self)
+        self.setWindowTitle("Facial Mask Detector")
 
         self.button = QtWidgets.QPushButton("Load image")
         self.label = QtWidgets.QLabel(self)
@@ -38,18 +37,17 @@ class MyWidget(QtWidgets.QWidget):
         self.button.clicked.connect(self.load_image)
 
     def load_image(self):
-        self.button.hide()
 
-        # username = getpass.getuser()
-
-        img = str(QFileDialog.getOpenFileNames(self,
+        basePath = "/users/" + getpass.getuser() + "/pictures"
+        img = QFileDialog.getOpenFileNames(self,
                                           "Open Image",
-                                          "/users/raphael/pictures",
-                                          "Image Files (*.png *.jpg *.bmp)")[0])
-        lb = Label(self)
-        imgPath = img[2:-2]
-        lb.setPixmap(QtGui.QPixmap(imgPath))
-        self.layout.addWidget(lb)
+                                          basePath,
+                                          "Image Files (*.png *.jpg *.bmp)")[0]
+        if len(img) > 0:
+            self.button.hide() #on peut toujours cliquer sur le bouton si on a pas ouvert d'image
+            for imgPath in img:
+                label = QtWidgets.QLabel(pixmap = QtGui.QPixmap(imgPath))
+                self.layout.addWidget(label)
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
