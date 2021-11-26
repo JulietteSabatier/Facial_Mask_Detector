@@ -1,43 +1,62 @@
-import getpass
 import sys
+from PySide6 import QtWidgets, QtCore, QtGui
+from PIL import ImageQt, Image
 
-from PySide6 import QtCore, QtWidgets, QtGui
-from PySide6.QtWidgets import QFileDialog
+
+class ImageAnnotator(QtWidgets.QMainWindow):  # main window
+    def __init__(self):
+        QtWidgets.QMainWindow.__init__(self)
+        self.Widget()
+
+    def Widget(self):
+        self.w = Widget()
+        self.setCentralWidget(self.w)
 
 
-# # https://stackoverflow.com/a/44508342
-
-class MyWidget(QtWidgets.QWidget):
+class Widget(QtWidgets.QWidget):
     def __init__(self, parent=None):
-        QtWidgets.QWidget.__init__(self, parent=parent)
-        # self.setFixedSize(QtCore.QSize(1280, 720))
-        self.layout = QtWidgets.QVBoxLayout(self)
-        self.setWindowTitle("Facial Mask Detector")
+        QtWidgets.QWidget.__init__(self, parent)
+        self.scene = QtWidgets.QGraphicsScene()
+        self.view = View(self.scene)
+        self.button = QtWidgets.QPushButton("load image")
 
-        self.button = QtWidgets.QPushButton("Load image")
-        self.label = QtWidgets.QLabel(self)
-
-        self.layout.addWidget(self.button)
+        layout = QtWidgets.QVBoxLayout()
+        layout.addWidget(self.button)
+        layout.addWidget(self.view)
+        self.setLayout(layout)
 
         self.button.clicked.connect(self.load_image)
 
     def load_image(self):
+        self.scene.clear()
+        img = QtWidgets.QFileDialog.getOpenFileNames(self,
+                                                     "Open Image",
+                                                     "/users/yannb/pictures",
+                                                     "Image Files (*.png *.jpg *.bmp)")[0]
+        imgPath = img[0]
+        image = Image.open(imgPath)
+        w, h = image.size
+        self.imgQ = ImageQt.ImageQt(image)  # we need to hold reference to imgQ
+        pixMap = QtGui.QPixmap.fromImage(self.imgQ)
+        self.scene.addPixmap(pixMap)
+        self.view.fitInView(QtCore.QRectF(0, 0, w, h), QtCore.Qt.KeepAspectRatio)
+        self.scene.update()
 
-        basePath = "/users/" + getpass.getuser() + "/pictures"
-        img = QFileDialog.getOpenFileNames(self,
-                                          "Open Image",
-                                          basePath,
-                                          "Image Files (*.png *.jpg *.bmp)")[0]
-        if len(img) > 0:
-            self.button.hide() #on peut toujours cliquer sur le bouton si on a pas ouvert d'image
-            for imgPath in img:
-                label = QtWidgets.QLabel(pixmap = QtGui.QPixmap(imgPath))
-                self.layout.addWidget(label)
 
-if __name__ == "__main__":
-    app = QtWidgets.QApplication([])
+class View(QtWidgets.QGraphicsView):
+    def mousePressEvent(self, event):
+        print("QGraphicsView mousePress")
 
-    widget = MyWidget()
-    widget.show()
+    def mouseMoveEvent(self, event):
+        print("QGraphicsView mouseMove")
 
+    def mouseReleaseEvent(self, event):
+        print("QGraphicsView mouseRelease")
+
+
+if __name__ == '__main__':
+    app = QtWidgets.QApplication(sys.argv)
+    imageAnnotator = ImageAnnotator()
+    imageAnnotator.resize(640, 480)
+    imageAnnotator.show()
     sys.exit(app.exec())
