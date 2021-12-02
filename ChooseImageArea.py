@@ -1,6 +1,4 @@
-import sys
-from PySide6 import QtWidgets, QtCore, QtGui
-from PIL import ImageQt, Image
+from PySide6 import QtWidgets
 from PySide6.QtCore import Slot, Qt
 
 

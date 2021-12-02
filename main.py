@@ -1,4 +1,5 @@
 import sys
+import getpass
 from PySide6 import QtWidgets, QtGui
 from PySide6.QtCore import Slot
 
@@ -107,9 +108,10 @@ class ImageAnnotator(QtWidgets.QMainWindow):  # main window
 
     @Slot()
     def load_image(self):
+        basePath = "/users/" + getpass.getuser() + "/pictures"
         img = QtWidgets.QFileDialog.getOpenFileNames(self,
                                                      "Open Image",
-                                                     "/user/julie/pictures",
+                                                     basePath,
                                                      "Image Files (*.png *.jpg *.bpm)")[0]
         if len(img) != 0:
             self.c.add_image(img)
