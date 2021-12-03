@@ -30,16 +30,12 @@ class ChooseImageArea(QtWidgets.QListWidget):
         self.setFixedWidth(150)
 
     @Slot()
-    def add_image(self, img):
-        #button = MyButton(img[0].split("/")[-1].split(".")[0])
+    def add_image(self, img_title: str):
 
-        button = QtWidgets.QPushButton(img[0].split("/")[-1].split(".")[0])
-        # Adjust size of the text in the button
+        button = QtWidgets.QListWidgetItem(img_title, self)
+        self.insertItem(1, button)
 
-        # Adjust size of the button in the area
-        button.setFixedWidth(120)
 
-        self.box.addWidget(button)
 
     @Slot()
     def delete_image(self):

@@ -1,4 +1,3 @@
-from Controller.ChooseImageAreaController import ChooseImageAreaController
 from Model import ModelAnnotator
 from View import MainWindow
 from Controller import MenuBarController

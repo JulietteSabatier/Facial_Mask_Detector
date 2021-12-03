@@ -31,8 +31,9 @@ class MenuBarController:
             self.main_model.add_image(image)
 
             # Envoyer les infos a la scroll area
-            self.main_view.get_choose_image_area().add_image(image.get_title())
+            self.main_view.get_choose_image_area().add_image(image.title)
 
+            # Envoyer les infos a au widget image
             self.main_view.w.scene.clear()
             img_path = image.path
             image = Image.open(img_path)
