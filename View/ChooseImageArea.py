@@ -6,12 +6,14 @@ from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QPushButton
 
 
-class MyButton(QPushButton):
+class MyButton(QtWidgets.QPushButton):
 
     def __init__(self, name):
         super(MyButton, self).__init__()
         self.setText(name)
         self.setContextMenuPolicy(Qt.ActionsContextMenu)
+        self.setToolTip(name)
+
         self.addAction(QAction("delete", self))
         self.show()
 
@@ -25,18 +27,13 @@ class ChooseImageArea(QtWidgets.QListWidget):
 
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        #self.setWidgetResizable(True)
-        #self.setWidget(self.widget)
         self.setFixedWidth(150)
 
-    @Slot()
     def add_image(self, img_title: str):
-
-        button = QtWidgets.QListWidgetItem(img_title, self)
+        button = MyButton(img_title)
+        list_widget = QtWidgets.QListWidget()
+        list_widget.addItem(button)
         self.insertItem(1, button)
 
-
-
-    @Slot()
     def delete_image(self):
         print("Delete image in the Scroll Area")
