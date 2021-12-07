@@ -1,13 +1,55 @@
+class Box:
+    def __init__(self, scene, x, y):
+        self.topLeft = Coordinates(x, y)
+        self.bottomRight = Coordinates(x, y)
+        self.width = 0
+        self.height = 0
+        self.scene = scene
+        self.box = self.scene.addRect(x, y, self.bottomRight.getX() - self.topLeft.getX(), self.bottomRight.getY() - self.topLeft.getY())
+
+
+    def update(self, eventPosX, eventPosY):
+        self.updateBottomRight(eventPosX, eventPosY)
+
+        self.width = self.bottomRight.getX() - self.topLeft.getX()
+        self.height = self.bottomRight.getY() - self.topLeft.getY()
+
+
+        self.box.setRect(self.topLeft.getX(),
+                                self.topLeft.getY(),
+                                self.width,
+                                self.height)
+
+        print("width = ", self.width, ", height = " , self.height, ", top left = ", self.topLeft.getX(), self.topLeft.getY(), ", bottom right = ", self.bottomRight.getX(), self.bottomRight.getY())
+
+    def updateTopLeft(self, newX, newY):
+        self.topLeft.setX(newX)
+        self.topLeft.setY(newY)
+
+    def updateBottomRight(self, newX, newY):
+        self.bottomRight.setX(newX)
+        self.bottomRight.setY(newY)
+
+    def getBox(self):
+        return self.box
+
+    def getTopLeft(self):
+        return self.topLeft
+
+    def getBottomRight(self):
+        return self.bottomRight
+
+    def getWidth(self):
+        return self.width
+
+    def getHeight(self):
+        return self.height
 
 
 class Coordinates:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-
-    def update(self, newX, newY):
-        self.setX(newX)
-        self.setY(newY)
 
     def getX(self):
         return self.x

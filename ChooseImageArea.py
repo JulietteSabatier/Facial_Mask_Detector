@@ -19,7 +19,8 @@ class ChooseImageArea(QtWidgets.QScrollArea):
 
     @Slot()
     def add_image(self, img):
-        button = QtWidgets.QPushButton(img[0].split("/")[-1].split(".")[0])
+        button = QtWidgets.QPushButton(img.split("/")[-1].split(".")[0])
+        button.path = img
         # Adjust size of the text in the button
         # Adjust size of the button in the area
         self.box.addWidget(button)

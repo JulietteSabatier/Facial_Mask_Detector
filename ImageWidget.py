@@ -33,48 +33,22 @@ class ImageWidget(QtWidgets.QWidget):  # Central Widget
 class View(QtWidgets.QGraphicsView):  # view of the image
     def __init__(self, parent = None):
         QtWidgets.QGraphicsView.__init__(self, parent)
-        self.startCurrentBox = Box.Coordinates(0, 0)
-        self.endCurrentBox = Box.Coordinates(0, 0)
         self.scene = parent
-        self.currentBox = self.scene.addRect(0, 0, 0, 0)
-
+        self.setAlignment(QtCore.Qt.AlignTop)
+        self.setAlignment(QtCore.Qt.AlignLeft)
+        self.currentBox = Box.Box(self.scene, 0.0, 0.0)
 
 
     def mousePressEvent(self, event):
-        print("QGraphicsView mousePress")
+        self.currentBox = Box.Box(self.scene, event.pos().x(), event.pos().y())
 
-        self.startCurrentBox.update(event.x(), event.y())
-        self.endCurrentBox.update(event.x(), event.y())
-        self.currentBox = self.scene.addRect(self.startCurrentBox.getX(),
-                                         self.startCurrentBox.getY(),
-                                         self.endCurrentBox.getX(),
-                                         self.endCurrentBox.getY())
+        print(self.currentBox.getTopLeft().getX(), self.currentBox.getTopLeft().getY())
+        print(event.pos().x(), event.pos().y())
 
-        print(self.startCurrentBox.getX(), self.startCurrentBox.getY())
 
     def mouseMoveEvent(self, event):
-        self.updateCurrentBox(event.x(), event.y())
+        self.currentBox.update(event.pos().x(), event.pos().y())
+
 
     def mouseReleaseEvent(self, event):
-        print("QGraphicsView mouseRelease")
-
-        self.updateCurrentBox(event.x(), event.y())
-        print(self.endCurrentBox.getX(), self.endCurrentBox.getY())
-
-        self.startCurrentBox.setX(0)
-        self.startCurrentBox.setY(0)
-        self.endCurrentBox.setX(0)
-        self.endCurrentBox.setY(0)
-
-    def updateCurrentBox(self, eventPosX, eventPosY):
-        self.endCurrentBox.update(eventPosX, eventPosY)
-
-        width = self.endCurrentBox.getX() - self.startCurrentBox.getX()
-        height = self.endCurrentBox.getY() - self.startCurrentBox.getY()
-
-        print("width = ", width, ", height = " , height)
-
-        self.currentBox.setRect(self.startCurrentBox.getX(),
-                                self.startCurrentBox.getY(),
-                                width,
-                                height)
+        self.currentBox.update(event.pos().x(), event.pos().y())

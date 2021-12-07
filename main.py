@@ -114,7 +114,8 @@ class ImageAnnotator(QtWidgets.QMainWindow):  # main window
                                                      basePath,
                                                      "Image Files (*.png *.jpg *.bpm)")[0]
         if len(img) != 0:
-            self.c.add_image(img)
+            for imgPath in img:
+                self.c.add_image(imgPath)
             self.w.load_image(img)
 
 if __name__ == '__main__':  # main
