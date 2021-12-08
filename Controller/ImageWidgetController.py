@@ -1,10 +1,15 @@
 from View import ImageWidget
 from Model import AnnotateImage
 from PIL import Image, ImageQt
-from PySide6 import QtGui, QtCore
+from PySide6 import QtGui, QtCore, QtWidgets
 
 
 def load_image(image_widget: ImageWidget, image: AnnotateImage):
+    layout = QtWidgets.QVBoxLayout()
+    layout.addWidget(image_widget.view)
+    image_widget.adjustSize()
+    image_widget.setLayout(layout)
+
     image_widget.scene.clear()
     img_path = image.path
     image = Image.open(img_path)

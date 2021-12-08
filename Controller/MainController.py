@@ -11,8 +11,7 @@ class MainController:
         self.main_view: MainWindow = main_view
 
         self.set_menu_bar_action()
-        self.main_view.choose_image_area.itemDoubleClicked.triggered.connect()
-        self.main_view.
+        # self.main_view.choose_image_area.itemDoubleClicked.triggered.connect()
 
 
     def set_menu_bar_action(self):
@@ -32,9 +31,9 @@ class MainController:
 
                 # Ajouter l'image dans la base
                 self.main_model.add_image(image)
-                # Envoyer les infos a la scroll area
+                # Envoyer les infos à la scroll area
                 ChooseImageAreaController.create_button(self.main_view.choose_image_area, image)
-                # Envoyer les infos a au widget image
+                # Envoyer les infos au widget image
                 ImageWidgetController.load_image(self.main_view.w, image)
 
     def delete_image(self, image: AnnotateImage):

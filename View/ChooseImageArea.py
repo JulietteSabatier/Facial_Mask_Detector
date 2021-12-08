@@ -1,9 +1,6 @@
-import sys
-from PySide6 import QtWidgets, QtCore, QtGui
-from PIL import ImageQt, Image
-from PySide6.QtCore import Slot, Qt
+from PySide6 import QtWidgets
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction
-from PySide6.QtWidgets import QPushButton
 
 
 class MyButton(QtWidgets.QPushButton):
@@ -32,8 +29,8 @@ class ChooseImageArea(QtWidgets.QListWidget):
     def add_image(self, img_title: str):
         button = MyButton(img_title)
         list_widget = QtWidgets.QListWidget()
-        list_widget.addItem(button)
-        self.insertItem(1, button)
+        list_widget.addItem(button.text())
+        self.insertItem(1, button.text())
 
     def delete_image(self):
         print("Delete image in the Scroll Area")

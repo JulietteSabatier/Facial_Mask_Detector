@@ -1,3 +1,5 @@
+import getpass
+
 from PySide6 import QtWidgets
 from PySide6 import QtGui
 
@@ -64,7 +66,9 @@ class MenuBar(QtWidgets.QMenuBar):
         self.addMenu(self.save)
 
     def widget_load_image(self):
-        image = QtWidgets.QFileDialog.getOpenFileNames(self, "Open Image",
-                                                       "/user/julie/pictures",
-                                                       "Image Files (*.png *.jpg *.bpm)")
+        basePath = "/users/" + getpass.getuser() + "/pictures"
+        image = QtWidgets.QFileDialog.getOpenFileNames(self,
+                                                     "Open Image",
+                                                     basePath,
+                                                     "Image Files (*.png *.jpg *.bpm)")
         return image

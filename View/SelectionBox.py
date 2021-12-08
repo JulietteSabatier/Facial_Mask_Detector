@@ -24,8 +24,6 @@ class Box:
                                 self.width,
                                 self.height)
 
-        print("width = ", self.width, ", height = " , self.height, ", top left = ", self.topLeft.getX(), self.topLeft.getY(), ", bottom right = ", self.bottomRight.getX(), self.bottomRight.getY())
-
     def updateTopLeft(self, newX, newY):
         self.topLeft.setX(newX)
         self.topLeft.setY(newY)
