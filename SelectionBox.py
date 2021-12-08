@@ -1,3 +1,6 @@
+from PySide6.QtGui import QPen, Qt
+from PySide6.QtWidgets import QGraphicsItem
+
 class Box:
     def __init__(self, scene, x, y):
         self.topLeft = Coordinates(x, y)
@@ -5,7 +8,8 @@ class Box:
         self.width = 0
         self.height = 0
         self.scene = scene
-        self.box = self.scene.addRect(x, y, self.bottomRight.getX() - self.topLeft.getX(), self.bottomRight.getY() - self.topLeft.getY())
+        self.box = self.scene.addRect(x, y, self.bottomRight.getX() - self.topLeft.getX(), self.bottomRight.getY() - self.topLeft.getY(), QPen(Qt.blue))
+        # self.box.setFlag(QGraphicsItem.ItemIsMovable)
 
 
     def update(self, eventPosX, eventPosY):
