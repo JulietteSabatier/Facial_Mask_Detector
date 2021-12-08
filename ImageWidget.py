@@ -11,6 +11,10 @@ class ImageWidget(QtWidgets.QWidget):  # Central Widget
         QtWidgets.QWidget.__init__(self, parent)
         self.scene = QtWidgets.QGraphicsScene()
         self.view = View(self.scene)
+        self.view.setSceneRect(QtCore.QRectF(0, 0, self.scene.width(), self.scene.height()))
+        # cette ligne positionne les rectangle correctement (sur une scene vide uniquement) mais casse le layout global
+        # self.view.setSceneRect(QtCore.QRectF(0, 0, self.width(), self.height()))
+
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.view)
         self.adjustSize()
@@ -27,6 +31,7 @@ class ImageWidget(QtWidgets.QWidget):  # Central Widget
             pixMap = QtGui.QPixmap.fromImage(self.imgQ)
             self.scene.addPixmap(pixMap)
             self.view.fitInView(QtCore.QRectF(0, 0, w, h), QtCore.Qt.KeepAspectRatio)
+            self.view.setSceneRect(QtCore.QRectF(0, 0, w, h))
         self.scene.update()
 
 
@@ -37,7 +42,6 @@ class View(QtWidgets.QGraphicsView):  # view of the image
         self.setAlignment(QtCore.Qt.AlignTop)
         self.setAlignment(QtCore.Qt.AlignLeft)
         self.currentBox = Box.Box(self.scene, 0.0, 0.0)
-
 
     def mousePressEvent(self, event):
         self.currentBox = Box.Box(self.scene, event.pos().x(), event.pos().y())
