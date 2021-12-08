@@ -67,6 +67,6 @@ class MenuBar(QtWidgets.QMenuBar):
 
     def widget_load_image(self):
         image = QtWidgets.QFileDialog.getOpenFileNames(self, "Open Image",
-                                                       "/user/julie/pictures",
+                                                       "Images",
                                                        "Image Files (*.png *.jpg *.bpm)")
         return image
