@@ -1,11 +1,11 @@
-import Model.AnnotateImage as Image
+from Model.annotate_image import AnnotateImage
 
 
 class ModelAnnotator:
     category_list: list[str]
-    image_list: list[Image]
+    image_list: list[AnnotateImage]
 
-    def __init__(self, category_list: (list[str]), image_list: (list[Image])):
+    def __init__(self, category_list: (list[str]), image_list: (list[AnnotateImage])):
         self.category_list = category_list
         self.image_list = image_list
 
@@ -15,10 +15,10 @@ class ModelAnnotator:
     def get_image_list(self):
         return self.image_list
 
-    def add_image(self, image: Image):
+    def add_image(self, image: AnnotateImage):
         self.image_list.append(image)
 
-    def delete_image(self, image: Image):
+    def delete_image(self, image: AnnotateImage):
         self.image_list.remove(image)
 
     def delete_image_by_name(self, name: str):

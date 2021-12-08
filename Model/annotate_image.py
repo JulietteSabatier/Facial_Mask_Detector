@@ -1,4 +1,4 @@
-import Model.Annotation as Annotation
+from Model.annotation import Annotation
 
 
 class AnnotateImage:

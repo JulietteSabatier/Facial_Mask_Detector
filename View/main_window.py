@@ -1,29 +1,28 @@
 from PySide6 import QtWidgets, QtGui
 from PySide6.QtCore import Slot
 
-import View.MenuBar
+from View.menu_bar import MenuBar
 
-from Model import ModelAnnotator
-from View.ChooseImageArea import ChooseImageArea
-from View.ImageWidget import ImageWidget
+from Model.model_annotator import ModelAnnotator
+from View.choose_image_area import ChooseImageArea
+from View.image_widget import ImageWidget
 
 
-
-class ImageAnnotator(QtWidgets.QMainWindow):  # main window
+class MainWindow(QtWidgets.QMainWindow):  # main window
     model_annotator: ModelAnnotator
 
     def __init__(self, model_annotator: ModelAnnotator):
-        super(ImageAnnotator, self).__init__()
+        super(MainWindow, self).__init__()
         self.model_annotator = model_annotator
 
-        self.w = ImageWidget()
+        self.image_widget = ImageWidget()
         self.choose_image_area: ChooseImageArea = ChooseImageArea()
-        self.menu_bar = View.MenuBar.MenuBar()
+        self.menu_bar = MenuBar()
 
         # Main Widget and layout
         page_layout = QtWidgets.QHBoxLayout()
         page_layout.addWidget(self.choose_image_area)
-        page_layout.addWidget(self.w)
+        page_layout.addWidget(self.image_widget)
         central_widget = QtWidgets.QWidget()
         central_widget.setLayout(page_layout)
 
@@ -49,5 +48,4 @@ class ImageAnnotator(QtWidgets.QMainWindow):  # main window
         return self.choose_image_area
 
     def get_image_widget(self):
-        return self.w
-
+        return self.image_widget

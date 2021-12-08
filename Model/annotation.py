@@ -1,4 +1,4 @@
-import Model.Position as Position
+from Model.position import Position
 
 
 class Annotation:

@@ -1,5 +1,5 @@
-from View import ImageWidget
-from Model import AnnotateImage
+from View.image_widget import ImageWidget
+from Model.annotate_image import AnnotateImage
 from PIL import Image, ImageQt
 from PySide6 import QtGui, QtCore
 

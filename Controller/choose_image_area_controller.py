@@ -1,5 +1,5 @@
-from View import ChooseImageArea
-from Model import AnnotateImage
+from View.choose_image_area import ChooseImageArea
+from Model.annotate_image import AnnotateImage
 
 
 def create_button(choose_image_area: ChooseImageArea, image: AnnotateImage):
