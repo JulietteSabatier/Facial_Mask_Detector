@@ -35,6 +35,7 @@ class ImageWidget(QtWidgets.QWidget):  # Central Widget
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.view)
         self.adjustSize()
+
         self.setLayout(layout)
         if len(img) > 0:
             self.scene.clear()
