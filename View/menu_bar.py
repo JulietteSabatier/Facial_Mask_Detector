@@ -2,6 +2,8 @@ from PySide6 import QtWidgets
 from PySide6 import QtGui
 
 
+# Créer la menu bar
+
 class MenuBar(QtWidgets.QMenuBar):
     image: QtWidgets.QMenu
     categories: QtWidgets.QMenu
@@ -13,8 +15,8 @@ class MenuBar(QtWidgets.QMenuBar):
         self.image = QtWidgets.QMenu("Image", self)
 
         # Load image
-        self.image.load_image = QtGui.QAction("Load Image", self)
-        self.image.addAction(self.image.load_image)
+        self.load_image_action = QtGui.QAction("Load Image", self)
+        self.image.addAction(self.load_image_action)
 
         # Delete Image
         delete_image = QtGui.QAction("Delete Image", self.image)

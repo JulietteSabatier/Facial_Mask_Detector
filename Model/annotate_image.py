@@ -1,5 +1,6 @@
 from Model.annotation import Annotation
 
+# Représentation des images annotées
 
 class AnnotateImage:
     path: str

@@ -3,6 +3,7 @@ from PySide6 import QtWidgets, QtCore, QtGui
 from PIL import ImageQt, Image
 from PySide6.QtCore import Slot, Qt
 
+# Créer le visuel du widget qui contient l'image à annoter
 
 class ImageWidget(QtWidgets.QWidget):  # Central Widget
 

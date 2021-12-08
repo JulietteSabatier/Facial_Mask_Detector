@@ -1,5 +1,6 @@
 from Model.annotate_image import AnnotateImage
 
+# Représente les data (liste de catégories et d'images annotés)
 
 class ModelAnnotator:
     category_list: list[str]

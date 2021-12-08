@@ -7,6 +7,7 @@ from Model.model_annotator import ModelAnnotator
 from View.choose_image_area import ChooseImageArea
 from View.image_widget import ImageWidget
 
+# Créer la main Window
 
 class MainWindow(QtWidgets.QMainWindow):  # main window
     model_annotator: ModelAnnotator

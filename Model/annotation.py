@@ -1,5 +1,6 @@
 from Model.position import Position
 
+# Représente les annotations
 
 class Annotation:
     title: str
