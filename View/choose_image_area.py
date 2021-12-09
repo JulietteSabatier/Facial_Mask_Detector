@@ -6,6 +6,8 @@ from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QPushButton
 
 
+
+
 # Créer le visuel de la scroll bar des nom des images
 
 class MyButton(QtWidgets.QPushButton):
@@ -29,8 +31,7 @@ class ChooseImageArea(QtWidgets.QListWidget):
         self.box = QtWidgets.QVBoxLayout()
         self.widget.setLayout(self.box)
 
-
-
+        #self.itemDoubleClicked.connect(ChooseImageAreaController)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setFixedWidth(150)

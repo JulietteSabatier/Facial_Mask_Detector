@@ -15,15 +15,15 @@ class ImageWidgetController:
         self.main_view = main_view
         self.main_model = main_model
 
-    def load_image(image_widget: ImageWidget, image: AnnotateImage):
-        image_widget.scene.clear()
+    def load_image(self, image: AnnotateImage):
+        self.main_view.image_widget.scene.clear()
         img_path = image.path
         image = Image.open(img_path)
         w, h = image.size
         img_q = ImageQt.ImageQt(image)
         pixmap = QtGui.QPixmap.fromImage(img_q)
-        image_widget.scene.addPixmap(pixmap)
-        image_widget.view.fitInView(QtCore.QRect(0, 0, w, h), QtCore.Qt.KeepAspectRatio)
-        image_widget.scene.update()
+        self.main_view.image_widget.scene.addPixmap(pixmap)
+        self.main_view.image_widget.view.fitInView(QtCore.QRect(0, 0, w, h), QtCore.Qt.KeepAspectRatio)
+        self.main_view.image_widget.scene.update()
 
         # If annotations load annotation

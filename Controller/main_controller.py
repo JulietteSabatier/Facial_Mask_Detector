@@ -2,8 +2,10 @@ from Model.annotate_image import AnnotateImage
 from Model.model_annotator import ModelAnnotator
 from View.main_window import MainWindow
 from View.menu_bar import MenuBar
+
 from Controller.menu_bar_controller import MenuBarController
-from Controller import image_widget_controller, choose_image_area_controller
+from Controller.image_widget_controller import ImageWidgetController
+from Controller.choose_image_area_controller import ChooseImageAreaController
 
 
 class MainController:
@@ -17,14 +19,19 @@ class MainController:
         self.main_view = main_view
 
         self.menu_bar_controller = MenuBarController(main_view, main_model)
+        self.image_widget_controller = ImageWidgetController(main_view, main_model)
+        self.choose_image_area_controller = ChooseImageAreaController(main_view, main_model)
 
-        self.set_menu_bar_action(main_view.menu_bar)
+        self.set_menu_bar_action()
+        self.set_image_widget_action()
+        self.set_choose_image_area_action()
 
-    def set_menu_bar_action(self, menu_bar: MenuBar):
-        menu_bar.load_image_action.triggered.connect(
+    def set_menu_bar_action(self):
+        self.main_view.menu_bar.load_image_action.triggered.connect(
             self.menu_bar_controller.load_image_menu_bar)
 
+    def set_image_widget_action(self):
+        return 0
 
-#    def delete_image(self, image: AnnotateImage):
-#        choose_image_area_controller.delete_button(self.main_view.choose_image_area, image)
-#        # si dans la graphicView la clear la graphic view
+    def set_choose_image_area_action(self):
+        self.main_view.choose_image_area.doubleClicked.connect(self.choose_image_area_controller.delete_button)
