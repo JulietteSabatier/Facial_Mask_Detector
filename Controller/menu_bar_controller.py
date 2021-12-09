@@ -20,6 +20,11 @@ class MenuBarController:
         self.main_view = main_view
         self.main_model = main_model
 
+
+    def show_all_categories(self):
+        return 0
+
+
     def load_image_menu_bar(self):
 
         # Charge un ou plusieurs images la dernière seulement s'affiche dans la graphicView

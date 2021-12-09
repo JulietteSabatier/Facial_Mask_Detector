@@ -24,9 +24,12 @@ class MyButton(QtWidgets.QPushButton):
 class ChooseImageArea(QtWidgets.QListWidget):
     def __init__(self, parent=None):
         QtWidgets.QListWidget.__init__(self, parent)
+
         self.widget = QtWidgets.QWidget()
         self.box = QtWidgets.QVBoxLayout()
         self.widget.setLayout(self.box)
+
+
 
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -35,6 +38,7 @@ class ChooseImageArea(QtWidgets.QListWidget):
     def add_image(self, img_title: str):
         #button = MyButton(img_title)
         widget_item = QtWidgets.QListWidgetItem(img_title)
+
         #self.setItemWidget(widget_item, button)
         self.insertItem(1, widget_item)
 

@@ -24,6 +24,7 @@ class MainController:
         menu_bar.load_image_action.triggered.connect(
             self.menu_bar_controller.load_image_menu_bar)
 
+
 #    def delete_image(self, image: AnnotateImage):
 #        choose_image_area_controller.delete_button(self.main_view.choose_image_area, image)
 #        # si dans la graphicView la clear la graphic view
