@@ -34,4 +34,7 @@ class MainController:
         return 0
 
     def set_choose_image_area_action(self):
-        self.main_view.choose_image_area.doubleClicked.connect(self.choose_image_area_controller.delete_button)
+        self.main_view.choose_image_area.doubleClicked.connect(lambda:
+                                                   self.image_widget_controller.load_image_widget(
+                                                       self.main_model.get_image_by_name(
+                                                           self.main_view.choose_image_area.currentItem().text())))

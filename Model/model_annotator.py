@@ -31,5 +31,9 @@ class ModelAnnotator:
     def delete_category(self, category: str):
         self.category_list.remove(category)
 
-
+    def get_image_by_name(self, name: str):
+        for i in range(len(self.image_list)):
+            if self.image_list[i].title == name:
+                return self.image_list[i]
+        return None
 

@@ -15,7 +15,7 @@ class ImageWidgetController:
         self.main_view = main_view
         self.main_model = main_model
 
-    def load_image(self, image: AnnotateImage):
+    def load_image_widget(self, image: AnnotateImage):
         self.main_view.image_widget.scene.clear()
         img_path = image.path
         image = Image.open(img_path)

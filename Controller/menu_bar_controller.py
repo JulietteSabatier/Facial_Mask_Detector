@@ -43,4 +43,4 @@ class MenuBarController:
                 # Envoyer les infos a la scroll area
                 ChooseImageAreaController.create_button(self.main_view.choose_image_area, image)
                 # Envoyer les infos a au widget image
-                ImageWidgetController.load_image(self, image)
+                ImageWidgetController.load_image_widget(self, image)
