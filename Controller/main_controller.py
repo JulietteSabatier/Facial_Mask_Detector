@@ -29,8 +29,19 @@ class MainController:
         self.set_choose_image_area_action()
 
     def set_menu_bar_action(self):
+        # Load image
         self.main_view.menu_bar.load_image_action.triggered.connect(
             self.menu_bar_controller.load_image_menu_bar)
+
+        # Import categories from csv
+        self.main_view.menu_bar.import_csv.triggered.connect(
+            self.menu_bar_controller.import_categories_from_csv
+        )
+
+        # Import categories from json
+        self.main_view.menu_bar.import_json.triggered.connect(
+            self.menu_bar_controller.import_categories_from_json
+        )
 
     def set_image_widget_action(self):
         return 0
@@ -50,3 +61,5 @@ class MainController:
         self.main_view.choose_image_area.rename_action.triggered.connect(
             self.choose_image_area_controller.rename_button
         )
+
+

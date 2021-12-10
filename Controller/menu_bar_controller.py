@@ -4,7 +4,7 @@ from Model.model_annotator import ModelAnnotator
 from Controller.choose_image_area_controller import ChooseImageAreaController
 from Controller.image_widget_controller import ImageWidgetController
 from View.main_window import MainWindow
-
+import csv
 
 # Définition des fonctions qui représentent les action de la menuBar
 
@@ -47,3 +47,17 @@ class MenuBarController:
                 self.choose_image_area_controller.create_button(image)
                 # Envoyer les infos a au widget image
                 self.image_widget_controller.load_image_widget(image)
+
+    def import_categories_from_csv(self):
+        categories = self.main_view.menu_bar.widget_import_categories_csv()
+
+        if len(categories[0]) != 0:
+            self.main_model.from_csv_to_categories(categories[0][0])
+
+
+    def import_categories_from_json(self):
+        categories = self.main_view.menu_bar.widget_import_categories_json()
+
+        if len(categories[0]) != 0:
+            return 0
+

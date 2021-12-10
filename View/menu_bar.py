@@ -15,10 +15,6 @@ class MenuBar(QtWidgets.QMenuBar):
         self.load_image_action = QtGui.QAction("Load Image", self)
         self.image.addAction(self.load_image_action)
 
-        # Delete Image
-        self.delete_image = QtGui.QAction("Delete Image", self.image)
-        self.image.addAction(self.delete_image)
-
         #  Categories
         self.categories = QtWidgets.QMenu("Categories", self)
 
@@ -67,3 +63,9 @@ class MenuBar(QtWidgets.QMenuBar):
                                                        "Images",
                                                        "Image Files (*.png *.jpg *.bpm)")
         return image
+
+    def widget_import_categories_csv(self):
+        return QtWidgets.QFileDialog.getOpenFileNames(self, "Open categories", "Categories", "Data files (*.csv)")
+
+    def widget_import_categories_json(self):
+        return QtWidgets.QFileDialog.getOpenFileNames(self, "Open categories", "Categories", "Data files (*.json)")

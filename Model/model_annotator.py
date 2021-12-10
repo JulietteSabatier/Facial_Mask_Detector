@@ -1,4 +1,6 @@
 from Model.annotate_image import AnnotateImage
+import csv
+
 
 # Représente les data (liste de catégories et d'images annotés)
 
@@ -37,3 +39,9 @@ class ModelAnnotator:
                 return self.image_list[i]
         return None
 
+    def from_csv_to_categories(self, path: str):
+        csv_file = open(path)
+        reader = csv.reader(csv_file, delimiter=';')
+        for row in reader:
+            for col in range(len(row)):
+                self.category_list.append(row[col])
