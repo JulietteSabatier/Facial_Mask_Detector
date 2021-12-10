@@ -18,7 +18,19 @@ class ChooseImageAreaController:
         self.main_view.choose_image_area.add_image(image.title)
 
     def delete_button(self):
-        print(self.main_model.image_list)
         name_image = self.main_view.choose_image_area.delete_image()
         self.main_model.delete_image_by_name(name_image)
-        print(self.main_model.image_list)
+
+    def rename_button(self):
+        # Get a new name
+        new_name = self.main_view.choose_image_area.rename_image_input()
+
+        # Get the image name
+        name_image = self.main_view.choose_image_area.currentItem().text()
+
+        # Change the name of the image in the model
+        image = self.main_model.get_image_by_name(name_image)
+        image.title = new_name
+
+        # Change the name on the view
+        self.main_view.choose_image_area.currentItem().setText(new_name)

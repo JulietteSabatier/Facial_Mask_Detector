@@ -45,3 +45,8 @@ class MainController:
         self.main_view.choose_image_area.remove_action.triggered.connect(
                     self.choose_image_area_controller.delete_button
         )
+
+        # Context menu : rename image
+        self.main_view.choose_image_area.rename_action.triggered.connect(
+            self.choose_image_area_controller.rename_button
+        )

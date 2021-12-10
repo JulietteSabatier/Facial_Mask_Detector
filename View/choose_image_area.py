@@ -30,10 +30,10 @@ class ChooseImageArea(QtWidgets.QListWidget):
         self.setFixedWidth(150)
 
         self.remove_action = QtGui.QAction("Delete")
+        self.rename_action = QtGui.QAction("Rename")
         self.setContextMenuPolicy(Qt.ActionsContextMenu)
         self.addAction(self.remove_action)
-
-
+        self.addAction(self.rename_action)
 
     def add_image(self, img_title: str):
         widget_item = QtWidgets.QListWidgetItem(img_title)
@@ -43,3 +43,9 @@ class ChooseImageArea(QtWidgets.QListWidget):
         item_image = self.takeItem(self.row(self.currentItem()))
         name_image = item_image.text()
         return name_image
+
+    def rename_image_input(self):
+        text, result = QtWidgets.QInputDialog.getText(self, "Rename ", "New name of the image: ")
+        if result:
+            return text
+
