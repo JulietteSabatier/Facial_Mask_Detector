@@ -6,21 +6,15 @@ from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QPushButton
 
 
-
-
 # Créer le visuel de la scroll bar des nom des images
 
-class MyButton(QtWidgets.QPushButton):
+class MyButton(QtWidgets.QListWidgetItem):
     # Pas encore fini
     def __init__(self, name):
         super(MyButton, self).__init__()
         inside_button = QtWidgets.QPushButton()
         self.setText(name)
         self.setToolTip(name)
-
-        self.setContextMenuPolicy(Qt.ActionsContextMenu)
-        self.addAction(QAction("delete", self))
-        self.show()
 
 
 class ChooseImageArea(QtWidgets.QListWidget):
@@ -31,17 +25,21 @@ class ChooseImageArea(QtWidgets.QListWidget):
         self.box = QtWidgets.QVBoxLayout()
         self.widget.setLayout(self.box)
 
-        #self.itemDoubleClicked.connect(ChooseImageAreaController)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setFixedWidth(150)
 
-    def add_image(self, img_title: str):
-        #button = MyButton(img_title)
-        widget_item = QtWidgets.QListWidgetItem(img_title)
+        self.remove_action = QtGui.QAction("Delete")
+        self.setContextMenuPolicy(Qt.ActionsContextMenu)
+        self.addAction(self.remove_action)
 
-        #self.setItemWidget(widget_item, button)
+
+
+    def add_image(self, img_title: str):
+        widget_item = QtWidgets.QListWidgetItem(img_title)
         self.insertItem(1, widget_item)
 
     def delete_image(self):
-        print("Delete image in the Scroll Area")
+        item_image = self.takeItem(self.row(self.currentItem()))
+        name_image = item_image.text()
+        return name_image

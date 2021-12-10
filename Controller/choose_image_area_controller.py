@@ -14,10 +14,11 @@ class ChooseImageAreaController:
         self.main_model = main_model
         self.main_view = main_view
 
-
-
-    def create_button(choose_image_area: ChooseImageArea, image: AnnotateImage):
-        choose_image_area.add_image(image.title)
+    def create_button(self, image: AnnotateImage):
+        self.main_view.choose_image_area.add_image(image.title)
 
     def delete_button(self):
-        print("Delete button in scroll area")
+        print(self.main_model.image_list)
+        name_image = self.main_view.choose_image_area.delete_image()
+        self.main_model.delete_image_by_name(name_image)
+        print(self.main_model.image_list)

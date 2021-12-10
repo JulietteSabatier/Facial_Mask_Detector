@@ -14,11 +14,14 @@ class MenuBarController:
     main_model: ModelAnnotator
 
     choose_image_area_controller: ChooseImageAreaController
-    image_widget: ImageWidgetController
+    image_widget_controller: ImageWidgetController
 
     def __init__(self, main_view: MainWindow, main_model: ModelAnnotator):
         self.main_view = main_view
         self.main_model = main_model
+
+        self.choose_image_area_controller = ChooseImageAreaController(main_view, main_model)
+        self.image_widget_controller = ImageWidgetController(main_view, main_model)
 
 
     def show_all_categories(self):
@@ -41,6 +44,6 @@ class MenuBarController:
                 # Ajouter l'image dans la base
                 self.main_model.add_image(image)
                 # Envoyer les infos a la scroll area
-                ChooseImageAreaController.create_button(self.main_view.choose_image_area, image)
+                self.choose_image_area_controller.create_button(image)
                 # Envoyer les infos a au widget image
-                ImageWidgetController.load_image_widget(self, image)
+                self.image_widget_controller.load_image_widget(image)

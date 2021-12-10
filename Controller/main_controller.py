@@ -1,3 +1,5 @@
+from PyQt5 import QtCore
+
 from Model.annotate_image import AnnotateImage
 from Model.model_annotator import ModelAnnotator
 from View.main_window import MainWindow
@@ -34,7 +36,12 @@ class MainController:
         return 0
 
     def set_choose_image_area_action(self):
+        # Double Click on the name : load in the graphic scene
         self.main_view.choose_image_area.doubleClicked.connect(lambda:
-                                                   self.image_widget_controller.load_image_widget(
+                                                self.image_widget_controller.load_image_widget(
                                                        self.main_model.get_image_by_name(
                                                            self.main_view.choose_image_area.currentItem().text())))
+        # Context menu : delete image
+        self.main_view.choose_image_area.remove_action.triggered.connect(
+                    self.choose_image_area_controller.delete_button
+        )
