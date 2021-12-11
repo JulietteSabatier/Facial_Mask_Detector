@@ -19,5 +19,3 @@ class ShowCategoryPopupController:
     def rename_category(self):
         old_name, new_name = self.popup.rename_category()
         self.main_model.rename_category(old_name, new_name)
-
-        print(self.main_model.category_list)

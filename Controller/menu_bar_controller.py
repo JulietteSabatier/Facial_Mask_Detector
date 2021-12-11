@@ -63,3 +63,7 @@ class MenuBarController:
         popup.rename_cat.triggered.connect(popup_controller.rename_category)
 
         popup.exec()
+
+    def create_new_category(self):
+        name, result = self.main_view.menu_bar.dialog_create_new_category()
+        self.main_model.add_category(name)

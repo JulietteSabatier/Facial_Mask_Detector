@@ -11,9 +11,7 @@ class ModelAnnotator:
         self.category_list = category_list
         self.image_list = image_list
 
-    def get_category_list(self):
-        return self.category_list
-
+    # Image
     def get_image_list(self):
         return self.image_list
 
@@ -29,6 +27,16 @@ class ModelAnnotator:
                 self.image_list.remove(image)
                 break
 
+    def get_image_by_name(self, name: str):
+        for i in range(len(self.image_list)):
+            if self.image_list[i].title == name:
+                return self.image_list[i]
+        return None
+
+    # Category
+    def get_category_list(self):
+        return self.category_list
+
     def add_category(self, name: str):
         if not self.category_list.__contains__(name):
             self.category_list.append(name)
@@ -43,12 +51,6 @@ class ModelAnnotator:
         # Change in the annotations too
         # Maybe create an object annotation to change easily the name without
         # search the name in all the annotations
-
-    def get_image_by_name(self, name: str):
-        for i in range(len(self.image_list)):
-            if self.image_list[i].title == name:
-                return self.image_list[i]
-        return None
 
     def from_csv_to_categories(self, path: str):
         csv_file = open(path)

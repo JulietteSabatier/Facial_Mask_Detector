@@ -43,6 +43,11 @@ class MainController:
             self.menu_bar_controller.show_categories
         )
 
+        # Create new category
+        self.main_view.menu_bar.create_new.triggered.connect(
+            self.menu_bar_controller.create_new_category
+        )
+
     def set_image_widget_action(self):
         return 0
 

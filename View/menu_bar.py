@@ -22,10 +22,6 @@ class MenuBar(QtWidgets.QMenuBar):
         self.import_cat = QtGui.QAction("Import", self.categories)
         self.categories.addAction(self.import_cat)
 
-        # Rename categories
-        self.rename = QtGui.QAction("Rename", self.categories)
-        self.categories.addAction(self.rename)
-
         # Show all
         self.show_all = QtGui.QAction("Show All", self.categories)
         self.categories.addAction(self.show_all)
@@ -63,3 +59,5 @@ class MenuBar(QtWidgets.QMenuBar):
     def widget_import_categories(self):
         return QtWidgets.QFileDialog.getOpenFileNames(self, "Open categories", "Categories", "Data files (*.csv *.json)")
 
+    def dialog_create_new_category(self):
+        return QtWidgets.QInputDialog.getText(self, "Create a category", "Name of the category")
