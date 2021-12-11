@@ -3,8 +3,10 @@ from Model.model_annotator import ModelAnnotator
 
 from Controller.choose_image_area_controller import ChooseImageAreaController
 from Controller.image_widget_controller import ImageWidgetController
+from Controller.show_category_popup_controller import ShowCategoryPopupController
+
 from View.main_window import MainWindow
-import csv
+from View.show_categories_popup import ShowCategoriesPopup
 
 # Définition des fonctions qui représentent les action de la menuBar
 
@@ -22,11 +24,6 @@ class MenuBarController:
 
         self.choose_image_area_controller = ChooseImageAreaController(main_view, main_model)
         self.image_widget_controller = ImageWidgetController(main_view, main_model)
-
-
-    def show_all_categories(self):
-        return 0
-
 
     def load_image_menu_bar(self):
 
@@ -48,16 +45,21 @@ class MenuBarController:
                 # Envoyer les infos a au widget image
                 self.image_widget_controller.load_image_widget(image)
 
-    def import_categories_from_csv(self):
-        categories = self.main_view.menu_bar.widget_import_categories_csv()
-
+    def import_categories(self):
+        categories = self.main_view.menu_bar.widget_import_categories()
+        import_type = categories[0][0].split("/")[-1].split(".")[-1]
         if len(categories[0]) != 0:
-            self.main_model.from_csv_to_categories(categories[0][0])
+            if import_type == "json":
+                self.main_model.from_json_to_categories(categories[0][0])
+            elif import_type == "csv":
+                self.main_model.from_csv_to_categories(categories[0][0])
 
+    def show_categories(self):
+        popup = ShowCategoriesPopup()
+        popup_controller = ShowCategoryPopupController(self.main_model, popup)
+        popup.add_categories(self.main_model.category_list)
 
-    def import_categories_from_json(self):
-        categories = self.main_view.menu_bar.widget_import_categories_json()
+        popup.delete_cat.triggered.connect(popup_controller.delete_category)
+        popup.rename_cat.triggered.connect(popup_controller.rename_category)
 
-        if len(categories[0]) != 0:
-            return 0
-
+        popup.exec()

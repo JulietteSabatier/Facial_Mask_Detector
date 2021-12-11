@@ -1,6 +1,5 @@
 from Model.annotate_image import AnnotateImage
-import csv
-
+import csv, json
 
 # Représente les data (liste de catégories et d'images annotés)
 
@@ -30,8 +29,20 @@ class ModelAnnotator:
                 self.image_list.remove(image)
                 break
 
+    def add_category(self, name: str):
+        if not self.category_list.__contains__(name):
+            self.category_list.append(name)
+
     def delete_category(self, category: str):
         self.category_list.remove(category)
+
+    def rename_category(self, category: str, new_name: str):
+        for i in range(len(self.category_list)):
+            if self.category_list[i] == category:
+                self.category_list[i] = new_name
+        # Change in the annotations too
+        # Maybe create an object annotation to change easily the name without
+        # search the name in all the annotations
 
     def get_image_by_name(self, name: str):
         for i in range(len(self.image_list)):
@@ -44,4 +55,10 @@ class ModelAnnotator:
         reader = csv.reader(csv_file, delimiter=';')
         for row in reader:
             for col in range(len(row)):
-                self.category_list.append(row[col])
+                self.add_category(row[col])
+
+    def from_json_to_categories(self, path: str):
+        json_file = open(path)
+        data = json.load(json_file)
+        for cat in data['categories']:
+            self.add_category(cat)

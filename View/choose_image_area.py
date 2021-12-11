@@ -47,5 +47,6 @@ class ChooseImageArea(QtWidgets.QListWidget):
     def rename_image_input(self):
         text, result = QtWidgets.QInputDialog.getText(self, "Rename ", "New name of the image: ")
         if result:
+            self.currentItem().setText(text)
             return text
 

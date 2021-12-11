@@ -22,7 +22,7 @@ class ChooseImageAreaController:
         self.main_model.delete_image_by_name(name_image)
 
     def rename_button(self):
-        # Get a new name
+        # Get a new name and change it on the view
         new_name = self.main_view.choose_image_area.rename_image_input()
 
         # Get the image name
@@ -31,6 +31,3 @@ class ChooseImageAreaController:
         # Change the name of the image in the model
         image = self.main_model.get_image_by_name(name_image)
         image.title = new_name
-
-        # Change the name on the view
-        self.main_view.choose_image_area.currentItem().setText(new_name)

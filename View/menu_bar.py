@@ -18,13 +18,9 @@ class MenuBar(QtWidgets.QMenuBar):
         #  Categories
         self.categories = QtWidgets.QMenu("Categories", self)
 
-        # Import from csv
-        self.import_csv = QtGui.QAction("Import from cvs", self.categories)
-        self.categories.addAction(self.import_csv)
-
-        # Import from json
-        self.import_json = QtGui.QAction("Import from json", self.categories)
-        self.categories.addAction(self.import_json)
+        # Import
+        self.import_cat = QtGui.QAction("Import", self.categories)
+        self.categories.addAction(self.import_cat)
 
         # Rename categories
         self.rename = QtGui.QAction("Rename", self.categories)
@@ -64,8 +60,6 @@ class MenuBar(QtWidgets.QMenuBar):
                                                        "Image Files (*.png *.jpg *.bpm)")
         return image
 
-    def widget_import_categories_csv(self):
-        return QtWidgets.QFileDialog.getOpenFileNames(self, "Open categories", "Categories", "Data files (*.csv)")
+    def widget_import_categories(self):
+        return QtWidgets.QFileDialog.getOpenFileNames(self, "Open categories", "Categories", "Data files (*.csv *.json)")
 
-    def widget_import_categories_json(self):
-        return QtWidgets.QFileDialog.getOpenFileNames(self, "Open categories", "Categories", "Data files (*.json)")
