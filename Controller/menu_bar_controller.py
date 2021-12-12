@@ -86,7 +86,6 @@ class MenuBarController:
         path, type_file = self.main_view.menu_bar.dialog_path_save_annotations()
         self.main_model.from_annotation_to_json(path)
 
-
     def load_annotations(self):
         path, type_file = self.main_view.menu_bar.dialog_path_load_annotations()
         print(path)

@@ -4,6 +4,7 @@ from Model.position import Position
 import csv, json
 from PIL import Image
 
+
 # Représente les data (liste de catégories et d'images annotés)
 
 class ModelAnnotator:
@@ -91,15 +92,15 @@ class ModelAnnotator:
         json.dump(data, json_file)
 
     def from_json_to_annotation(self, path: str):
+        # TODO load only if the path is correct
         f = open(path)
         json_data = json.load(f)
         for image in json_data:
             annotations = []
             for annotation in json_data[image]["annotations"]:
-                position = Position(annotation["position"]["left_up"],
-                                    annotation["position"]["left_down"],
-                                    annotation["position"]["right_up"],
-                                    annotation["position"]["right_down"])
+                position = Position(
+                    (annotation["position"]["left_up"]["abs"], annotation["position"]["left_up"]["ord"]),
+                    (annotation["position"]["right_down"]["abs"], annotation["position"]["right_down"]["ord"]))
                 annotations.append(Annotation(annotation["title"], position))
             annotate_image = AnnotateImage(json_data[image]["path"], image, annotations)
             self.add_image(annotate_image)

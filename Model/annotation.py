@@ -20,7 +20,7 @@ class Annotation:
     def set_title(self, new_title):
         self.title = new_title
 
-    def set_position(self, new_position):
+    def set_position(self, new_position: Position):
         self.position = new_position
 
     def from_annotations_to_json(self):
