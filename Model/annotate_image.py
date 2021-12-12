@@ -1,4 +1,5 @@
 from Model.annotation import Annotation
+from PIL import Image
 
 # Représentation des images annotées
 
@@ -29,3 +30,7 @@ class AnnotateImage:
 
     def set_annotation_list(self, annotation_list: list[Annotation]):
         self.annotation_list = annotation_list
+
+    def save_image(self, path: str):
+        image = Image.open(self.path, 'r')
+        image.save(path+"/"+self.title+".png")

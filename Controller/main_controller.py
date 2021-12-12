@@ -29,23 +29,47 @@ class MainController:
         self.set_choose_image_area_action()
 
     def set_menu_bar_action(self):
-        # Load image
+        # Images
         self.main_view.menu_bar.load_image_action.triggered.connect(
             self.menu_bar_controller.load_image_menu_bar)
 
-        # Import categories
+        self.main_view.menu_bar.save_images.triggered.connect(
+            self.menu_bar_controller.save_images
+        )
+
+        # Categories
         self.main_view.menu_bar.import_cat.triggered.connect(
             self.menu_bar_controller.import_categories
         )
 
-        # Show all categories
         self.main_view.menu_bar.show_all.triggered.connect(
             self.menu_bar_controller.show_categories
         )
 
-        # Create new category
         self.main_view.menu_bar.create_new.triggered.connect(
             self.menu_bar_controller.create_new_category
+        )
+
+        self.main_view.menu_bar.save_categories.triggered.connect(
+            self.menu_bar_controller.save_categories
+        )
+
+        # Annotations
+        self.main_view.menu_bar.load_annotation.triggered.connect(
+            self.menu_bar_controller.load_annotations
+        )
+
+        self.main_view.menu_bar.save_annotation.triggered.connect(
+            self.menu_bar_controller.save_annotations
+        )
+
+        # Project
+        self.main_view.menu_bar.save_project.triggered.connect(
+            self.menu_bar_controller.save_project
+        )
+
+        self.main_view.menu_bar.load_project.triggered.connect(
+            self.menu_bar_controller.load_project
         )
 
     def set_image_widget_action(self):

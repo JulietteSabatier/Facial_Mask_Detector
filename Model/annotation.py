@@ -1,5 +1,6 @@
 from Model.position import Position
 
+
 # Représente les annotations
 
 class Annotation:
@@ -21,3 +22,7 @@ class Annotation:
 
     def set_position(self, new_position):
         self.position = new_position
+
+    def from_annotations_to_json(self):
+        return {"title": self.title,
+                "position": self.position.from_position_to_json()}

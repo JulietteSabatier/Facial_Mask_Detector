@@ -36,3 +36,8 @@ class Position:
     def set_right_down_point(self, point: (int, int)):
         self.right_down_point = point
 
+    def from_position_to_json(self):
+        return {"left_up": self.left_up_point,
+                "left_down": self.left_down_point,
+                "right_up": self.right_up_point,
+                "right_down": self.right_down_point}

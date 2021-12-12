@@ -8,6 +8,7 @@ from Controller.show_category_popup_controller import ShowCategoryPopupControlle
 from View.main_window import MainWindow
 from View.show_categories_popup import ShowCategoriesPopup
 
+
 # Définition des fonctions qui représentent les action de la menuBar
 
 
@@ -25,6 +26,7 @@ class MenuBarController:
         self.choose_image_area_controller = ChooseImageAreaController(main_view, main_model)
         self.image_widget_controller = ImageWidgetController(main_view, main_model)
 
+    # Images
     def load_image_menu_bar(self):
 
         # Charge un ou plusieurs images la dernière seulement s'affiche dans la graphicView
@@ -45,10 +47,16 @@ class MenuBarController:
                 # Envoyer les infos a au widget image
                 self.image_widget_controller.load_image_widget(image)
 
+    def save_images(self):
+        path = self.main_view.menu_bar.dialog_save_image()
+        self.main_model.save_images(path)
+        print("Save Images")
+
+    # Categories
     def import_categories(self):
         categories = self.main_view.menu_bar.widget_import_categories()
-        import_type = categories[0][0].split("/")[-1].split(".")[-1]
         if len(categories[0]) != 0:
+            import_type = categories[0][0].split("/")[-1].split(".")[-1]
             if import_type == "json":
                 self.main_model.from_json_to_categories(categories[0][0])
             elif import_type == "csv":
@@ -67,3 +75,29 @@ class MenuBarController:
     def create_new_category(self):
         name, result = self.main_view.menu_bar.dialog_create_new_category()
         self.main_model.add_category(name)
+
+    def save_categories(self):
+        path, type_file = self.main_view.menu_bar.dialog_path_save_categories()
+        self.main_model.from_categories_to_json(path)
+
+    # Annotations
+    def save_annotations(self):
+        path, type_file = self.main_view.menu_bar.dialog_path_save_annotations()
+        print("Save annotations")
+        print(path)
+
+    def load_annotations(self):
+        path, type_file = self.main_view.menu_bar.dialog_path_load_annotations()
+        print("Load annotations")
+        print(path)
+
+    # Project
+    def save_project(self):
+        path = self.main_view.menu_bar.dialog_path_save_project()
+        print("Save project")
+        print(path)
+
+    def load_project(self):
+        path = self.main_view.menu_bar.dialog_path_load_project()
+        print("Load Project")
+        print(path)

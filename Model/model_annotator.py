@@ -1,5 +1,6 @@
 from Model.annotate_image import AnnotateImage
 import csv, json
+from PIL import Image
 
 # Représente les data (liste de catégories et d'images annotés)
 
@@ -33,6 +34,10 @@ class ModelAnnotator:
                 return self.image_list[i]
         return None
 
+    def save_images(self, new_path: str):
+        for image in self.image_list:
+            image.save_image(new_path)
+
     # Category
     def get_category_list(self):
         return self.category_list
@@ -64,3 +69,23 @@ class ModelAnnotator:
         data = json.load(json_file)
         for cat in data['categories']:
             self.add_category(cat)
+
+    def from_categories_to_json(self, path: str):
+        data = {"categories": []}
+        for cat in self.category_list:
+            data["categories"].append(cat)
+        json_file = open(path, 'w')
+        json.dump(data, json_file)
+
+    # Annotations
+    def from_annotation_to_json(self,path: str):
+        data = {}
+        for image in self.image_list:
+            data[image.title] = {"path": image.path,
+                                 "annotations": []}
+            for annotation in image.annotation_list:
+                data[image.title]["annotations"] = annotation.from_annotations_to_json()
+        json_file = open(path)
+        json.dump(data, json_file)
+
+
