@@ -1,6 +1,7 @@
 from Model.annotate_image import AnnotateImage
 from Model.model_annotator import ModelAnnotator
-
+from Model.annotation import Annotation
+from Model.position import Position
 from Controller.choose_image_area_controller import ChooseImageAreaController
 from Controller.image_widget_controller import ImageWidgetController
 from Controller.show_category_popup_controller import ShowCategoryPopupController
@@ -82,9 +83,14 @@ class MenuBarController:
 
     # Annotations
     def save_annotations(self):
+        position = Position(10, 20, 30, 40)
+        annotation = Annotation("test", position)
+        list_annot = [annotation]
+        image = AnnotateImage("Annotations/", "image_test", list_annot)
+        self.main_model.add_image(image)
         path, type_file = self.main_view.menu_bar.dialog_path_save_annotations()
-        print("Save annotations")
-        print(path)
+        self.main_model.from_annotation_to_json(path)
+
 
     def load_annotations(self):
         path, type_file = self.main_view.menu_bar.dialog_path_load_annotations()

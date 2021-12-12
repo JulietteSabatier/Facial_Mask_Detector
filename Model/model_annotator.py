@@ -78,14 +78,14 @@ class ModelAnnotator:
         json.dump(data, json_file)
 
     # Annotations
-    def from_annotation_to_json(self,path: str):
+    def from_annotation_to_json(self, path: str):
         data = {}
         for image in self.image_list:
             data[image.title] = {"path": image.path,
                                  "annotations": []}
             for annotation in image.annotation_list:
                 data[image.title]["annotations"] = annotation.from_annotations_to_json()
-        json_file = open(path)
+        json_file = open(path, 'w')
         json.dump(data, json_file)
 
 
