@@ -83,19 +83,17 @@ class MenuBarController:
 
     # Annotations
     def save_annotations(self):
-        position = Position(10, 20, 30, 40)
-        annotation = Annotation("test", position)
-        list_annot = [annotation]
-        image = AnnotateImage("Annotations/", "image_test", list_annot)
-        self.main_model.add_image(image)
         path, type_file = self.main_view.menu_bar.dialog_path_save_annotations()
         self.main_model.from_annotation_to_json(path)
 
 
     def load_annotations(self):
         path, type_file = self.main_view.menu_bar.dialog_path_load_annotations()
-        print("Load annotations")
         print(path)
+        self.main_model.from_json_to_annotation(path[0])
+        print(self.main_model.image_list[0].title)
+        print(self.main_model.image_list[0].path)
+        print(self.main_model.image_list[0].annotation_list)
 
     # Project
     def save_project(self):

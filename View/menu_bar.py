@@ -87,7 +87,7 @@ class MenuBar(QtWidgets.QMenuBar):
 
     # Annotations
     def dialog_path_load_annotations(self):
-        return QtWidgets.QFileDialog.getOpenFileNames(self, "Load Annotations", "Annotations", "Json File (*.json")
+        return QtWidgets.QFileDialog.getOpenFileNames(self, "Load Annotations", "Annotations", "Json File (*.json)")
 
     def dialog_path_save_annotations(self):
         return QtWidgets.QFileDialog.getSaveFileName(self, "Save Annotations in json", "Annotations", "Json File (*.json)")
