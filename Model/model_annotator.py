@@ -1,3 +1,5 @@
+import os.path
+
 from Model.annotate_image import AnnotateImage
 from Model.annotation import Annotation
 from Model.position import Position
@@ -92,16 +94,17 @@ class ModelAnnotator:
         json.dump(data, json_file)
 
     def from_json_to_annotation(self, path: str):
-        # TODO load only if the path is correct
         f = open(path)
         json_data = json.load(f)
         for image in json_data:
-            annotations = []
-            for annotation in json_data[image]["annotations"]:
-                position = Position(
-                    (annotation["position"]["left_up"]["abs"], annotation["position"]["left_up"]["ord"]),
-                    (annotation["position"]["right_down"]["abs"], annotation["position"]["right_down"]["ord"]))
-                annotations.append(Annotation(annotation["title"], position))
-            annotate_image = AnnotateImage(json_data[image]["path"], image, annotations)
-            self.add_image(annotate_image)
+            if os.path.exists(json_data[image]["path"]):
+                annotations = []
+                for annotation in json_data[image]["annotations"]:
+                    position = Position(
+                        (annotation["position"]["left_up"]["abs"], annotation["position"]["left_up"]["ord"]),
+                        (annotation["position"]["right_down"]["abs"], annotation["position"]["right_down"]["ord"]))
+                    annotations.append(Annotation(annotation["title"], position))
+                annotate_image = AnnotateImage(json_data[image]["path"], image, annotations)
+                self.add_image(annotate_image)
         f.close()
+

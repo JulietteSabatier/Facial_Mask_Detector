@@ -72,6 +72,10 @@ class MainController:
             self.menu_bar_controller.load_project
         )
 
+        self.main_view.menu_bar.create_project.triggered.connect(
+            self.menu_bar_controller.create_project
+        )
+
     def set_image_widget_action(self):
         return 0
 

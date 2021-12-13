@@ -52,11 +52,15 @@ class MenuBar(QtWidgets.QMenuBar):
         # Project
         self.project = QtWidgets.QMenu("Project", self)
 
+        # Create Project
+        self.create_project = QtGui.QAction("Create new", self.project)
+        self.project.addAction(self.create_project)
+
         # Save Project
         self.save_project = QtGui.QAction("Save", self.project)
         self.project.addAction(self.save_project)
 
-        # Save Project
+        # Load Project
         self.load_project = QtGui.QAction("Load", self.project)
         self.project.addAction(self.load_project)
 
@@ -93,8 +97,22 @@ class MenuBar(QtWidgets.QMenuBar):
         return QtWidgets.QFileDialog.getSaveFileName(self, "Save Annotations in json", "Annotations", "Json File (*.json)")
 
     # Project
+    def dialog_name_project(self):
+        return QtWidgets.QInputDialog.getText(self, "Create a project", "Name of the project")
+
     def dialog_path_save_project(self):
         return QtWidgets.QFileDialog.getExistingDirectory(self, "Save the Project (Images/ Annotations/Categories)", "Categories")
 
     def dialog_path_load_project(self):
         return QtWidgets.QFileDialog.getExistingDirectory(self, "Load Project", "Project")
+
+    def dialog_not_a_project(self):
+        message = QtWidgets.QMessageBox()
+        message.setIcon(QtWidgets.QMessageBox.Warning)
+        message.setText("This directory is not a project")
+        message.setDetailedText("A project contains:\n"
+                                " - a directory with images \n "
+                                "- a file annotations.json \n"
+                                " - a file categories.json")
+        message.setWindowTitle("Warning Project Directory")
+        return message

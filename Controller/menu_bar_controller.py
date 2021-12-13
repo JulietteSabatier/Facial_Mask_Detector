@@ -1,3 +1,5 @@
+import os.path
+
 from Model.annotate_image import AnnotateImage
 from Model.model_annotator import ModelAnnotator
 from Model.annotation import Annotation
@@ -88,19 +90,29 @@ class MenuBarController:
 
     def load_annotations(self):
         path, type_file = self.main_view.menu_bar.dialog_path_load_annotations()
-        print(path)
         self.main_model.from_json_to_annotation(path[0])
-        print(self.main_model.image_list[0].title)
-        print(self.main_model.image_list[0].path)
-        print(self.main_model.image_list[0].annotation_list)
 
     # Project
+    def create_project(self):
+        name, result = self.main_view.menu_bar.dialog_name_project()
+        if result:
+            path = "Project/"+name
+            if not os.path.exists(path+"/Images"):
+                os.makedirs(path+"/Images")
+            open(path+"/annotations.json", 'w')
+            open(path+"/categories.json", 'w')
+
     def save_project(self):
-        path = self.main_view.menu_bar.dialog_path_save_project()
+        path = self.main_view.menu_bar.dialog_path_load_project()
         print("Save project")
-        print(path)
 
     def load_project(self):
-        path = self.main_view.menu_bar.dialog_path_load_project()
-        print("Load Project")
-        print(path)
+        path = self.main_view.menu_bar.dialog_path_save_project()
+        if (os.path.exists(path+"/Images")
+            and os.path.exists(path+"/annotations.json")
+            and os.path.exists(path+"/categories.json")):
+            self.main_model.from_json_to_annotation(path+"/annotations.json")
+            self.main_model.from_json_to_categories(path+"/categories.json")
+        else:
+            self.main_view.menu_bar.dialog_not_a_project()
+
