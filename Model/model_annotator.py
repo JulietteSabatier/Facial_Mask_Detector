@@ -72,8 +72,9 @@ class ModelAnnotator:
     def from_json_to_categories(self, path: str):
         json_file = open(path)
         data = json.load(json_file)
-        for cat in data['categories']:
-            self.add_category(cat)
+        if len(data) != 0:
+            for cat in data['categories']:
+                self.add_category(cat)
 
     def from_categories_to_json(self, path: str):
         data = {"categories": []}
@@ -96,15 +97,17 @@ class ModelAnnotator:
     def from_json_to_annotation(self, path: str):
         f = open(path)
         json_data = json.load(f)
-        for image in json_data:
-            if os.path.exists(json_data[image]["path"]):
-                annotations = []
-                for annotation in json_data[image]["annotations"]:
-                    position = Position(
-                        (annotation["position"]["left_up"]["abs"], annotation["position"]["left_up"]["ord"]),
-                        (annotation["position"]["right_down"]["abs"], annotation["position"]["right_down"]["ord"]))
-                    annotations.append(Annotation(annotation["title"], position))
-                annotate_image = AnnotateImage(json_data[image]["path"], image, annotations)
-                self.add_image(annotate_image)
+        if len(json_data) != 0:
+            for image in json_data:
+                print(image)
+                if os.path.exists(json_data[image]["path"]):
+                    annotations = []
+                    for annotation in json_data[image]["annotations"]:
+                        position = Position(
+                            (annotation["position"]["left_up"]["abs"], annotation["position"]["left_up"]["ord"]),
+                            (annotation["position"]["right_down"]["abs"], annotation["position"]["right_down"]["ord"]))
+                        annotations.append(Annotation(annotation["title"], position))
+                    annotate_image = AnnotateImage(json_data[image]["path"], image, annotations)
+                    self.add_image(annotate_image)
         f.close()
 

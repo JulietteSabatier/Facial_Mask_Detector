@@ -9,10 +9,18 @@ class PopupOpenProject(QtWidgets.QDialog):
         super(PopupOpenProject, self).__init__()
 
         self.resize(600, 300)
+        self.setWindowTitle("Image Annotator Project")
+
+        self.setWindowModality(QtCore.Qt.ApplicationModal)
+        self.setFocusPolicy(QtCore.Qt.StrongFocus)
 
         self.create_button = QtWidgets.QPushButton("Create Project")
         self.text_load = QtWidgets.QLabel("Load a project below")
         self.list_project = QtWidgets.QListWidget()
+
+        self.list_project.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
+        self.delete_project = QtGui.QAction("Delete")
+        self.list_project.addAction(self.delete_project)
 
         # Layout
         self.box = QtWidgets.QVBoxLayout()
@@ -33,4 +41,3 @@ class PopupOpenProject(QtWidgets.QDialog):
                     and os.path.exists(list_path_project[i] + "/categories.json")):
                 item = QtWidgets.QListWidgetItem(list_project[i].title())
                 self.list_project.addItem(item)
-

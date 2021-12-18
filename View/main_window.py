@@ -1,11 +1,11 @@
 from PySide6 import QtWidgets, QtGui
-from PySide6.QtCore import Slot
 
 from View.menu_bar import MenuBar
 
 from Model.model_annotator import ModelAnnotator
 from View.choose_image_area import ChooseImageArea
 from View.image_widget import ImageWidget
+from View.popup_open_project import PopupOpenProject
 
 
 # Créer la main Window
@@ -21,6 +21,8 @@ class MainWindow(QtWidgets.QMainWindow):  # main window
         self.choose_image_area: ChooseImageArea = ChooseImageArea()
         self.menu_bar = MenuBar()
 
+        self.popup_open_project = PopupOpenProject()
+
         # Main Widget and layout
         page_layout = QtWidgets.QHBoxLayout()
         page_layout.addWidget(self.choose_image_area)
@@ -34,6 +36,7 @@ class MainWindow(QtWidgets.QMainWindow):  # main window
 
         self.init_ui()
         self.show()
+        self.popup_open_project.show()
 
     def init_ui(self):
         self.baseSize()
