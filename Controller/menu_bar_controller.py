@@ -96,10 +96,11 @@ class MenuBarController:
 
     # Project
     def save_project(self, project_name: str):
-        path = "Project/"+project_name+"/"
-        self.main_model.from_annotation_to_json(path+"annotations.json")
-        self.main_model.from_categories_to_json(path+"categories.json")
-        self.main_model.save_images(path+"Images/")
+        if project_name != "":
+            path = "Project/"+project_name+"/"
+            self.main_model.from_annotation_to_json(path+"annotations.json")
+            self.main_model.from_categories_to_json(path+"categories.json")
+            self.main_model.save_images(path+"Images/")
 
     def close_project(self):
         #self.save_project() ??

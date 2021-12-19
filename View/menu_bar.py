@@ -57,7 +57,7 @@ class MenuBar(QtWidgets.QMenuBar):
         self.project.addAction(self.save_project)
 
         # Load Project
-        self.close_project = QtGui.QAction("Close", self.project)
+        self.close_project = QtGui.QAction("Close (and open new)", self.project)
         self.project.addAction(self.close_project)
 
         # Add to menuBar
