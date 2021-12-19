@@ -47,5 +47,8 @@ class PopupOpenProject(QtWidgets.QDialog):
 
     def closeEvent(self, event) -> None:
         if self.force_close:
-            print("close pupup")
             sys.exit()
+
+    def dialog_no_project(self):
+        message_box = QtWidgets.QMessageBox()
+        message_box.setText("This project doesn't exist")

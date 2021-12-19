@@ -1,4 +1,5 @@
 import json
+import shutil
 
 from View.main_window import MainWindow
 from Model.model_annotator import ModelAnnotator
@@ -32,9 +33,12 @@ class PopupOpenProjectController:
     def delete_project_action(self):
         path = "Project/" + self.main_view.popup_open_project.list_project.currentItem().text()
         try:
-            os.remove(path)
+            self.main_view.popup_open_project.list_project.takeItem(
+                self.main_view.popup_open_project.list_project.row(
+                    self.main_view.popup_open_project.list_project.currentItem()))
+            shutil.rmtree(path)
         except:
-            self.dialog_no_project()
+            self.main_view.popup_open_project.dialog_no_project()
             self.main_view.popup_open_project.list_project.removeItemWidget(
                 self.main_view.popup_open_project.list_project.currentItem())
 
@@ -50,7 +54,7 @@ class PopupOpenProjectController:
             self.main_view.popup_open_project.force_close = False
             self.main_view.popup_open_project.close()
         else:
-            self.dialog_no_project()
+            self.main_view.popup_open_project.dialog_no_project()
             self.main_view.popup_open_project.list_project.removeItemWidget(
                 self.main_view.popup_open_project.list_project.currentItem())
 
@@ -59,7 +63,8 @@ class PopupOpenProjectController:
             self.main_view.popup_open_project, "Create a project", "Name of the project")
         while os.path.exists("Project/" + project_name):
             project_name, result = QtWidgets.QInputDialog.getText(
-                self.main_view.popup_open_project, "Create a project", "The previous name already exist, write a new one")
+                self.main_view.popup_open_project, "Create a project",
+                "The previous name already exist, write a new one")
             if not result:
                 project_name = None
                 break
@@ -67,6 +72,3 @@ class PopupOpenProjectController:
             self.main_view.popup_open_project.force_close = False
             self.main_view.popup_open_project.close()
         return project_name
-
-    def dialog_no_project(self):
-        QtWidgets.QMessageBox.setText("This project doesn't exist")
