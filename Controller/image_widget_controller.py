@@ -16,10 +16,10 @@ class ImageWidgetController:
         self.main_model = main_model
 
     def load_image_widget(self, image: AnnotateImage):
+        self.main_view.image_widget.initialize_scene()
 
-        self.main_view.image_widget.scene.clear()
         self.main_view.image_widget.scene.setCurrentAnnotateImage(image)
-        
+
         img_path = image.path
         image = Image.open(img_path)
         w, h = image.size
