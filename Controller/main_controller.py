@@ -1,5 +1,10 @@
+from PySide6 import QtCore
+
+from Model.annotate_image import AnnotateImage
 from Model.model_annotator import ModelAnnotator
 from View.main_window import MainWindow
+from View.menu_bar import MenuBar
+
 
 from Controller.menu_bar_controller import MenuBarController
 from Controller.image_widget_controller import ImageWidgetController

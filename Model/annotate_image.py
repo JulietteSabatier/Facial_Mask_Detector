@@ -1,4 +1,4 @@
-import Model.annotation as Annotation
+from Model.annotation import Annotation
 from PIL import Image
 
 # Représentation des images annotées
@@ -15,7 +15,7 @@ class AnnotateImage:
 
     def add_annotation(self, annotation: Annotation) -> None:
         self.annotation_list.append(annotation)
-
+        
     def get_path(self):
         return self.path
 

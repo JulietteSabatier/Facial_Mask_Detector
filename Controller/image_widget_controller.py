@@ -19,6 +19,7 @@ class ImageWidgetController:
 
         self.main_view.image_widget.scene.clear()
         self.main_view.image_widget.scene.setCurrentAnnotateImage(image)
+        
         img_path = image.path
         image = Image.open(img_path)
         w, h = image.size
