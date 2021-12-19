@@ -17,11 +17,6 @@ class ImageWidgetController:
 
     def load_image_widget(self, image: AnnotateImage):
 
-        layout = QtWidgets.QVBoxLayout()
-        layout.addWidget(self.main_view.image_widget.view)
-        self.main_view.image_widget.adjustSize()
-        self.main_view.image_widget.setLayout(layout)
-
         self.main_view.image_widget.scene.clear()
         self.main_view.image_widget.scene.setCurrentAnnotateImage(image)
         img_path = image.path

@@ -9,4 +9,8 @@ class ImageWidget(QtWidgets.QWidget):  # Central Widget
         QtWidgets.QWidget.__init__(self, parent)
         self.scene = CustomScene(self)
         self.view = View(self.scene)
+        layout = QtWidgets.QVBoxLayout()
+        layout.addWidget(self.view)
+        self.adjustSize()
+        self.setLayout(layout)
         self.parent = parent
