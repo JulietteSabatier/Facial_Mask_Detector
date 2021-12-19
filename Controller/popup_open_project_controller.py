@@ -47,6 +47,7 @@ class PopupOpenProjectController:
             self.main_model.from_json_to_categories(path + "/categories.json")
             self.project = path.split("/")[-1]
             self.main_view.choose_image_area.load_all_images()
+            self.main_view.popup_open_project.force_close = False
             self.main_view.popup_open_project.close()
         else:
             self.dialog_no_project()
@@ -63,7 +64,8 @@ class PopupOpenProjectController:
                 project_name = None
                 break
         if project_name is not None:
-            self.main_view.popup_open_project.reject()
+            self.main_view.popup_open_project.force_close = False
+            self.main_view.popup_open_project.close()
         return project_name
 
     def dialog_no_project(self):

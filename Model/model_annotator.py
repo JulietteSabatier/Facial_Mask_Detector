@@ -80,8 +80,11 @@ class ModelAnnotator:
         data = {"categories": []}
         for cat in self.category_list:
             data["categories"].append(cat)
-        json_file = open(path, 'w')
-        json.dump(data, json_file)
+        try:
+            json_file = open(path, 'w')
+            json.dump(data, json_file)
+        except:
+            return
 
     # Annotations
     def from_annotation_to_json(self, path: str):
@@ -110,4 +113,3 @@ class ModelAnnotator:
                     annotate_image = AnnotateImage(json_data[image]["path"], image, annotations)
                     self.add_image(annotate_image)
         f.close()
-

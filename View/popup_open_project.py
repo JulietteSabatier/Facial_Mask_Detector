@@ -12,6 +12,7 @@ class PopupOpenProject(QtWidgets.QDialog):
 
         self.resize(600, 300)
         self.setWindowTitle("Image Annotator Project")
+        self.force_close = True
 
         self.setWindowModality(QtCore.Qt.ApplicationModal)
         self.setFocusPolicy(QtCore.Qt.StrongFocus)
@@ -43,3 +44,8 @@ class PopupOpenProject(QtWidgets.QDialog):
                     and os.path.exists(list_path_project[i] + "/categories.json")):
                 item = QtWidgets.QListWidgetItem(list_project[i].title())
                 self.list_project.addItem(item)
+
+    def closeEvent(self, event) -> None:
+        if self.force_close:
+            print("close pupup")
+            sys.exit()
