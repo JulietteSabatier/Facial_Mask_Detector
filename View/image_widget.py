@@ -1,7 +1,7 @@
 from PySide6 import QtWidgets
 
-from View.CustomScene import CustomScene
-from View.View import View
+from View.custom_scene import CustomScene
+from View.view import View
 
 
 class ImageWidget(QtWidgets.QWidget):  # Central Widget

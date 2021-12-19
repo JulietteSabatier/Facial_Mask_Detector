@@ -1,5 +1,5 @@
-import Model.Position as Position
-from Model.SelectionBox import Box
+import Model.position as Position
+from Model.selection_box import Box
 
 
 class Annotation:
@@ -18,3 +18,7 @@ class Annotation:
 
     def set_title(self, new_title):
         self.title = new_title
+
+    def from_annotations_to_json(self):
+        return {"title": self.title,
+                "position": self.box.get_position_as_json()}

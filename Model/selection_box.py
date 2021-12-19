@@ -3,7 +3,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QPen
 from PySide6.QtWidgets import QGraphicsRectItem
 
-from Model.Coordinates import Coordinates
+from Model.coordinates import Coordinates
 
 
 class Box(QtWidgets.QGraphicsRectItem):
@@ -41,6 +41,16 @@ class Box(QtWidgets.QGraphicsRectItem):
     def updateBottomRight(self, newX, newY):
         self.bottomRight.setX(newX)
         self.bottomRight.setY(newY)
+
+    def get_position_as_json(self):
+        return {"top_left": {
+                    "abs": self.getTopLeft().getX(),
+                    "ord": self.getTopLeft().getY()},
+
+                "bottom_right": {
+                    "abs": self.getBottomRight().getX(),
+                    "ord": self.getBottomRight().getY()}
+                }
 
     def getBox(self):
         return self.box

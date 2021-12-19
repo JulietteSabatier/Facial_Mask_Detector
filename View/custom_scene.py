@@ -1,9 +1,9 @@
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt
 
-from Model import SelectionBox
-from Model.AnnotateImage import AnnotateImage
-from Model.Annotation import Annotation
+from Model.selection_box import Box
+from Model.annotate_image import AnnotateImage
+from Model.annotation import Annotation
 
 
 class CustomScene(QtWidgets.QGraphicsScene):
@@ -16,7 +16,7 @@ class CustomScene(QtWidgets.QGraphicsScene):
         self.parentWidget.setCursor(Qt.CrossCursor)
 
     def mousePressEvent(self, event:QtWidgets.QGraphicsSceneMouseEvent) -> None:
-        self.currentBox = SelectionBox.Box(self, event.scenePos().x(), event.scenePos().y())
+        self.currentBox = Box(self, event.scenePos().x(), event.scenePos().y())
 
     def mouseMoveEvent(self, event:QtWidgets.QGraphicsSceneMouseEvent) -> None:
         self.currentBox.updateBottomRight(event.scenePos().x(), event.scenePos().y())
