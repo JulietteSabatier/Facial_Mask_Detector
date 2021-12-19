@@ -3,6 +3,7 @@ from PySide6 import QtWidgets, QtCore, QtGui
 from PIL import ImageQt, Image
 from PySide6.QtCore import Slot, Qt
 
+# Créer le visuel du widget qui contient l'image à annoter
 
 class ImageWidget(QtWidgets.QWidget):  # Central Widget
 
@@ -13,19 +14,8 @@ class ImageWidget(QtWidgets.QWidget):  # Central Widget
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.view)
         self.adjustSize()
-        self.setLayout(layout)
 
-    @Slot()
-    def load_image(self, img):
-        self.scene.clear()
-        imgPath = img[0]
-        image = Image.open(imgPath)
-        w, h = image.size
-        self.imgQ = ImageQt.ImageQt(image)  # we need to hold reference to imgQ
-        pixMap = QtGui.QPixmap.fromImage(self.imgQ)
-        self.scene.addPixmap(pixMap)
-        self.view.fitInView(QtCore.QRectF(0, 0, w, h), QtCore.Qt.KeepAspectRatio)
-        self.scene.update()
+        self.setLayout(layout)
 
 
 class View(QtWidgets.QGraphicsView):  # view of the image
