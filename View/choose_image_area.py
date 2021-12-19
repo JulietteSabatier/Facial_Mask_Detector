@@ -1,10 +1,5 @@
-import sys
-from PySide6 import QtWidgets, QtCore, QtGui
-from PIL import ImageQt, Image
-from PySide6.QtCore import Slot, Qt
-from PySide6.QtGui import QAction
-from PySide6.QtWidgets import QPushButton
-
+from PySide6 import QtWidgets, QtGui
+from PySide6.QtCore import Qt
 
 # Créer le visuel de la scroll bar des nom des images
 
@@ -49,4 +44,3 @@ class ChooseImageArea(QtWidgets.QListWidget):
         if result:
             self.currentItem().setText(text)
             return text
-

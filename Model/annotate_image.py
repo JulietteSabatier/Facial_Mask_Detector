@@ -13,6 +13,9 @@ class AnnotateImage:
         self.path = path
         self.annotation_list = annotation_list
 
+    def add_annotation(self, annotation: Annotation) -> None:
+        self.annotation_list.append(annotation)
+        
     def get_path(self):
         return self.path
 
@@ -33,5 +36,4 @@ class AnnotateImage:
 
     def save_image(self, path: str):
         image = Image.open(self.path, 'r')
-        image.save(path+"/"+self.title+".png")
-
+        image.save(path + "/" + self.title + ".png")

@@ -4,7 +4,6 @@ from Model.annotate_image import AnnotateImage
 from Model.annotation import Annotation
 from Model.position import Position
 import csv, json
-from PIL import Image
 
 
 # Représente les data (liste de catégories et d'images annotés)
@@ -107,4 +106,3 @@ class ModelAnnotator:
                 annotate_image = AnnotateImage(json_data[image]["path"], image, annotations)
                 self.add_image(annotate_image)
         f.close()
-

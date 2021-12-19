@@ -1,28 +1,24 @@
-from Model.position import Position
+import Model.position as Position
+from Model.selection_box import Box
 
-
-# Représente les annotations
 
 class Annotation:
     title: str
-    position: Position
+    box: Box
 
-    def __init__(self, title, position):
+    def __init__(self, title, box):
         self.title = title
-        self.position = position
+        self.box = box
 
     def get_title(self):
         return self.title
 
-    def get_position(self):
-        return self.position
+    def get_box(self):
+        return self.box
 
     def set_title(self, new_title):
         self.title = new_title
 
-    def set_position(self, new_position: Position):
-        self.position = new_position
-
     def from_annotations_to_json(self):
         return {"title": self.title,
-                "position": self.position.from_position_to_json()}
+                "position": self.box.get_position_as_json()}
