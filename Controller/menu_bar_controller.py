@@ -100,7 +100,6 @@ class MenuBarController:
         self.main_model.from_annotation_to_json(path+"annotations.json")
         self.main_model.from_categories_to_json(path+"categories.json")
         self.main_model.save_images(path+"Images/")
-        print("Save project")
 
     def close_project(self):
         #self.save_project() ??
@@ -108,5 +107,4 @@ class MenuBarController:
         self.main_model.image_list = []
         self.main_view.choose_image_area.clear()
         self.main_view.image_widget.scene.clear()
-        self.main_view.popup_open_project = PopupOpenProject()
-        self.main_view.popup_open_project.open()
+        self.main_view.popup_open_project.show()

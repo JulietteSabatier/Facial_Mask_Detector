@@ -46,6 +46,7 @@ class PopupOpenProjectController:
             self.main_model.from_json_to_annotation(path + "/annotations.json")
             self.main_model.from_json_to_categories(path + "/categories.json")
             self.project = path.split("/")[-1]
+            self.main_view.choose_image_area.load_all_images()
             self.main_view.popup_open_project.close()
         else:
             self.dialog_no_project()

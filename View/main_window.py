@@ -18,7 +18,7 @@ class MainWindow(QtWidgets.QMainWindow):  # main window
         self.model_annotator = model_annotator
 
         self.image_widget = ImageWidget()
-        self.choose_image_area: ChooseImageArea = ChooseImageArea()
+        self.choose_image_area: ChooseImageArea = ChooseImageArea(model_annotator)
         self.menu_bar = MenuBar()
 
         self.popup_open_project = PopupOpenProject()
@@ -36,7 +36,7 @@ class MainWindow(QtWidgets.QMainWindow):  # main window
 
         self.init_ui()
         self.show()
-        self.popup_open_project.open()
+        self.popup_open_project.show()
 
     def init_ui(self):
         self.baseSize()

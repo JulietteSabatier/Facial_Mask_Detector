@@ -1,5 +1,7 @@
 import os.path
+import sys
 
+import PySide6
 from PySide6 import QtGui, QtWidgets, QtCore
 
 
