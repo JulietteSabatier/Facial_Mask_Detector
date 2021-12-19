@@ -1,22 +1,20 @@
 import Model.Position as Position
+from Model.SelectionBox import Box
 
 
 class Annotation:
     title: str
-    position: Position
+    box: Box
 
-    def __init__(self, title, position):
+    def __init__(self, title, box):
         self.title = title
-        self.position = position
+        self.box = box
 
     def get_title(self):
         return self.title
 
-    def get_position(self):
-        return self.position
+    def get_box(self):
+        return self.box
 
     def set_title(self, new_title):
         self.title = new_title
-
-    def set_position(self, new_position):
-        self.position = new_position

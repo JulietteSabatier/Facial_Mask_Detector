@@ -11,6 +11,9 @@ class AnnotateImage:
         self.path = path
         self.annotation_list = annotation_list
 
+    def add_annotation(self, annotation: Annotation) -> None:
+        self.annotation_list.append(annotation)
+
     def get_path(self):
         return self.path
 
