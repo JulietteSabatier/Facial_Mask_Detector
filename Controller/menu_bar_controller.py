@@ -31,7 +31,7 @@ class MenuBarController:
         self.image_widget_controller = ImageWidgetController(main_view, main_model)
 
     # Images
-    def load_image_menu_bar(self):
+    def load_image_menu_bar(self, project_name: str):
 
         # Charge un ou plusieurs images la dernière seulement s'affiche dans la graphicView
         # Ne charge pas les annotations
@@ -42,6 +42,7 @@ class MenuBarController:
             for i in range(len(imgs[0])):
                 path = imgs[0][i]
                 title = path.split("/")[-1].split(".")[0]
+#                new_path = "Project/"+project_name+"/"+title
                 image = AnnotateImage(path, title, [])
 
                 # Ajouter l'image dans la base
@@ -98,9 +99,10 @@ class MenuBarController:
     def save_project(self, project_name: str):
         if project_name != "":
             path = "Project/"+project_name+"/"
+            self.main_model.save_images(path + "Images/")
             self.main_model.from_annotation_to_json(path+"annotations.json")
             self.main_model.from_categories_to_json(path+"categories.json")
-            self.main_model.save_images(path+"Images/")
+
 
     def close_project(self):
         #self.save_project() ??

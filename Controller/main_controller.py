@@ -48,10 +48,10 @@ class MainController:
     def set_menu_bar_action(self):
         # Images
         self.main_view.menu_bar.load_image_action.triggered.connect(
-            self.menu_bar_controller.load_image_menu_bar)
+            lambda: self.menu_bar_controller.load_image_menu_bar(self.popup_open_project_controller.project))
 
         self.main_view.menu_bar.save_images.triggered.connect(
-            lambda : self.menu_bar_controller.save_images()
+            lambda: self.menu_bar_controller.save_images()
         )
 
         # Categories

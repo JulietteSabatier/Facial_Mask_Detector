@@ -41,7 +41,8 @@ class ModelAnnotator:
 
     def save_images(self, new_path: str):
         for image in self.image_list:
-            image.save_image(new_path)
+            path = image.path
+            image.save_image(path, new_path)
 
     # Category
     def get_category_list(self):
