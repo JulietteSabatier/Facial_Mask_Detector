@@ -36,7 +36,7 @@ class MainWindow(QtWidgets.QMainWindow):  # main window
 
         self.init_ui()
         self.show()
-        self.popup_open_project.show()
+        self.popup_open_project.open()
 
     def init_ui(self):
         self.baseSize()

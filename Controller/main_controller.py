@@ -16,6 +16,8 @@ class MainController:
     main_model: ModelAnnotator
     main_view: MainWindow
 
+    project_name: str
+
     menu_bar_controller: MenuBarController
     image_widget_controller: ImageWidgetController
     choose_image_area_controller: ChooseImageAreaController
@@ -49,7 +51,7 @@ class MainController:
             self.menu_bar_controller.load_image_menu_bar)
 
         self.main_view.menu_bar.save_images.triggered.connect(
-            self.menu_bar_controller.save_images
+            lambda : self.menu_bar_controller.save_images()
         )
 
         # Categories
@@ -80,7 +82,11 @@ class MainController:
 
         # Project
         self.main_view.menu_bar.save_project.triggered.connect(
-            self.menu_bar_controller.save_project
+            lambda: self.menu_bar_controller.save_project(self.popup_open_project_controller.project)
+        )
+
+        self.main_view.menu_bar.close_project.triggered.connect(
+            self.menu_bar_controller.close_project
         )
 
     def set_image_widget_action(self):
@@ -101,3 +107,4 @@ class MainController:
         self.main_view.choose_image_area.rename_action.triggered.connect(
             self.choose_image_area_controller.rename_button
         )
+

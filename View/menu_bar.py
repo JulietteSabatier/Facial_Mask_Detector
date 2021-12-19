@@ -52,17 +52,13 @@ class MenuBar(QtWidgets.QMenuBar):
         # Project
         self.project = QtWidgets.QMenu("Project", self)
 
-        # Create Project
-        self.create_project = QtGui.QAction("Create new", self.project)
-        self.project.addAction(self.create_project)
-
         # Save Project
         self.save_project = QtGui.QAction("Save", self.project)
         self.project.addAction(self.save_project)
 
         # Load Project
-        self.load_project = QtGui.QAction("Load", self.project)
-        self.project.addAction(self.load_project)
+        self.close_project = QtGui.QAction("Close", self.project)
+        self.project.addAction(self.close_project)
 
         # Add to menuBar
         self.addMenu(self.image)

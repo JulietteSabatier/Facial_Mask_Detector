@@ -46,6 +46,7 @@ class PopupOpenProjectController:
             self.main_model.from_json_to_annotation(path + "/annotations.json")
             self.main_model.from_json_to_categories(path + "/categories.json")
             self.project = path.split("/")[-1]
+            self.main_view.popup_open_project.close()
         else:
             self.dialog_no_project()
             self.main_view.popup_open_project.list_project.removeItemWidget(
@@ -61,7 +62,7 @@ class PopupOpenProjectController:
                 project_name = None
                 break
         if project_name is not None:
-            self.main_view.popup_open_project.close()
+            self.main_view.popup_open_project.reject()
         return project_name
 
     def dialog_no_project(self):
