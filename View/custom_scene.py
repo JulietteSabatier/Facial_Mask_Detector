@@ -60,22 +60,22 @@ class CustomScene(QtWidgets.QGraphicsScene):
         if self.currentBox is not None:
             # Le mieux serait de faire un pop-up qui permette de donner un titre
             title = "Default title"
-            finalBox = self.currentBox.getBox()
 
-            # ce beau petit monde ne fonctionne pas correctement quand je fais le rectangle de bas droit vers haut gauche
             boxes_to_remove = []
             for box in self.box_list:
-                if min(self.currentBox.getTopLeft().getX(), self.currentBox.getBottomRight().getX()) <= min(box.getTopLeft().getX(), box.getBottomRight().getX()) and min(self.currentBox.getTopLeft().getY(), self.currentBox.getBottomRight().getY()) <= min(box.getTopLeft().getY(), box.getBottomRight().getY()):
-                    if max(self.currentBox.getTopLeft().getX(), self.currentBox.getBottomRight().getX()) >= max(box.getTopLeft().getX(), box.getBottomRight().getX()) and max(self.currentBox.getTopLeft().getY(), self.currentBox.getBottomRight().getY()) >= max(box.getTopLeft().getY(), box.getBottomRight().getY()):
+                if min(self.currentBox.getTopLeft().getX(), self.currentBox.getBottomRight().getX()) <= min(box.getTopLeft().getX(), box.getBottomRight().getX()) \
+                        and min(self.currentBox.getTopLeft().getY(), self.currentBox.getBottomRight().getY()) <= min(box.getTopLeft().getY(), box.getBottomRight().getY()):
+                    if max(self.currentBox.getTopLeft().getX(), self.currentBox.getBottomRight().getX()) >= max(box.getTopLeft().getX(), box.getBottomRight().getX()) \
+                            and max(self.currentBox.getTopLeft().getY(), self.currentBox.getBottomRight().getY()) >= max(box.getTopLeft().getY(), box.getBottomRight().getY()):
                         boxes_to_remove.append(box) # je passe par une liste intermédiaire pour éviter les bugs en modifiant la liste que je parcours
 
             for box in boxes_to_remove:
-                self.removeItem(box.getBox())
-                self.box_list.remove(box)
-                self.currentAnnotateImage.remove_annotation(box)
+                self.removeItem(box.getBox()) # on supprime le rectangle de l'image
+                self.box_list.remove(box) # on le retire de la liste actuelle
+                self.currentAnnotateImage.remove_annotation(box) # on retire l'annotation qui lui est associée sur l'image
 
             self.box_list.append(self.currentBox)
-            self.currentAnnotateImage.add_annotation(Annotation(title, finalBox))
+            self.currentAnnotateImage.add_annotation(Annotation(title, self.currentBox))
 
 
     def setCurrentAnnotateImage(self, annotateImage:AnnotateImage):
