@@ -55,7 +55,6 @@ class MenuBarController:
     def save_images(self):
         path = self.main_view.menu_bar.dialog_save_image()
         self.main_model.save_images(path)
-        print("Save Images")
 
     # Categories
     def import_categories(self):
