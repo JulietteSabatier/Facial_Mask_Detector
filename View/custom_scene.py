@@ -9,7 +9,8 @@ from Model.annotation import Annotation
 
 class CustomScene(QtWidgets.QGraphicsScene):
     currentAnnotateImage: AnnotateImage
-    rectangle_list: list[QGraphicsRectItem]
+    currentBox: Box
+    box_list: list[Box]
     left_click_pressed: bool
 
     def __init__(self, parentWidget:QtWidgets.QWidget, parent=None):
@@ -18,7 +19,8 @@ class CustomScene(QtWidgets.QGraphicsScene):
         self.parentWidget = parentWidget
         self.parentWidget.setCursor(Qt.CrossCursor)
         self.left_click_pressed = False
-        self.rectangle_list = []
+        self.box_list = []
+
 
     def mousePressEvent(self, event:QtWidgets.QGraphicsSceneMouseEvent) -> None:
         if event.button() == Qt.LeftButton:
@@ -27,17 +29,19 @@ class CustomScene(QtWidgets.QGraphicsScene):
 
         elif event.button() == Qt.RightButton:
 
-            if len(self.rectangle_list) > 0:
-                self.removeItem(self.rectangle_list[-1])
-                self.rectangle_list.pop()
+            if len(self.box_list) > 0:
+                self.removeItem(self.box_list[-1].getBox())
+                self.box_list.pop()
 
             if len(self.currentAnnotateImage.get_annotation_list()) > 0:
                 self.currentAnnotateImage.get_annotation_list().pop()
+
 
     def mouseMoveEvent(self, event:QtWidgets.QGraphicsSceneMouseEvent) -> None:
         if self.left_click_pressed:
             self.currentBox.updateBottomRight(event.scenePos().x(), event.scenePos().y())
             self.currentBox.update()
+
 
     def mouseReleaseEvent(self, event:QtWidgets.QGraphicsSceneMouseEvent) -> None:
         if event.button() == Qt.LeftButton:
@@ -46,17 +50,33 @@ class CustomScene(QtWidgets.QGraphicsScene):
             self.finishBox()
             self.left_click_pressed = False
 
+
     def wheelEvent(self, event:QtWidgets.QGraphicsSceneWheelEvent) -> None:
         # Do nothing, no scrolling allowed here sir (but later we'll maybe use it to zoom in/out
         pass
 
+
     def finishBox(self):
         if self.currentBox is not None:
             # Le mieux serait de faire un pop-up qui permette de donner un titre
-            finalBox = self.currentBox.getBox()
-            self.rectangle_list.append(finalBox)
             title = "Default title"
+            finalBox = self.currentBox.getBox()
+
+            # ce beau petit monde ne fonctionne pas correctement quand je fais le rectangle de bas droit vers haut gauche
+            boxes_to_remove = []
+            for box in self.box_list:
+                if min(self.currentBox.getTopLeft().getX(), self.currentBox.getBottomRight().getX()) <= min(box.getTopLeft().getX(), box.getBottomRight().getX()) and min(self.currentBox.getTopLeft().getY(), self.currentBox.getBottomRight().getY()) <= min(box.getTopLeft().getY(), box.getBottomRight().getY()):
+                    if max(self.currentBox.getTopLeft().getX(), self.currentBox.getBottomRight().getX()) >= max(box.getTopLeft().getX(), box.getBottomRight().getX()) and max(self.currentBox.getTopLeft().getY(), self.currentBox.getBottomRight().getY()) >= max(box.getTopLeft().getY(), box.getBottomRight().getY()):
+                        boxes_to_remove.append(box) # je passe par une liste intermédiaire pour éviter les bugs en modifiant la liste que je parcours
+
+            for box in boxes_to_remove:
+                self.removeItem(box.getBox())
+                self.box_list.remove(box)
+                self.currentAnnotateImage.remove_annotation(box)
+
+            self.box_list.append(self.currentBox)
             self.currentAnnotateImage.add_annotation(Annotation(title, finalBox))
+
 
     def setCurrentAnnotateImage(self, annotateImage:AnnotateImage):
         self.currentAnnotateImage = annotateImage
