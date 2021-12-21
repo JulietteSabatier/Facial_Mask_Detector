@@ -1,4 +1,3 @@
-from PySide6 import QtWidgets
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QPen
 from PySide6.QtWidgets import QGraphicsRectItem
@@ -6,7 +5,7 @@ from PySide6.QtWidgets import QGraphicsRectItem
 from Model.coordinates import Coordinates
 
 
-class Box(QtWidgets.QGraphicsRectItem):
+class Box:
     topLeft: Coordinates
     bottomRight: Coordinates
     width: float
@@ -14,14 +13,12 @@ class Box(QtWidgets.QGraphicsRectItem):
     box: QGraphicsRectItem
 
     def __init__(self, scene, x, y):
-        super().__init__()
         self.topLeft = Coordinates(x, y)
         self.bottomRight = Coordinates(x, y)
         self.width = 0
         self.height = 0
         self.scene = scene
-        self.setPen(QPen(Qt.blue))
-        self.box = self.scene.addRect(x, y, self.bottomRight.getX() - self.topLeft.getX(), self.bottomRight.getY() - self.topLeft.getY(), QPen(Qt.blue))
+        self.box = self.scene.addRect(x, y, 0, 0, QPen(Qt.blue))
 
 
     def update(self):
@@ -51,6 +48,9 @@ class Box(QtWidgets.QGraphicsRectItem):
                     "abs": self.getBottomRight().getX(),
                     "ord": self.getBottomRight().getY()}
                 }
+
+    def setBox(self, newBox:QGraphicsRectItem):
+        self.box = newBox
 
     def getBox(self):
         return self.box

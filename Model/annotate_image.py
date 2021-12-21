@@ -15,7 +15,12 @@ class AnnotateImage:
 
     def add_annotation(self, annotation: Annotation) -> None:
         self.annotation_list.append(annotation)
-        
+
+    def remove_annotation(self, box):
+        for annotation in self.annotation_list:
+            if annotation.get_box().getTopLeft() == box.getTopLeft() and annotation.get_box().getBottomRight() == box.getBottomRight():
+                self.annotation_list.remove(annotation)
+
     def get_path(self):
         return self.path
 
