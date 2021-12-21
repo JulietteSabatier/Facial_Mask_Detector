@@ -2,6 +2,7 @@ from Model.model_annotator import ModelAnnotator
 
 from View.show_categories_popup import ShowCategoriesPopup
 
+
 class ShowCategoryPopupController:
     main_model: ModelAnnotator
     popup: ShowCategoriesPopup
@@ -16,5 +17,7 @@ class ShowCategoryPopupController:
         self.main_model.delete_category(category)
 
     def rename_category(self):
-        old_name, new_name = self.popup.rename_category()
-        self.main_model.rename_category(old_name, new_name)
+        res = self.popup.rename_category()
+        if res is not None:
+            old_name, new_name = res[0], res[1]
+            self.main_model.rename_category(old_name, new_name)

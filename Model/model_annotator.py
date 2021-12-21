@@ -3,6 +3,7 @@ import os.path
 from Model.annotate_image import AnnotateImage
 from Model.annotation import Annotation
 from Model.position import Position
+from Model.category import Category
 import csv, json
 from PIL import Image
 
@@ -10,10 +11,10 @@ from PIL import Image
 # Représente les data (liste de catégories et d'images annotés)
 
 class ModelAnnotator:
-    category_list: list[str]
+    category_list: list[Category]
     image_list: list[AnnotateImage]
 
-    def __init__(self, category_list: (list[str]), image_list: (list[AnnotateImage])):
+    def __init__(self, category_list: (list[Category]), image_list: (list[AnnotateImage])):
         self.category_list = category_list
         self.image_list = image_list
 
@@ -49,19 +50,22 @@ class ModelAnnotator:
         return self.category_list
 
     def add_category(self, name: str):
-        if not self.category_list.__contains__(name):
-            self.category_list.append(name)
+        for cat in self.category_list:
+            if cat.name == name:
+                return
+        category = Category(name)
+        self.category_list.append(category)
 
     def delete_category(self, category: str):
-        self.category_list.remove(category)
+        for cat in self.category_list:
+            if cat.name == category:
+                self.category_list.remove(cat)
 
     def rename_category(self, category: str, new_name: str):
-        for i in range(len(self.category_list)):
-            if self.category_list[i] == category:
-                self.category_list[i] = new_name
-        # Change in the annotations too
-        # Maybe create an object annotation to change easily the name without
-        # search the name in all the annotations
+        for cat in self.category_list:
+            if cat.name == category:
+                cat.name = new_name
+                return
 
     def from_csv_to_categories(self, path: str):
         csv_file = open(path)
@@ -80,7 +84,7 @@ class ModelAnnotator:
     def from_categories_to_json(self, path: str):
         data = {"categories": []}
         for cat in self.category_list:
-            data["categories"].append(cat)
+            data["categories"].append(cat.name)
         try:
             json_file = open(path, 'w')
             json.dump(data, json_file)
