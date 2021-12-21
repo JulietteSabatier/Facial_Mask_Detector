@@ -86,7 +86,7 @@ class MainController:
         )
 
         self.main_view.menu_bar.close_project.triggered.connect(
-            self.menu_bar_controller.close_project
+            lambda: self.menu_bar_controller.close_project(self.popup_open_project_controller.project)
         )
 
     def set_image_widget_action(self):

@@ -1,7 +1,6 @@
 import os.path
 import sys
 
-import PySide6
 from PySide6 import QtGui, QtWidgets, QtCore
 
 
@@ -52,3 +51,18 @@ class PopupOpenProject(QtWidgets.QDialog):
     def dialog_no_project(self):
         message_box = QtWidgets.QMessageBox()
         message_box.setText("This project doesn't exist")
+
+    def update_list_project(self) -> None:
+        list_projects = os.listdir("Project")
+        list_path_project = [os.path.join("Project", x) for x in list_projects]
+
+        for i in range(len(list_projects)):
+            find = False
+            for j in range(self.list_project.count()):
+                if list_projects[i].title().upper() == self.list_project.item(j).text().upper():
+                    find = True
+            if not find:
+                item = QtWidgets.QListWidgetItem(list_projects[i].title())
+                self.list_project.addItem(item)
+            else:
+                continue

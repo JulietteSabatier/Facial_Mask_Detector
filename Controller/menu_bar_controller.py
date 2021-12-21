@@ -103,11 +103,12 @@ class MenuBarController:
             self.main_model.from_categories_to_json(path+"categories.json")
 
 
-    def close_project(self):
-        #self.save_project() ??
+    def close_project(self, project_name: str):
+        self.save_project(project_name)
         self.main_model.category_list = []
         self.main_model.image_list = []
         self.main_view.choose_image_area.clear()
         self.main_view.image_widget.scene.clear()
         self.main_view.popup_open_project.force_close = True
+        self.main_view.popup_open_project.update_list_project()
         self.main_view.popup_open_project.show()
