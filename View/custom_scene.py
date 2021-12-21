@@ -1,6 +1,6 @@
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QGraphicsRectItem
+from PySide6.QtGui import QPen
 
 from Model.selection_box import Box
 from Model.annotate_image import AnnotateImage
@@ -52,7 +52,7 @@ class CustomScene(QtWidgets.QGraphicsScene):
 
 
     def wheelEvent(self, event:QtWidgets.QGraphicsSceneWheelEvent) -> None:
-        # Do nothing, no scrolling allowed here sir (but later we'll maybe use it to zoom in/out
+        # Do nothing, no scrolling allowed here sir (but later we'll maybe use it to zoom in/out)
         pass
 
 
@@ -65,6 +65,7 @@ class CustomScene(QtWidgets.QGraphicsScene):
             for box in self.box_list:
                 if min(self.currentBox.getTopLeft().getX(), self.currentBox.getBottomRight().getX()) <= min(box.getTopLeft().getX(), box.getBottomRight().getX()) \
                         and min(self.currentBox.getTopLeft().getY(), self.currentBox.getBottomRight().getY()) <= min(box.getTopLeft().getY(), box.getBottomRight().getY()):
+
                     if max(self.currentBox.getTopLeft().getX(), self.currentBox.getBottomRight().getX()) >= max(box.getTopLeft().getX(), box.getBottomRight().getX()) \
                             and max(self.currentBox.getTopLeft().getY(), self.currentBox.getBottomRight().getY()) >= max(box.getTopLeft().getY(), box.getBottomRight().getY()):
                         boxes_to_remove.append(box) # je passe par une liste intermédiaire pour éviter les bugs en modifiant la liste que je parcours
@@ -80,3 +81,12 @@ class CustomScene(QtWidgets.QGraphicsScene):
 
     def setCurrentAnnotateImage(self, annotateImage:AnnotateImage):
         self.currentAnnotateImage = annotateImage
+
+    def loadAnnotations(self):
+        self.box_list = []
+
+        for annotation in self.currentAnnotateImage.get_annotation_list():
+            self.box_list.append(annotation.get_box())
+
+        for box in self.box_list:
+            box.setBox(self.addRect(box.getTopLeft().getX(), box.getTopLeft().getY(), box.getWidth(), box.getHeight(), QPen(Qt.blue)))

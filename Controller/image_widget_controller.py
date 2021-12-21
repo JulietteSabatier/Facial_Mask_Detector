@@ -28,5 +28,4 @@ class ImageWidgetController:
         self.main_view.image_widget.scene.addPixmap(pixmap)
         self.main_view.image_widget.view.fitInView(QtCore.QRect(0, 0, w, h), QtCore.Qt.KeepAspectRatio)
         self.main_view.image_widget.scene.update()
-
-        # If annotations load annotation
+        self.main_view.image_widget.scene.loadAnnotations()
