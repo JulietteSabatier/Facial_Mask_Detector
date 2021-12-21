@@ -61,6 +61,7 @@ class CustomScene(QtWidgets.QGraphicsScene):
             # Le mieux serait de faire un pop-up qui permette de donner un titre
             title = "Default title"
 
+            # Vérification des box qui seraient plus petites
             boxes_to_remove = []
             for box in self.box_list:
                 if min(self.currentBox.getTopLeft().getX(), self.currentBox.getBottomRight().getX()) <= min(box.getTopLeft().getX(), box.getBottomRight().getX()) \
@@ -75,8 +76,21 @@ class CustomScene(QtWidgets.QGraphicsScene):
                 self.box_list.remove(box) # on le retire de la liste actuelle
                 self.currentAnnotateImage.remove_annotation(box) # on retire l'annotation qui lui est associée sur l'image
 
-            self.box_list.append(self.currentBox)
-            self.currentAnnotateImage.add_annotation(Annotation(title, self.currentBox))
+            # Vérification des box qui seraient plus grande
+            bigger_box = False
+            for box in self.box_list:
+                if min(self.currentBox.getTopLeft().getX(), self.currentBox.getBottomRight().getX()) >= min(box.getTopLeft().getX(), box.getBottomRight().getX()) \
+                        and min(self.currentBox.getTopLeft().getY(), self.currentBox.getBottomRight().getY()) >= min(box.getTopLeft().getY(), box.getBottomRight().getY()):
+
+                    if max(self.currentBox.getTopLeft().getX(), self.currentBox.getBottomRight().getX()) <= max(box.getTopLeft().getX(), box.getBottomRight().getX()) \
+                            and max(self.currentBox.getTopLeft().getY(), self.currentBox.getBottomRight().getY()) <= max(box.getTopLeft().getY(), box.getBottomRight().getY()):
+                        bigger_box = True
+
+            if bigger_box:
+                self.removeItem(self.currentBox.getBox())
+            else:
+                self.box_list.append(self.currentBox)
+                self.currentAnnotateImage.add_annotation(Annotation(title, self.currentBox))
 
 
     def setCurrentAnnotateImage(self, annotateImage:AnnotateImage):
