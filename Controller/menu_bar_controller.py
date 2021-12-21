@@ -109,4 +109,5 @@ class MenuBarController:
         self.main_model.image_list = []
         self.main_view.choose_image_area.clear()
         self.main_view.image_widget.scene.clear()
+        self.main_view.popup_open_project.force_close = True
         self.main_view.popup_open_project.show()

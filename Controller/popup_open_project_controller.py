@@ -1,5 +1,6 @@
 import json
 import shutil
+from pathlib import Path
 
 from View.main_window import MainWindow
 from Model.model_annotator import ModelAnnotator
@@ -22,7 +23,8 @@ class PopupOpenProjectController:
         if name is not None:
             path = "Project/" + name
             if not os.path.exists(path + "/Images"):
-                os.makedirs(path + "/Images")
+                path_to_create = Path(path+'/Images')
+                path_to_create.mkdir(parents=True, exist_ok=True)
             data = {}
             annot_json = open(path + "/annotations.json", 'w')
             cat_json = open(path + "/categories.json", 'w')

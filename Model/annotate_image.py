@@ -32,6 +32,7 @@ class AnnotateImage:
         self.annotation_list = annotation_list
 
     def save_image(self, new_path: str):
-        image = Image.open(self.path)
+        image = Image.open(r''+self.path)
         image.save(new_path+self.title+".png")
+
 
