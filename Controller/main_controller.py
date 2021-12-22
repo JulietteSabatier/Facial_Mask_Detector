@@ -1,10 +1,11 @@
-from PyQt5 import QtCore
+from PySide6 import QtCore
 
 from Model.annotate_image import AnnotateImage
 from Model.model_annotator import ModelAnnotator
 from View.main_window import MainWindow
 from View.menu_bar import MenuBar
 from View.popup_open_project import PopupOpenProject
+
 
 from Controller.menu_bar_controller import MenuBarController
 from Controller.image_widget_controller import ImageWidgetController
@@ -107,4 +108,3 @@ class MainController:
         self.main_view.choose_image_area.rename_action.triggered.connect(
             self.choose_image_area_controller.rename_button
         )
-

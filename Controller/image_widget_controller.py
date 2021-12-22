@@ -1,7 +1,7 @@
 from View.image_widget import ImageWidget
 from Model.annotate_image import AnnotateImage
 from PIL import Image, ImageQt
-from PySide6 import QtGui, QtCore
+from PySide6 import QtGui, QtCore, QtWidgets
 from View.main_window import MainWindow
 from Model.model_annotator import ModelAnnotator
 
@@ -16,7 +16,10 @@ class ImageWidgetController:
         self.main_model = main_model
 
     def load_image_widget(self, image: AnnotateImage):
-        self.main_view.image_widget.scene.clear()
+        self.main_view.image_widget.initialize_scene()
+
+        self.main_view.image_widget.scene.setCurrentAnnotateImage(image)
+
         img_path = image.path
         image = Image.open(img_path)
         w, h = image.size
@@ -25,5 +28,4 @@ class ImageWidgetController:
         self.main_view.image_widget.scene.addPixmap(pixmap)
         self.main_view.image_widget.view.fitInView(QtCore.QRect(0, 0, w, h), QtCore.Qt.KeepAspectRatio)
         self.main_view.image_widget.scene.update()
-
-        # If annotations load annotation
+        self.main_view.image_widget.scene.loadAnnotations()

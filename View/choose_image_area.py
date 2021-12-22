@@ -55,4 +55,3 @@ class ChooseImageArea(QtWidgets.QListWidget):
         if result:
             self.currentItem().setText(text)
             return text
-

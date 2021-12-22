@@ -13,6 +13,14 @@ class AnnotateImage:
         self.path = path
         self.annotation_list = annotation_list
 
+    def add_annotation(self, annotation: Annotation) -> None:
+        self.annotation_list.append(annotation)
+
+    def remove_annotation(self, box):
+        for annotation in self.annotation_list:
+            if annotation.get_box().getTopLeft() == box.getTopLeft() and annotation.get_box().getBottomRight() == box.getBottomRight():
+                self.annotation_list.remove(annotation)
+
     def get_path(self):
         return self.path
 
@@ -34,5 +42,4 @@ class AnnotateImage:
     def save_image(self, new_path: str):
         image = Image.open(r''+self.path)
         image.save(new_path+self.title+".png")
-
 

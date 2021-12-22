@@ -107,10 +107,10 @@ class ModelAnnotator:
         json_data = json.load(f)
         if len(json_data) != 0:
             for image in json_data:
-                print(image)
                 if os.path.exists(json_data[image]["path"]):
                     annotations = []
                     for annotation in json_data[image]["annotations"]:
+                        # TODO changer cet appel erroné du constructeur d'Annotation
                         position = Position(
                             (annotation["position"]["left_up"]["abs"], annotation["position"]["left_up"]["ord"]),
                             (annotation["position"]["right_down"]["abs"], annotation["position"]["right_down"]["ord"]))
