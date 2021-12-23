@@ -82,18 +82,25 @@ class CustomScene(QtWidgets.QGraphicsScene):
             if is_invalid:
                 self.removeItem(self.currentBox.getBox())
             else:
+                annotation = Annotation(title, self.currentBox)
                 self.box_list.append(self.currentBox)
-                self.currentAnnotateImage.add_annotation(Annotation(title, self.currentBox))
+                self.currentAnnotateImage.add_annotation(annotation)
+                self.addAnnotation(annotation)
 
 
     def setCurrentAnnotateImage(self, annotateImage:AnnotateImage):
         self.currentAnnotateImage = annotateImage
 
     def loadAnnotations(self):
-        self.box_list = []
-
         for annotation in self.currentAnnotateImage.get_annotation_list():
-            self.box_list.append(annotation.get_box())
+            self.addAnnotation(annotation)
 
-        for box in self.box_list:
-            box.setBox(self.addRect(box.getTopLeft().getX(), box.getTopLeft().getY(), box.getWidth(), box.getHeight(), QPen(Qt.blue)))
+    def addAnnotation(self, annotation: Annotation):
+        box = annotation.get_box()
+        top_left = box.getTopLeft()
+        bottom_right = box.getBottomRight()
+
+        self.box_list.append(box)
+        self.addRect(top_left.getX(), top_left.getY(),
+                     abs(bottom_right.getX() - top_left.getX()), abs(top_left.getY() - bottom_right.getY()),
+                     QPen(Qt.blue))

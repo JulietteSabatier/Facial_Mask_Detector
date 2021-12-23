@@ -10,25 +10,25 @@ class Box:
     bottomRight: Coordinates
     width: float
     height: float
-    box: QGraphicsRectItem
+    #box: QGraphicsRectItem
 
     def __init__(self, scene, x, y):
         self.topLeft = Coordinates(x, y)
         self.bottomRight = Coordinates(x, y)
         self.width = 0
         self.height = 0
-        self.scene = scene
-        self.box = self.scene.addRect(x, y, 0, 0, QPen(Qt.blue))
+        #self.scene = scene
+        #self.box = self.scene.addRect(x, y, 0, 0, QPen(Qt.blue))
 
 
     def update(self):
         self.width = self.bottomRight.getX() - self.topLeft.getX()
         self.height = self.bottomRight.getY() - self.topLeft.getY()
 
-        self.box.setRect(self.topLeft.getX(),
-                     self.topLeft.getY(),
-                     self.width,
-                     self.height)
+        #self.box.setRect(self.topLeft.getX(),
+        #             self.topLeft.getY(),
+        #             self.width,
+        #             self.height)
 
 
     def updateTopLeft(self, newX, newY):
@@ -49,7 +49,7 @@ class Box:
                     "ord": self.getBottomRight().getY()}
                 }
 
-    def setBox(self, newBox:QGraphicsRectItem):
+    def setBox(self, newBox: QGraphicsRectItem):
         self.box = newBox
 
     def getBox(self):

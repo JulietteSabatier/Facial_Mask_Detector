@@ -25,3 +25,4 @@ class ImageWidget(QtWidgets.QWidget):  # Central Widget
             self.initialized = True
         else:
             self.scene.clear()
+
