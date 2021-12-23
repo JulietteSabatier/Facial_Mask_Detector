@@ -1,4 +1,3 @@
-from PySide6.QtWidgets import QGraphicsRectItem
 
 from Model.coordinates import Coordinates
 
@@ -36,12 +35,6 @@ class Box:
                     "abs": self.getBottomRight().getX(),
                     "ord": self.getBottomRight().getY()}
                 }
-
-    def setBox(self, newBox: QGraphicsRectItem):
-        self.box = newBox
-
-    def getBox(self):
-        return self.box
 
     def getTopLeft(self):
         return self.topLeft

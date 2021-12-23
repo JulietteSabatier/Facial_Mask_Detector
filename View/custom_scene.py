@@ -33,37 +33,24 @@ class CustomScene(QtWidgets.QGraphicsScene):
             self.left_click_pressed = True
 
         #Right click = removing the most recently registered box
-        elif event.button() == Qt.RightButton:
-            if len(self.box_list) > 0:
-                self.removeItem(self.box_list[-1].getBox())
-                self.box_list.pop()
+        #elif event.button() == Qt.RightButton:
+        #    if len(self.box_list) > 0:
+        #        self.removeItem(self.box_list[-1].getBox())
+        #        self.box_list.pop()
 
-            if len(self.currentAnnotateImage.get_annotation_list()) > 0:
-                self.currentAnnotateImage.get_annotation_list().pop()
-
+        #    if len(self.currentAnnotateImage.get_annotation_list()) > 0:
+        #        self.currentAnnotateImage.get_annotation_list().pop()
 
     def mouseMoveEvent(self, event:QtWidgets.QGraphicsSceneMouseEvent) -> None:
         # If the left click is pressed (we must not do it with right click), we update the box we're creating
         if self.left_click_pressed:
-            self.currentBox.updateBottomRight(event.scenePos().x(), event.scenePos().y())
-            self.currentRect.setRect(
-                self.currentBox.getTopLeft().x,
-                self.currentBox.getTopLeft().y,
-                abs(self.currentBox.getTopLeft().getX() - event.scenePos().x()),
-                abs(self.currentBox.getTopLeft().getY() - event.scenePos().y()))
-            self.currentBox.update()
-
+            self.updateRect(event.scenePos().x(), event.scenePos().y())
 
     def mouseReleaseEvent(self, event:QtWidgets.QGraphicsSceneMouseEvent) -> None:
         # If it's the left click (we don't care about the right click), we update the box one last time
         # and then call the function to check its final validity
         if event.button() == Qt.LeftButton:
-            self.currentBox.updateBottomRight(event.scenePos().x(), event.scenePos().y())
-            self.currentRect.setRect(
-                self.currentBox.getTopLeft().x,
-                self.currentBox.getTopLeft().y,
-                abs(self.currentBox.getTopLeft().getX() - event.scenePos().x()),
-                abs(self.currentBox.getTopLeft().getY() - event.scenePos().y()))
+            self.updateRect(event.scenePos().x(), event.scenePos().y())
             self.currentBox.update()
             self.finishBox()
             self.left_click_pressed = False
@@ -71,6 +58,15 @@ class CustomScene(QtWidgets.QGraphicsScene):
     def wheelEvent(self, event: QtWidgets.QGraphicsSceneWheelEvent) -> None:
         # Do nothing, no scrolling allowed here sir (but later we'll maybe use it to zoom in/out)
         pass
+
+    def updateRect(self, x, y):
+        self.currentBox.updateBottomRight(x, y)
+        self.currentRect.setRect(
+            self.currentBox.getTopLeft().x,
+            self.currentBox.getTopLeft().y,
+            x - self.currentBox.getTopLeft().getX(),
+            y - self.currentBox.getTopLeft().getY())
+        self.currentBox.update()
 
     def finishBox(self):
         """Does the final verifications to check the validity of the currentBox,\
@@ -115,7 +111,7 @@ class CustomScene(QtWidgets.QGraphicsScene):
                     break
 
             if is_invalid:
-                self.removeItem(self.currentBox.getBox())
+                self.removeItem(self.currentRect)
             else:
                 annotation = Annotation(title, self.currentBox)
                 self.box_list.append(self.currentBox)
