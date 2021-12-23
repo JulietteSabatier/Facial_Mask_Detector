@@ -1,7 +1,6 @@
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QPen
-from PySide6 import QtCore
 from Model.selection_box import Box
 from Model.annotate_image import AnnotateImage
 from Model.annotation import Annotation
@@ -110,14 +109,11 @@ class CustomScene(QtWidgets.QGraphicsScene):
 
     def loadAnnotations(self):
         for annotation in self.currentAnnotateImage.get_annotation_list():
-            self.addAnnotation(annotation)
+            box = annotation.get_box()
+            top_left = box.getTopLeft()
+            bottom_right = box.getBottomRight()
 
-    def addAnnotation(self, annotation: Annotation):
-        box = annotation.get_box()
-        top_left = box.getTopLeft()
-        bottom_right = box.getBottomRight()
-
-        self.box_list.append(box)
-        self.addRect(top_left.getX(), top_left.getY(),
-                     abs(bottom_right.getX() - top_left.getX()), abs(top_left.getY() - bottom_right.getY()),
-                     QPen(Qt.blue))
+            self.box_list.append(box)
+            self.addRect(top_left.getX(), top_left.getY(),
+                         abs(bottom_right.getX() - top_left.getX()), abs(top_left.getY() - bottom_right.getY()),
+                         QPen(Qt.blue))
