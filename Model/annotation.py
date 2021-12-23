@@ -21,4 +21,4 @@ class Annotation:
 
     def from_annotations_to_json(self):
         return {"title": self.title,
-                "position": self.box.get_position_as_json()}
+                "box": self.box.get_position_as_json()}

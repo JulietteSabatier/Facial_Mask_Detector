@@ -1,11 +1,13 @@
 import os.path
+import csv, json
 
 from Model.annotate_image import AnnotateImage
 from Model.annotation import Annotation
-from Model.position import Position
+from Model.selection_box import Box
 from Model.category import Category
-import csv, json
-from PIL import Image
+
+from View.custom_scene import CustomScene
+from PySide6 import QtGui, QtWidgets, QtCore
 
 
 # Représente les data (liste de catégories et d'images annotés)
@@ -43,7 +45,7 @@ class ModelAnnotator:
     def save_images(self, new_path: str):
         for image in self.image_list:
             image.save_image(new_path)
-            image.path = new_path+image.title+".png"
+            image.path = new_path + image.title + ".png"
 
     # Category
     def get_category_list(self):
@@ -98,7 +100,7 @@ class ModelAnnotator:
             data[image.title] = {"path": image.path,
                                  "annotations": []}
             for annotation in image.annotation_list:
-                data[image.title]["annotations"] = annotation.from_annotations_to_json()
+                data[image.title]["annotations"].append(annotation.from_annotations_to_json())
         json_file = open(path, 'w')
         json.dump(data, json_file)
 
@@ -109,12 +111,19 @@ class ModelAnnotator:
             for image in json_data:
                 if os.path.exists(json_data[image]["path"]):
                     annotations = []
-                    for annotation in json_data[image]["annotations"]:
-                        # TODO changer cet appel erroné du constructeur d'Annotation
-                        position = Position(
-                            (annotation["position"]["left_up"]["abs"], annotation["position"]["left_up"]["ord"]),
-                            (annotation["position"]["right_down"]["abs"], annotation["position"]["right_down"]["ord"]))
-                        annotations.append(Annotation(annotation["title"], position))
                     annotate_image = AnnotateImage(json_data[image]["path"], image, annotations)
-                    self.add_image(annotate_image)
+                    # TODO changer cet appel erroné du constructeur d'Annotation
+                    # les annotations devrai être bien chargé mais je ne sais pas trop comment faire pour la custom scene
+                    # on est pas censé avoir de view dans le model !
+                    if len(json_data[image]["annotations"]) != 0:
+                        for i in range(len(json_data[image]["annotations"])):
+
+                            top_x = json_data[image]["annotations"][i]["box"]["top_left"]["abs"]
+                            top_y = json_data[image]["annotations"][i]["box"]["top_left"]["ord"]
+                            box = Box(None, top_x, top_y)
+                            bottom_x = json_data[image]["annotations"][i]["box"]["bottom_right"]["abs"]
+                            bottom_y = json_data[image]["annotations"][i]["box"]["bottom_right"]["ord"]
+                            box.updateBottomRight(bottom_x, bottom_y)
+                            annotations.append(Annotation(json_data[image]["annotations"][i]["title"], box))
+                        self.add_image(annotate_image)
         f.close()
