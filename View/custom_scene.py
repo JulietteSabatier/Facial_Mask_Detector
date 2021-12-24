@@ -44,12 +44,12 @@ class CustomScene(QtWidgets.QGraphicsScene):
         #    if len(self.currentAnnotateImage.get_annotation_list()) > 0:
         #        self.currentAnnotateImage.get_annotation_list().pop()
 
-    def mouseMoveEvent(self, event:QtWidgets.QGraphicsSceneMouseEvent) -> None:
+    def mouseMoveEvent(self, event: QtWidgets.QGraphicsSceneMouseEvent) -> None:
         # If the left click is pressed (we must not do it with right click), we update the box we're creating
         if self.left_click_pressed:
             self.updateRect(event.scenePos().x(), event.scenePos().y())
 
-    def mouseReleaseEvent(self, event:QtWidgets.QGraphicsSceneMouseEvent) -> None:
+    def mouseReleaseEvent(self, event: QtWidgets.QGraphicsSceneMouseEvent) -> None:
         # If it's the left click (we don't care about the right click), we update the box one last time
         # and then call the function to check its final validity
         if event.button() == Qt.LeftButton:
@@ -72,8 +72,8 @@ class CustomScene(QtWidgets.QGraphicsScene):
         self.currentBox.update()
 
     def popup_rename(self):
-        dialog = QtWidgets.QInputDialog()
-        dialog.setComboBoxEditable(True)
+        dialog = QtWidgets.QInputDialog().
+        dialog.setComboBoxEditable()
         dialog.show()
 
     def finishBox(self):
@@ -149,5 +149,17 @@ class CustomScene(QtWidgets.QGraphicsScene):
     def getCurrentBox(self):
         return self.currentBox
 
+
+
+class PopupComboBox(QtWidgets.QDialog):
+     def __init__(self):
+         super(PopupComboBox, self).__init__()
+         self.resize(400,200)
+
+         self.combo_box = QtWidgets.QComboBox()
+
+         self.box = QtWidgets.QVBoxLayout()
+         self.box.addWidget(self.combo_box)
+         self.setLayout(self.box)
 
 
