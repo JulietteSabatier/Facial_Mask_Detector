@@ -2,7 +2,7 @@ import shapely.geometry
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QPen
-
+from PySide6 import QtCore
 from Model.selection_box import Box
 from Model.annotate_image import AnnotateImage
 from Model.annotation import Annotation
@@ -30,10 +30,13 @@ class CustomScene(QtWidgets.QGraphicsScene):
         if event.button() == Qt.LeftButton:
             self.currentBox = Box(self, event.scenePos().x(), event.scenePos().y())
             self.currentRect = self.addRect(event.scenePos().x(), event.scenePos().y(), 0, 0, QPen(Qt.blue))
+
             self.left_click_pressed = True
 
         #Right click = removing the most recently registered box
-        #elif event.button() == Qt.RightButton:
+        elif event.button() == Qt.RightButton:
+            comboBox = QtWidgets.QInputDialog.setComboBoxEditable(True)
+
         #    if len(self.box_list) > 0:
         #        self.removeItem(self.box_list[-1].getBox())
         #        self.box_list.pop()
@@ -67,6 +70,11 @@ class CustomScene(QtWidgets.QGraphicsScene):
             x - self.currentBox.getTopLeft().getX(),
             y - self.currentBox.getTopLeft().getY())
         self.currentBox.update()
+
+    def popup_rename(self):
+        dialog = QtWidgets.QInputDialog()
+        dialog.setComboBoxEditable(True)
+        dialog.show()
 
     def finishBox(self):
         """Does the final verifications to check the validity of the currentBox,\
@@ -140,3 +148,6 @@ class CustomScene(QtWidgets.QGraphicsScene):
 
     def getCurrentBox(self):
         return self.currentBox
+
+
+
