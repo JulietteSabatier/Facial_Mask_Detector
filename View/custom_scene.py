@@ -14,6 +14,7 @@ class CustomScene(QtWidgets.QGraphicsScene):
     currentBox: Box
     currentRect: QtWidgets.QGraphicsRectItem
     box_list: list[Box]
+    rect_list: list[QtWidgets.QGraphicsRectItem]
     left_click_pressed: bool
     view: View
 
@@ -25,20 +26,20 @@ class CustomScene(QtWidgets.QGraphicsScene):
         self.parentWidget.setCursor(Qt.CrossCursor)
         self.left_click_pressed = False
         self.box_list = []
+        self.rect_list = []
 
-
-    def mousePressEvent(self, event:QtWidgets.QGraphicsSceneMouseEvent) -> None:
-        #Left click = creating a new box
+    def mousePressEvent(self, event: QtWidgets.QGraphicsSceneMouseEvent) -> None:
+        # Left click = creating a new box
         if event.button() == Qt.LeftButton:
             if self.currentBox is not None:
-                self.currentBox.getBox().setSelected(False)
+                self.currentRect.setSelected(False)
 
             self.currentBox = Box(self, event.scenePos().x(), event.scenePos().y())
             self.currentRect = self.addRect(event.scenePos().x(), event.scenePos().y(), 0, 0, QPen(Qt.blue))
 
             self.left_click_pressed = True
 
-        #Right click = removing the most recently registered box
+        # Right click = removing the most recently registered box
         elif event.button() == Qt.RightButton:
             comboBox = QtWidgets.QInputDialog.setComboBoxEditable(True)
 
@@ -57,23 +58,25 @@ class CustomScene(QtWidgets.QGraphicsScene):
     def mouseReleaseEvent(self, event: QtWidgets.QGraphicsSceneMouseEvent) -> None:
         # If it's the left click (we don't care about the right click), we update the box one last time
         # and then call the function to check its final validity
-        if event.button() == Qt.LeftButton and self.currentBox is not None and not self.currentBox.getBox().isSelected():
+        if event.button() == Qt.LeftButton and self.currentBox is not None and not self.currentRect.isSelected():
             self.updateRect(event.scenePos().x(), event.scenePos().y())
             self.currentBox.updateBottomRight(event.scenePos().x(), event.scenePos().y())
             self.currentBox.update()
             self.finishBox()
             self.left_click_pressed = False
 
-    def mouseDoubleClickEvent(self, event:QtWidgets.QGraphicsSceneMouseEvent) -> None:
+    def mouseDoubleClickEvent(self, event: QtWidgets.QGraphicsSceneMouseEvent) -> None:
         if event.button() == Qt.LeftButton:
-            for box in self.box_list:
-                if box.getBox().contains(event.scenePos()):
-                    box.getBox().setSelected(True)
-                    self.currentBox = box
+            for rect in self.rect_list:
+                if rect.contains(event.scenePos()):
+                    rect.setSelected(True)
+                    self.currentRect = rect
+                    index = self.rect_list.index(self.currentRect)
+                    self.currentBox = self.box_list.__getitem__(index)
+                    print("double click on annot")
                     break
 
-
-    def wheelEvent(self, event:QtWidgets.QGraphicsSceneWheelEvent) -> None:
+    def wheelEvent(self, event: QtWidgets.QGraphicsSceneWheelEvent) -> None:
         # Do nothing, no scrolling allowed here sir (but later we'll maybe use it to zoom in/out)
         pass
 
@@ -85,11 +88,6 @@ class CustomScene(QtWidgets.QGraphicsScene):
             x - self.currentBox.getTopLeft().getX(),
             y - self.currentBox.getTopLeft().getY())
         self.currentBox.update()
-
-    def popup_rename(self):
-        dialog = QtWidgets.QInputDialog().
-        dialog.setComboBoxEditable()
-        dialog.show()
 
     def finishBox(self):
         """Does the final verifications to check the validity of the currentBox,
@@ -106,18 +104,20 @@ class CustomScene(QtWidgets.QGraphicsScene):
             is_invalid = self.view.check_pixel_size(self.currentBox)
 
             if is_invalid:
-                self.removeItem(self.currentBox.getBox())
+                self.removeItem(self.currentRect)
                 print("Box invalide (surface inférieure à 40 pixels ou largeur/longueur inférieure à 5 pixels")
             else:
-                new_polygon = shapely.geometry.box(min(self.currentBox.getTopLeft().getX(), self.currentBox.getBottomRight().getX()),
-                                                   min(self.currentBox.getTopLeft().getY(), self.currentBox.getBottomRight().getY()),
-                                                   max(self.currentBox.getTopLeft().getX(), self.currentBox.getBottomRight().getX()),
-                                                   max(self.currentBox.getTopLeft().getY(), self.currentBox.getBottomRight().getY()))
+                new_polygon = shapely.geometry.box(
+                    min(self.currentBox.getTopLeft().getX(), self.currentBox.getBottomRight().getX()),
+                    min(self.currentBox.getTopLeft().getY(), self.currentBox.getBottomRight().getY()),
+                    max(self.currentBox.getTopLeft().getX(), self.currentBox.getBottomRight().getX()),
+                    max(self.currentBox.getTopLeft().getY(), self.currentBox.getBottomRight().getY()))
                 for box in self.box_list:
                     current_polygon = shapely.geometry.box(min(box.getTopLeft().getX(), box.getBottomRight().getX()),
                                                            min(box.getTopLeft().getY(), box.getBottomRight().getY()),
                                                            max(box.getTopLeft().getX(), box.getBottomRight().getX()),
                                                            max(box.getTopLeft().getY(), box.getBottomRight().getY()))
+
                     # Vérification des box qui seraient plus petites
                     if new_polygon.covers(current_polygon):
                         is_invalid = True
@@ -131,21 +131,23 @@ class CustomScene(QtWidgets.QGraphicsScene):
                         break
 
                     # Vérification des box qui seraient couvertes à 40%
-                    if new_polygon.intersection(current_polygon).area >= current_polygon.area * 0.2 or new_polygon.intersection(current_polygon).area >= new_polygon.area * 0.2:
+                    if new_polygon.intersection(
+                            current_polygon).area >= current_polygon.area * 0.2 or new_polygon.intersection(
+                            current_polygon).area >= new_polygon.area * 0.2:
                         is_invalid = True
                         print("Box invalide (intersection couvrant 20% ou plus de la surface)")
                         break
 
-            #Oui je vérifie 2 fois mais soit je suis trop bête pour le faire efficacement, soit on peut pas parce qu'on
-            #change le booléen après la première vérification
+            # Oui je vérifie 2 fois mais soit je suis trop bête pour le faire efficacement, soit on peut pas parce qu'on
+            # change le booléen après la première vérification
             if is_invalid:
                 self.removeItem(self.currentRect)
             else:
                 annotation = Annotation(title, self.currentBox)
                 self.box_list.append(self.currentBox)
+                self.rect_list.append(self.currentRect)
                 self.currentAnnotateImage.add_annotation(Annotation(title, self.currentBox))
-                self.currentBox.getBox().setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
-
+                self.currentRect.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
 
     def setCurrentAnnotateImage(self, annotateImage: AnnotateImage):
         self.currentAnnotateImage = annotateImage
@@ -159,16 +161,18 @@ class CustomScene(QtWidgets.QGraphicsScene):
             top_left = box.getTopLeft()
             bottom_right = box.getBottomRight()
 
-        for box in self.box_list:
-            box.setBox(self.addRect(box.getTopLeft().getX(), box.getTopLeft().getY(), box.getWidth(), box.getHeight(), QPen(Qt.blue)))
-            box.getBox().setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
+            self.box_list.append(box)
+            self.currentRect = self.addRect(top_left.getX(), top_left.getY(),
+                         abs(bottom_right.getX() - top_left.getX()), abs(top_left.getY() - bottom_right.getY()),
+                         QPen(Qt.blue))
+            self.currentRect.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
+            self.rect_list.append(self.currentRect)
+        # for box in self.box_list:
+        #    box.setBox(self.addRect(box.getTopLeft().getX(), box.getTopLeft().getY(), box.getWidth(), box.getHeight(), QPen(Qt.blue)))
+        #    box.getBox().setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
 
     def set_view(self, view: View):
         self.view = view
-            self.box_list.append(box)
-            self.addRect(top_left.getX(), top_left.getY(),
-                         abs(bottom_right.getX() - top_left.getX()), abs(top_left.getY() - bottom_right.getY()),
-                         QPen(Qt.blue))
 
     def getCurrentAnnotateImage(self):
         return self.currentAnnotateImage
@@ -177,16 +181,13 @@ class CustomScene(QtWidgets.QGraphicsScene):
         return self.currentBox
 
 
-
 class PopupComboBox(QtWidgets.QDialog):
-     def __init__(self):
-         super(PopupComboBox, self).__init__()
-         self.resize(400,200)
+    def __init__(self):
+        super(PopupComboBox, self).__init__()
+        self.resize(400, 200)
 
-         self.combo_box = QtWidgets.QComboBox()
+        self.combo_box = QtWidgets.QComboBox()
 
-         self.box = QtWidgets.QVBoxLayout()
-         self.box.addWidget(self.combo_box)
-         self.setLayout(self.box)
-
-
+        self.box = QtWidgets.QVBoxLayout()
+        self.box.addWidget(self.combo_box)
+        self.setLayout(self.box)
