@@ -1,5 +1,6 @@
 from PySide6 import QtGui, QtWidgets, QtCore
 
+from Model.category import Category
 
 class ShowCategoriesPopup(QtWidgets.QDialog):
 
@@ -22,9 +23,9 @@ class ShowCategoriesPopup(QtWidgets.QDialog):
         self.category_list_widget.addAction(self.rename_cat)
         self.category_list_widget.addAction(self.delete_cat)
 
-    def add_categories(self, category_list: list[str]):
+    def add_categories(self, category_list: list[Category]):
         for category in category_list:
-            widget_item = QtWidgets.QListWidgetItem(category)
+            widget_item = QtWidgets.QListWidgetItem(category.name)
             self.category_list_widget.insertItem(1, widget_item)
 
     def delete_category(self):

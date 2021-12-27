@@ -1,9 +1,14 @@
-from PySide6 import QtWidgets, QtGui
-from PySide6.QtCore import Qt
+import sys
+from PySide6 import QtWidgets, QtCore, QtGui
+from PySide6.QtCore import Slot, Qt
+from Model.model_annotator import ModelAnnotator
+
 
 # Créer le visuel de la scroll bar des nom des images
 
 class MyButton(QtWidgets.QListWidgetItem):
+    main_model: ModelAnnotator
+
     # Pas encore fini
     def __init__(self, name):
         super(MyButton, self).__init__()
@@ -13,8 +18,10 @@ class MyButton(QtWidgets.QListWidgetItem):
 
 
 class ChooseImageArea(QtWidgets.QListWidget):
-    def __init__(self, parent=None):
-        QtWidgets.QListWidget.__init__(self, parent)
+    def __init__(self, main_model: ModelAnnotator):
+        QtWidgets.QListWidget.__init__(self)
+
+        self.main_model = main_model
 
         self.widget = QtWidgets.QWidget()
         self.box = QtWidgets.QVBoxLayout()
@@ -29,6 +36,10 @@ class ChooseImageArea(QtWidgets.QListWidget):
         self.setContextMenuPolicy(Qt.ActionsContextMenu)
         self.addAction(self.remove_action)
         self.addAction(self.rename_action)
+
+    def load_all_images(self):
+        for image in self.main_model.image_list:
+            self.add_image(image.title)
 
     def add_image(self, img_title: str):
         widget_item = QtWidgets.QListWidgetItem(img_title)

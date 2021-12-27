@@ -1,3 +1,4 @@
+import json
 import os.path
 
 from Model.annotate_image import AnnotateImage
@@ -10,7 +11,7 @@ from Controller.show_category_popup_controller import ShowCategoryPopupControlle
 
 from View.main_window import MainWindow
 from View.show_categories_popup import ShowCategoriesPopup
-
+from View.popup_open_project import PopupOpenProject
 
 # Définition des fonctions qui représentent les action de la menuBar
 
@@ -30,7 +31,7 @@ class MenuBarController:
         self.image_widget_controller = ImageWidgetController(main_view, main_model)
 
     # Images
-    def load_image_menu_bar(self):
+    def load_image_menu_bar(self, project_name: str):
 
         # Charge un ou plusieurs images la dernière seulement s'affiche dans la graphicView
         # Ne charge pas les annotations
@@ -41,6 +42,7 @@ class MenuBarController:
             for i in range(len(imgs[0])):
                 path = imgs[0][i]
                 title = path.split("/")[-1].split(".")[0]
+#                new_path = "Project/"+project_name+"/"+title
                 image = AnnotateImage(path, title, [])
 
                 # Ajouter l'image dans la base
@@ -53,7 +55,6 @@ class MenuBarController:
     def save_images(self):
         path = self.main_view.menu_bar.dialog_save_image()
         self.main_model.save_images(path)
-        print("Save Images")
 
     # Categories
     def import_categories(self):
@@ -90,28 +91,24 @@ class MenuBarController:
 
     def load_annotations(self):
         path, type_file = self.main_view.menu_bar.dialog_path_load_annotations()
-        self.main_model.from_json_to_annotation(path[0])
+        if len(path) != 0:
+            self.main_model.from_json_to_annotation(path[0])
 
     # Project
-    def create_project(self):
-        name, result = self.main_view.menu_bar.dialog_name_project()
-        if result:
-            path = "Project/" + name
-            if not os.path.exists(path + "/Images"):
-                os.makedirs(path + "/Images")
-            open(path + "/annotations.json", 'w')
-            open(path + "/categories.json", 'w')
+    def save_project(self, project_name: str):
+        if project_name != "":
+            path = "Project/"+project_name+"/"
+            self.main_model.save_images(path + "Images/")
+            self.main_model.from_annotation_to_json(path+"annotations.json")
+            self.main_model.from_categories_to_json(path+"categories.json")
 
-    def save_project(self):
-        path = self.main_view.menu_bar.dialog_path_load_project()
-        print("Save project")
 
-    def load_project(self):
-        path = self.main_view.menu_bar.dialog_path_save_project()
-        if (os.path.exists(path + "/Images")
-            and os.path.exists(path + "/annotations.json")
-            and os.path.exists(path + "/categories.json")):
-            self.main_model.from_json_to_annotation(path + "/annotations.json")
-            self.main_model.from_json_to_categories(path + "/categories.json")
-        else:
-            self.main_view.menu_bar.dialog_not_a_project()
+    def close_project(self, project_name: str):
+        self.save_project(project_name)
+        self.main_model.category_list = []
+        self.main_model.image_list = []
+        self.main_view.choose_image_area.clear()
+        self.main_view.image_widget.scene.clear()
+        self.main_view.popup_open_project.force_close = True
+        self.main_view.popup_open_project.update_list_project()
+        self.main_view.popup_open_project.show()
