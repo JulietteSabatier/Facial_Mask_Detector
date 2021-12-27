@@ -6,10 +6,6 @@ from Model.annotation import Annotation
 from Model.selection_box import Box
 from Model.category import Category
 
-from View.custom_scene import CustomScene
-from PySide6 import QtGui, QtWidgets, QtCore
-
-
 # Représente les data (liste de catégories et d'images annotés)
 
 class ModelAnnotator:
@@ -50,6 +46,11 @@ class ModelAnnotator:
     # Category
     def get_category_list(self):
         return self.category_list
+
+    def get_category_by_name(self, name: str):
+        for category in self.category_list:
+            if category.name == name:
+                return category
 
     def add_category(self, name: str):
         for cat in self.category_list:

@@ -17,7 +17,7 @@ class MainWindow(QtWidgets.QMainWindow):  # main window
         super(MainWindow, self).__init__()
         self.model_annotator = model_annotator
 
-        self.image_widget = ImageWidget()
+        self.image_widget = ImageWidget(model_annotator)
         self.choose_image_area: ChooseImageArea = ChooseImageArea(model_annotator)
         self.menu_bar = MenuBar()
 
