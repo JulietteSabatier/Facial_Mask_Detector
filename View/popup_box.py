@@ -1,9 +1,8 @@
-from PySide6 import QtWidgets, QtCore, QtGui
-
-from Model.annotation import Annotation
-from Model.selection_box import Box
-from Model.model_annotator import ModelAnnotator
 from Model.annotate_image import AnnotateImage
+from Model.annotation import Annotation
+from Model.model_annotator import ModelAnnotator
+from Model.selection_box import Box
+from PySide6 import QtGui, QtWidgets
 
 
 class PopupBox(QtWidgets.QDialog):

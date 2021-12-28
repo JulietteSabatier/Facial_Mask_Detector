@@ -1,12 +1,10 @@
-from PySide6 import QtWidgets, QtGui
-
-from View.menu_bar import MenuBar
-
 from Model.model_annotator import ModelAnnotator
+from PySide6 import QtGui, QtWidgets
+
 from View.choose_image_area import ChooseImageArea
 from View.image_widget import ImageWidget
+from View.menu_bar import MenuBar
 from View.popup_open_project import PopupOpenProject
-
 
 # Créer la main Window
 
@@ -54,3 +52,14 @@ class MainWindow(QtWidgets.QMainWindow):  # main window
 
     def get_image_widget(self):
         return self.image_widget
+
+    def closeEvent(self, event:QtGui.QCloseEvent) -> None:
+        message_box = QtWidgets.QMessageBox()
+        message_box.setText("You may have unsaved changes, are you sure you want to close the application ?")
+        message_box.addButton(QtWidgets.QMessageBox.Cancel)
+        message_box.addButton(QtWidgets.QMessageBox.Close)
+        result = message_box.exec()
+        if result == QtWidgets.QMessageBox.Close:
+            event.accept()
+        if result == QtWidgets.QMessageBox.Cancel:
+            event.ignore()

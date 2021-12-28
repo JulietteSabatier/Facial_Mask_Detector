@@ -1,6 +1,4 @@
-from PySide6 import QtWidgets
-from PySide6 import QtGui
-
+from PySide6 import QtGui, QtWidgets
 
 # Créer la menu bar
 

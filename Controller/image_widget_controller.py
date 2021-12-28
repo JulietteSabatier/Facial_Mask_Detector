@@ -1,9 +1,8 @@
-from View.image_widget import ImageWidget
 from Model.annotate_image import AnnotateImage
-from PIL import Image, ImageQt
-from PySide6 import QtGui, QtCore, QtWidgets
-from View.main_window import MainWindow
 from Model.model_annotator import ModelAnnotator
+from PIL import Image, ImageQt
+from PySide6 import QtCore, QtGui
+from View.main_window import MainWindow
 
 # Définition des fonctions qui permettent de mettre a jour le widget contenant les images
 
@@ -12,10 +11,13 @@ class ImageWidgetController:
     main_model: ModelAnnotator
 
     def __init__(self, main_view: MainWindow, main_model: ModelAnnotator):
+        """ Define the functions which permit to update the image_widget
+                which show the image and annotations"""
         self.main_view = main_view
         self.main_model = main_model
 
     def load_image_widget(self, image: AnnotateImage):
+        """ Function which load the scene where the image annotation are create"""
         self.main_view.image_widget.initialize_scene()
 
         self.main_view.image_widget.scene.setCurrentAnnotateImage(image)

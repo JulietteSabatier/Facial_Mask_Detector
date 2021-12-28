@@ -1,10 +1,11 @@
+import csv
+import json
 import os.path
-import csv, json
 
 from Model.annotate_image import AnnotateImage
 from Model.annotation import Annotation
-from Model.selection_box import Box
 from Model.category import Category
+from Model.selection_box import Box
 
 # Représente les data (liste de catégories et d'images annotés)
 
@@ -55,12 +56,13 @@ class ModelAnnotator:
     def add_category(self, name: str):
         for cat in self.category_list:
             if cat.name == name:
-                return
+                return False
         if name is None :
             category = Category("")
         else:
             category = Category(name)
         self.category_list.append(category)
+        return True
 
     def delete_category(self, category: str):
         for cat in self.category_list:
@@ -120,7 +122,7 @@ class ModelAnnotator:
                         for i in range(len(json_data[image]["annotations"])):
                             top_x = json_data[image]["annotations"][i]["box"]["top_left"]["abs"]
                             top_y = json_data[image]["annotations"][i]["box"]["top_left"]["ord"]
-                            box = Box(None, top_x, top_y)
+                            box = Box(top_x, top_y)
                             bottom_x = json_data[image]["annotations"][i]["box"]["bottom_right"]["abs"]
                             bottom_y = json_data[image]["annotations"][i]["box"]["bottom_right"]["ord"]
                             box.updateBottomRight(bottom_x, bottom_y)

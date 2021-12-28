@@ -1,6 +1,7 @@
-from PySide6 import QtGui, QtWidgets, QtCore
-
 from Model.category import Category
+from PySide6 import QtCore, QtGui, QtWidgets
+from PySide6.QtCore import Qt
+
 
 class ShowCategoriesPopup(QtWidgets.QDialog):
 
@@ -33,14 +34,14 @@ class ShowCategoriesPopup(QtWidgets.QDialog):
             self.category_list_widget.insertItem(1, widget_item)
 
     def delete_category(self):
-        item_cat = self.category_list_widget.takeItem(
-            self.category_list_widget.row(self.category_list_widget.currentItem()))
+        item_cat = self.category_list_widget.currentItem()
         name_cat = item_cat.text()
         return name_cat
 
-    def rename_category(self, ):
+    def rename_category(self):
         new_name, result = QtWidgets.QInputDialog.getText(self, "Rename Categorie", "New name of the category: ")
-        if result:
+        if result and len(new_name) > 0 and not " " in new_name and not " " in new_name:
             old_name = self.category_list_widget.currentItem().text()
-            self.category_list_widget.currentItem().setText(new_name)
-            return old_name, new_name
+            if not self.category_list_widget.findItems(new_name, Qt.MatchFixedString):
+                self.category_list_widget.currentItem().setText(new_name)
+                return old_name, new_name

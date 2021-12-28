@@ -18,6 +18,8 @@ class PopupBoxController:
                  rect_list: list[QtWidgets.QGraphicsRectItem], current_rect: QtWidgets.QGraphicsRectItem,
                  annot_list: list[Annotation], current_annot: Annotation):
 
+        """ Define the functions which permit to update the popup of the boxes """
+
         self.popup_box = popup_box
         self.scene = scene
         self.main_model = main_model
