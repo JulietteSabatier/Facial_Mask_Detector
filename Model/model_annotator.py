@@ -121,7 +121,7 @@ class ModelAnnotator:
                         for i in range(len(json_data[image]["annotations"])):
                             top_x = json_data[image]["annotations"][i]["box"]["top_left"]["abs"]
                             top_y = json_data[image]["annotations"][i]["box"]["top_left"]["ord"]
-                            box = Box(None, top_x, top_y)
+                            box = Box(top_x, top_y)
                             bottom_x = json_data[image]["annotations"][i]["box"]["bottom_right"]["abs"]
                             bottom_y = json_data[image]["annotations"][i]["box"]["bottom_right"]["ord"]
                             box.updateBottomRight(bottom_x, bottom_y)

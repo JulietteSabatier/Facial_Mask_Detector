@@ -59,7 +59,7 @@ class CustomScene(QtWidgets.QGraphicsScene):
             if self.currentRect is not None:
                 self.currentRect.setSelected(False)
 
-            self.currentBox = Box(self, event.scenePos().x(), event.scenePos().y())
+            self.currentBox = Box(event.scenePos().x(), event.scenePos().y())
             self.currentRect = self.addRect(event.scenePos().x(),
                                             event.scenePos().y(),
                                             0, 0,

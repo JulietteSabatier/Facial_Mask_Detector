@@ -25,7 +25,7 @@ class CustomSceneController:
             if self.custom_scene.currentRect is not None:
                 self.custom_scene.currentRect.setSelected(False)
 
-            self.custom_scene.currentBox = Box(self, event.scenePos().x(), event.scenePos().y())
+            self.custom_scene.currentBox = Box(event.scenePos().x(), event.scenePos().y())
             self.custom_scene.currentRect = self.custom_scene.addRect(event.scenePos().x(),
                                                                       event.scenePos().y(),
                                                                       0, 0,

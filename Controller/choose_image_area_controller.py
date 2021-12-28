@@ -15,6 +15,7 @@ class ChooseImageAreaController:
         self.main_view = main_view
 
     def create_button(self, image: AnnotateImage):
+
         self.main_view.choose_image_area.add_image(image.title)
 
     def delete_button(self):
