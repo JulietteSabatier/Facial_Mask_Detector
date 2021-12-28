@@ -1,0 +1,12 @@
+{"maksssksksss200": {
+  "path": "Project/test/Images/maksssksksss200.png",
+  "annotations": [
+    {
+    "title": "",
+    "box": {
+      "top_left": {"abs": 88.0597014925373, "ord": 75.3731343283582},
+      "bottom_right": {"abs": 197.0149253731343, "ord": 195.52238805970148}}}]},
+  "maksssksksss201": {
+    "path": "Project/test/Images/maksssksksss201.png",
+    "annotations": []},
+  "maksssksksss202": {"path": "Project/test/Images/maksssksksss202.png", "annotations": []}}

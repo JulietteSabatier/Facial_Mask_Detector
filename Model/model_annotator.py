@@ -117,16 +117,24 @@ class ModelAnnotator:
                     annotations = []
                     annotate_image = AnnotateImage(json_data[image]["path"], image, annotations)
                     if len(json_data[image]["annotations"]) != 0:
-                        for i in range(len(json_data[image]["annotations"])):
 
+                        for i in range(len(json_data[image]["annotations"])):
+                            print(i)
                             top_x = json_data[image]["annotations"][i]["box"]["top_left"]["abs"]
                             top_y = json_data[image]["annotations"][i]["box"]["top_left"]["ord"]
                             box = Box(None, top_x, top_y)
                             bottom_x = json_data[image]["annotations"][i]["box"]["bottom_right"]["abs"]
                             bottom_y = json_data[image]["annotations"][i]["box"]["bottom_right"]["ord"]
                             box.updateBottomRight(bottom_x, bottom_y)
+                            category = None
                             for cat in self.category_list:
-                                category = Category(json_data[image]["annotations"][i]["title"])
-                                annotations.append(Annotation(category, box))
+                                if cat == json_data[image]["annotations"][i]["title"]:
+                                    category = cat
+                                if category is None:
+                                    category = Category(json_data[image]["annotations"][i]["title"])
+                            annotations.append(Annotation(category, box))
                     self.add_image(annotate_image)
         f.close()
+        for image in self.image_list:
+            for annotation in image.annotation_list:
+                print(annotation)
