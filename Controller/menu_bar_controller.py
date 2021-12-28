@@ -1,5 +1,6 @@
 import json
 import os.path
+from PySide6 import QtWidgets, QtGui, QtCore
 
 from Model.annotate_image import AnnotateImage
 from Model.model_annotator import ModelAnnotator
@@ -79,7 +80,17 @@ class MenuBarController:
 
     def create_new_category(self):
         name, result = self.main_view.menu_bar.dialog_create_new_category()
-        self.main_model.add_category(name)
+        if result:
+            if (name == "") or (' ' in name):
+                message = QtWidgets.QMessageBox()
+                message.setText("Invalid category name")
+                message.setWindowTitle("Warning")
+                message.exec()
+
+            else:
+                self.main_model.add_category(name)
+
+
 
     def save_categories(self):
         path, type_file = self.main_view.menu_bar.dialog_path_save_categories()
