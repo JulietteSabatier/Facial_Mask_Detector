@@ -13,6 +13,7 @@ from View.main_window import MainWindow
 from View.show_categories_popup import ShowCategoriesPopup
 from View.popup_open_project import PopupOpenProject
 
+
 # Définition des fonctions qui représentent les action de la menuBar
 
 
@@ -42,7 +43,7 @@ class MenuBarController:
             for i in range(len(imgs[0])):
                 path = imgs[0][i]
                 title = path.split("/")[-1].split(".")[0]
-#                new_path = "Project/"+project_name+"/"+title
+                #                new_path = "Project/"+project_name+"/"+title
                 image = AnnotateImage(path, title, [])
 
                 # Ajouter l'image dans la base
@@ -97,18 +98,20 @@ class MenuBarController:
     # Project
     def save_project(self, project_name: str):
         if project_name != "":
-            path = "Project/"+project_name+"/"
+            path = "Project/" + project_name + "/"
             self.main_model.save_images(path + "Images/")
-            self.main_model.from_annotation_to_json(path+"annotations.json")
-            self.main_model.from_categories_to_json(path+"categories.json")
-
+            self.main_model.from_annotation_to_json(path + "annotations.json")
+            self.main_model.from_categories_to_json(path + "categories.json")
 
     def close_project(self, project_name: str):
         self.save_project(project_name)
         self.main_model.category_list = []
         self.main_model.image_list = []
         self.main_view.choose_image_area.clear()
-        self.main_view.image_widget.scene.clear()
+        try:
+            self.main_view.image_widget.scene.clear()
+        except:
+            pass
         self.main_view.popup_open_project.force_close = True
         self.main_view.popup_open_project.update_list_project()
         self.main_view.popup_open_project.show()
