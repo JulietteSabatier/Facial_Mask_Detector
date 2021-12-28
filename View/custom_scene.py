@@ -103,14 +103,13 @@ class CustomScene(QtWidgets.QGraphicsScene):
                     index = self.rect_list.index(self.currentRect)
                     self.currentBox = self.box_list.__getitem__(index)
                     self.currentAnnot = self.annot_list.__getitem__(index)
-                    self.popup = PopupBox(self.currentAnnot,
-                                          self.currentBox, self.box_list,
-                                          self.currentRect, self.rect_list,
-                                          self.currentAnnot, self.annot_list,
-                                          self.main_model,
-                                          self.currentAnnotateImage,
-                                          self)
-                    print("double click on annot0, ", self.currentAnnot.title)
+                    popup = PopupBox(self.currentAnnot,
+                                     self.currentBox, self.box_list,
+                                     self.currentRect, self.rect_list,
+                                     self.currentAnnot, self.annot_list,
+                                     self.main_model,
+                                     self.currentAnnotateImage,
+                                     self)
                     break
 
     def updateRect(self, x, y):
@@ -183,6 +182,11 @@ class CustomScene(QtWidgets.QGraphicsScene):
                 self.removeItem(self.currentRect)
             else:
                 self.currentAnnot = Annotation(None, self.currentBox)
+                self.annot_list.append(self.currentAnnot)
+                self.box_list.append(self.currentBox)
+                self.rect_list.append(self.currentRect)
+                self.currentAnnotateImage.add_annotation(self.currentAnnot)
+                self.currentRect.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
                 self.popup = PopupBox(self.currentAnnot,
                                       self.currentBox, self.box_list,
                                       self.currentRect, self.rect_list,
@@ -190,12 +194,6 @@ class CustomScene(QtWidgets.QGraphicsScene):
                                       self.main_model,
                                       self.currentAnnotateImage,
                                       self)
-
-                self.annot_list.append(self.currentAnnot)
-                self.box_list.append(self.currentBox)
-                self.rect_list.append(self.currentRect)
-                self.currentAnnotateImage.add_annotation(self.currentAnnot)
-                self.currentRect.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable)
 
     def loadAnnotations(self):
         """Loads the annotations from the current annotate image. For the scene, it means loading the list of boxes to display as rectangles"""

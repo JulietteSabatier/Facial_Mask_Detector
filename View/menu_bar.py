@@ -83,6 +83,7 @@ class MenuBar(QtWidgets.QMenuBar):
         return QtWidgets.QInputDialog.getText(self, "Create a category", "Name of the category")
 
     def dialog_path_save_categories(self):
+        # return QtWidgets.QFileDialog.getExistingDirectory(self, "Save Categories", "Categories")
         return QtWidgets.QFileDialog.getSaveFileName(self, "Save Category in json", "Categories", "Json File (*.json)")
 
     # Annotations

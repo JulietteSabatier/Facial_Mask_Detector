@@ -41,7 +41,7 @@ class ModelAnnotator:
     def save_images(self, new_path: str):
         for image in self.image_list:
             image.save_image(new_path)
-            image.path = new_path + image.title + ".png"
+            image.path = new_path + "/" + image.title + ".png"
 
     # Category
     def get_category_list(self):
@@ -56,7 +56,10 @@ class ModelAnnotator:
         for cat in self.category_list:
             if cat.name == name:
                 return
-        category = Category(name)
+        if name is None :
+            category = Category("")
+        else:
+            category = Category(name)
         self.category_list.append(category)
 
     def delete_category(self, category: str):
@@ -67,7 +70,7 @@ class ModelAnnotator:
     def rename_category(self, category: str, new_name: str):
         for cat in self.category_list:
             if cat.name == category:
-                cat.name = new_name
+                cat.change_name(new_name)
                 return
 
     def from_csv_to_categories(self, path: str):
@@ -113,18 +116,21 @@ class ModelAnnotator:
                 if os.path.exists(json_data[image]["path"]):
                     annotations = []
                     annotate_image = AnnotateImage(json_data[image]["path"], image, annotations)
-                    # TODO changer cet appel erroné du constructeur d'Annotation
-                    # les annotations devrai être bien chargé mais je ne sais pas trop comment faire pour la custom scene
-                    # on est pas censé avoir de view dans le model !
                     if len(json_data[image]["annotations"]) != 0:
                         for i in range(len(json_data[image]["annotations"])):
-
                             top_x = json_data[image]["annotations"][i]["box"]["top_left"]["abs"]
                             top_y = json_data[image]["annotations"][i]["box"]["top_left"]["ord"]
                             box = Box(None, top_x, top_y)
                             bottom_x = json_data[image]["annotations"][i]["box"]["bottom_right"]["abs"]
                             bottom_y = json_data[image]["annotations"][i]["box"]["bottom_right"]["ord"]
                             box.updateBottomRight(bottom_x, bottom_y)
-                            annotations.append(Annotation(json_data[image]["annotations"][i]["title"], box))
-                        self.add_image(annotate_image)
+                            category = None
+                            for cat in self.category_list:
+                                if cat == json_data[image]["annotations"][i]["title"]:
+                                    category = cat
+                                if category is None:
+                                    category = Category(json_data[image]["annotations"][i]["title"])
+                            annotations.append(Annotation(category, box))
+                    self.add_image(annotate_image)
         f.close()
+

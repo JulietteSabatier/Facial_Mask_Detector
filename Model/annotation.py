@@ -21,5 +21,8 @@ class Annotation:
         self.title = new_title
 
     def from_annotations_to_json(self):
-        return {"title": self.title.name,
-                "box": self.box.get_position_as_json()}
+        if self.title is None:
+            return {"title": "", "box": self.box.get_position_as_json()}
+        else:
+            return {"title": self.title.name,
+                    "box": self.box.get_position_as_json()}

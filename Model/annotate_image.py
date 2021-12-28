@@ -41,5 +41,5 @@ class AnnotateImage:
 
     def save_image(self, new_path: str):
         image = Image.open(r''+self.path)
-        image.save(new_path+self.title+".png")
+        image.save(new_path+"/"+self.title+".png")
 
