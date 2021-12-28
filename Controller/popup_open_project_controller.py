@@ -60,6 +60,7 @@ class PopupOpenProjectController:
             self.main_view.popup_open_project.list_project.removeItemWidget(
                 self.main_view.popup_open_project.list_project.currentItem())
 
+
     def dialog_name_project(self):
         project_name, result = QtWidgets.QInputDialog.getText(
             self.main_view.popup_open_project, "Create a project", "Name of the project")

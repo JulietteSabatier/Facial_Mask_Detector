@@ -23,7 +23,7 @@ class ImageWidget(QtWidgets.QWidget):  # Central Widget
     def initialize_scene(self):
         if not self.initialized:
             self.scene = CustomScene(self.main_model, self)
-            self.scene_controller = CustomSceneController(self.scene, self.main_model)
+            #self.scene_controller = CustomSceneController(self.scene, self.main_model)
             self.view = View(self.scene)
             layout = QtWidgets.QVBoxLayout()
             layout.addWidget(self.view)
@@ -32,4 +32,10 @@ class ImageWidget(QtWidgets.QWidget):  # Central Widget
             self.initialized = True
         else:
             self.scene.clear()
+            self.scene.currentRect = None
+            self.scene.currentBox = None
+            self.scene.annot_list = []
+            self.scene.currentAnnot = None
+            self.scene.rect_list = []
+            self.scene.box_list = []
 

@@ -126,10 +126,7 @@ class ModelAnnotator:
                             bottom_y = json_data[image]["annotations"][i]["box"]["bottom_right"]["ord"]
                             box.updateBottomRight(bottom_x, bottom_y)
                             for cat in self.category_list:
-                                if cat.name == json_data[image]["annotations"][i]["title"]:
-                                    annotations.append(Annotation(cat, box))
-                                else:
-                                    category = Category(json_data[image]["annotations"][i]["title"])
-                                    annotations.append(Annotation(category, box))
-                        self.add_image(annotate_image)
+                                category = Category(json_data[image]["annotations"][i]["title"])
+                                annotations.append(Annotation(category, box))
+                    self.add_image(annotate_image)
         f.close()
