@@ -10,7 +10,9 @@ class PopupOpenProject(QtWidgets.QDialog):
         super(PopupOpenProject, self).__init__()
 
         self.resize(600, 300)
-        self.setWindowTitle("Image Annotator Project")
+        self.setWindowTitle("Image Annotator Open Project")
+        icon = QtGui.QIcon("iconMask.png")
+        self.setWindowIcon(icon)
         self.force_close = True
 
         self.setWindowModality(QtCore.Qt.ApplicationModal)

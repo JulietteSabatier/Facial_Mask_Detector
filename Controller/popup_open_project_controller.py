@@ -63,6 +63,8 @@ class PopupOpenProjectController:
     def dialog_name_project(self):
         project_name, result = QtWidgets.QInputDialog.getText(
             self.main_view.popup_open_project, "Create a project", "Name of the project")
+        if not result:
+            return None
         while os.path.exists("Project/" + project_name):
             project_name, result = QtWidgets.QInputDialog.getText(
                 self.main_view.popup_open_project, "Create a project",

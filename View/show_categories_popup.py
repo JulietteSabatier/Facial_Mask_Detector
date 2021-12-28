@@ -7,6 +7,10 @@ class ShowCategoriesPopup(QtWidgets.QDialog):
     def __init__(self):
         super(ShowCategoriesPopup, self).__init__()
         self.resize(600, 300)
+        icon = QtGui.QIcon("iconMask.png")
+        self.setWindowIcon(icon)
+        self.setWindowTitle("All Categories")
+
 
         self.category_list_widget = QtWidgets.QListWidget()
 

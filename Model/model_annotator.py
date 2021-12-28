@@ -113,9 +113,6 @@ class ModelAnnotator:
                 if os.path.exists(json_data[image]["path"]):
                     annotations = []
                     annotate_image = AnnotateImage(json_data[image]["path"], image, annotations)
-                    # TODO changer cet appel erroné du constructeur d'Annotation
-                    # les annotations devrai être bien chargé mais je ne sais pas trop comment faire pour la custom scene
-                    # on est pas censé avoir de view dans le model !
                     if len(json_data[image]["annotations"]) != 0:
                         for i in range(len(json_data[image]["annotations"])):
 
@@ -125,6 +122,7 @@ class ModelAnnotator:
                             bottom_x = json_data[image]["annotations"][i]["box"]["bottom_right"]["abs"]
                             bottom_y = json_data[image]["annotations"][i]["box"]["bottom_right"]["ord"]
                             box.updateBottomRight(bottom_x, bottom_y)
-                            annotations.append(Annotation(json_data[image]["annotations"][i]["title"], box))
+                            category = Category(json_data[image]["annotations"][i]["title"])
+                            annotations.append(Annotation(category, box))
                         self.add_image(annotate_image)
         f.close()
