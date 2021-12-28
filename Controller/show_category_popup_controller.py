@@ -19,5 +19,5 @@ class ShowCategoryPopupController:
     def rename_category(self):
         res = self.popup.rename_category()
         if res is not None:
-            old_name, new_name = res[0], res[1]
+            old_name, new_name = res
             self.main_model.rename_category(old_name, new_name)
