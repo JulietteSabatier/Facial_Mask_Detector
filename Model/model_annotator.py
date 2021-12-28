@@ -1,10 +1,11 @@
+import csv
+import json
 import os.path
-import csv, json
 
 from Model.annotate_image import AnnotateImage
 from Model.annotation import Annotation
-from Model.selection_box import Box
 from Model.category import Category
+from Model.selection_box import Box
 
 # Représente les data (liste de catégories et d'images annotés)
 

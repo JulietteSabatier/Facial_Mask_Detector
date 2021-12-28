@@ -1,8 +1,7 @@
-from View.choose_image_area import ChooseImageArea
 from Model.annotate_image import AnnotateImage
-from View.main_window import MainWindow
 from Model.model_annotator import ModelAnnotator
-
+from View.choose_image_area import ChooseImageArea
+from View.main_window import MainWindow
 
 # Définition des fonction qui permettent de mettre a jour la scroll bar des nom d'image
 

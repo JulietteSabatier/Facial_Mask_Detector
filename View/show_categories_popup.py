@@ -1,7 +1,7 @@
-from PySide6 import QtGui, QtWidgets, QtCore
+from Model.category import Category
+from PySide6 import QtCore, QtGui, QtWidgets
 from PySide6.QtCore import Qt
 
-from Model.category import Category
 
 class ShowCategoriesPopup(QtWidgets.QDialog):
 

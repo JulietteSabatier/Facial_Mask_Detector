@@ -1,13 +1,13 @@
-from PySide6 import QtWidgets, QtCore, QtGui
 import shapely.geometry
-
+from Model.annotation import Annotation
+from Model.model_annotator import ModelAnnotator
+from Model.selection_box import Box
+from PySide6 import QtCore, QtGui, QtWidgets
 from View.custom_scene import CustomScene
 from View.popup_box import PopupBox
 
-from Model.model_annotator import ModelAnnotator
-from Model.selection_box import Box
-from Model.annotation import Annotation
 from Controller.popup_box_controller import PopupBoxController
+
 
 # Non utilisée pour problème de signaux
 ####

@@ -1,9 +1,8 @@
-from View.image_widget import ImageWidget
 from Model.annotate_image import AnnotateImage
-from PIL import Image, ImageQt
-from PySide6 import QtGui, QtCore, QtWidgets
-from View.main_window import MainWindow
 from Model.model_annotator import ModelAnnotator
+from PIL import Image, ImageQt
+from PySide6 import QtCore, QtGui
+from View.main_window import MainWindow
 
 # Définition des fonctions qui permettent de mettre a jour le widget contenant les images
 

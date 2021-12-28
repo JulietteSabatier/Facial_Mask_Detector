@@ -1,5 +1,4 @@
 from Model.model_annotator import ModelAnnotator
-
 from View.show_categories_popup import ShowCategoriesPopup
 
 
