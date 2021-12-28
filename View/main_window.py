@@ -54,3 +54,14 @@ class MainWindow(QtWidgets.QMainWindow):  # main window
 
     def get_image_widget(self):
         return self.image_widget
+
+    def closeEvent(self, event:QtGui.QCloseEvent) -> None:
+        message_box = QtWidgets.QMessageBox()
+        message_box.setText("You may have unsaved changes, are you sure you want to close the application ?")
+        message_box.addButton(QtWidgets.QMessageBox.Cancel)
+        message_box.addButton(QtWidgets.QMessageBox.Close)
+        result = message_box.exec()
+        if result == QtWidgets.QMessageBox.Close:
+            event.accept()
+        if result == QtWidgets.QMessageBox.Cancel:
+            event.ignore()
