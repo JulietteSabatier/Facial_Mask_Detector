@@ -1,14 +1,13 @@
-from PySide6 import QtWidgets
-
 from Model.annotate_image import AnnotateImage
 from Model.model_annotator import ModelAnnotator
-from Controller.choose_image_area_controller import ChooseImageAreaController
-from Controller.image_widget_controller import ImageWidgetController
-from Controller.show_category_popup_controller import ShowCategoryPopupController
-
+from PySide6 import QtWidgets
 from View.main_window import MainWindow
 from View.show_categories_popup import ShowCategoriesPopup
 
+from Controller.choose_image_area_controller import ChooseImageAreaController
+from Controller.image_widget_controller import ImageWidgetController
+from Controller.show_category_popup_controller import \
+    ShowCategoryPopupController
 
 # Définition des fonctions qui représentent les action de la menuBar
 

@@ -1,8 +1,6 @@
-import sys
-from PySide6 import QtWidgets, QtCore, QtGui
-from PySide6.QtCore import Slot, Qt
 from Model.model_annotator import ModelAnnotator
-
+from PySide6 import QtGui, QtWidgets
+from PySide6.QtCore import Qt
 
 # Créer le visuel de la scroll bar des nom des images
 

@@ -1,18 +1,14 @@
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QPen
-from PySide6 import QtCore, QtGui, QtWidgets
-
 import shapely.geometry
-
-from Model.selection_box import Box
 from Model.annotate_image import AnnotateImage
 from Model.annotation import Annotation
 from Model.model_annotator import ModelAnnotator
+from Model.selection_box import Box
+from PySide6 import QtCore, QtGui, QtWidgets
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QPen
 
-from View.view import View
 from View.popup_box import PopupBox
-
-from Controller.popup_box_controller import PopupBoxController
+from View.view import View
 
 
 class CustomScene(QtWidgets.QGraphicsScene):

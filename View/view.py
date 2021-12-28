@@ -1,8 +1,7 @@
+from Model.selection_box import Box
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt
-from shapely.geometry import Point, box
-
-from Model.selection_box import Box
+from shapely.geometry import Point
 
 
 class View(QtWidgets.QGraphicsView):  # view of the image

@@ -1,5 +1,5 @@
-from Model.selection_box import Box
 from Model.category import Category
+from Model.selection_box import Box
 
 
 class Annotation:

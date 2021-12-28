@@ -1,12 +1,10 @@
-from PySide6 import QtWidgets, QtGui
-
-from View.menu_bar import MenuBar
-
 from Model.model_annotator import ModelAnnotator
+from PySide6 import QtGui, QtWidgets
+
 from View.choose_image_area import ChooseImageArea
 from View.image_widget import ImageWidget
+from View.menu_bar import MenuBar
 from View.popup_open_project import PopupOpenProject
-
 
 # Créer la main Window
 

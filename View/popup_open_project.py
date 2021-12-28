@@ -1,7 +1,7 @@
 import os.path
 import sys
 
-from PySide6 import QtGui, QtWidgets, QtCore
+from PySide6 import QtCore, QtGui, QtWidgets
 
 
 class PopupOpenProject(QtWidgets.QDialog):

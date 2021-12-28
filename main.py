@@ -1,11 +1,11 @@
 import os.path
 import sys
 
-from View.main_window import MainWindow
-from Model.model_annotator import ModelAnnotator
-from Controller.main_controller import MainController
-from PySide6 import QtWidgets, QtCore, QtGui
+from PySide6 import QtWidgets
 
+from Controller.main_controller import MainController
+from Model.model_annotator import ModelAnnotator
+from View.main_window import MainWindow
 
 if __name__ == '__main__':  # main
     app = QtWidgets.QApplication(sys.argv)

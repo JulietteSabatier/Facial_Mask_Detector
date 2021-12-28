@@ -1,11 +1,10 @@
-from PySide6 import QtWidgets
-
 from Controller.custom_scene_controller import CustomSceneController
+from Model.model_annotator import ModelAnnotator
+from PySide6 import QtWidgets
 
 from View.custom_scene import CustomScene
 from View.view import View
 
-from Model.model_annotator import ModelAnnotator
 
 class ImageWidget(QtWidgets.QWidget):  # Central Widget
     main_model : ModelAnnotator

@@ -1,11 +1,11 @@
 import json
+import os
 import shutil
 from pathlib import Path
 
-from View.main_window import MainWindow
 from Model.model_annotator import ModelAnnotator
-import os
-from PySide6 import QtGui, QtWidgets, QtCore
+from PySide6 import QtWidgets
+from View.main_window import MainWindow
 
 
 class PopupOpenProjectController:
