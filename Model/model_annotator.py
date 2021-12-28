@@ -55,12 +55,13 @@ class ModelAnnotator:
     def add_category(self, name: str):
         for cat in self.category_list:
             if cat.name == name:
-                return
+                return False
         if name is None :
             category = Category("")
         else:
             category = Category(name)
         self.category_list.append(category)
+        return True
 
     def delete_category(self, category: str):
         for cat in self.category_list:

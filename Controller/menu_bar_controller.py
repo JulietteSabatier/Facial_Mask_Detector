@@ -88,7 +88,12 @@ class MenuBarController:
                 message.exec()
 
             else:
-                self.main_model.add_category(name)
+                res = self.main_model.add_category(name)
+                if not res:
+                    message = QtWidgets.QMessageBox()
+                    message.setWindowTitle("Warning")
+                    message.setText("This category already exist")
+                    message.exec()
 
 
 
