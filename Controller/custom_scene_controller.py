@@ -7,13 +7,12 @@ from Model.annotation import Annotation
 from PySide6 import QtCore, QtGui, QtWidgets
 from Controller.popup_box_controller import PopupBoxController
 
-
 # Unused for now from signal problem
 class CustomSceneController:
-    custom_scene: CustomScene
+
     main_model: ModelAnnotator
 
-    def __init__(self, custom_scene: CustomScene, main_model: ModelAnnotator):
+    def __init__(self, main_model: ModelAnnotator):
         """ Define the functions which permit to update the choose_image_area
                 which contains the names of the annotates image"""
         self.main_model = main_model

@@ -34,8 +34,7 @@ class ShowCategoriesPopup(QtWidgets.QDialog):
             self.category_list_widget.insertItem(1, widget_item)
 
     def delete_category(self):
-        item_cat = self.category_list_widget.takeItem(
-            self.category_list_widget.row(self.category_list_widget.currentItem()))
+        item_cat = self.category_list_widget.currentItem()
         name_cat = item_cat.text()
         return name_cat
 
