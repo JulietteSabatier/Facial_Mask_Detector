@@ -70,7 +70,7 @@ class ModelAnnotator:
     def rename_category(self, category: str, new_name: str):
         for cat in self.category_list:
             if cat.name == category:
-                cat.name = new_name
+                cat.change_name(new_name)
                 return
 
     def from_csv_to_categories(self, path: str):
@@ -125,7 +125,11 @@ class ModelAnnotator:
                             bottom_x = json_data[image]["annotations"][i]["box"]["bottom_right"]["abs"]
                             bottom_y = json_data[image]["annotations"][i]["box"]["bottom_right"]["ord"]
                             box.updateBottomRight(bottom_x, bottom_y)
-                            category = Category(json_data[image]["annotations"][i]["title"])
-                            annotations.append(Annotation(category, box))
+                            for cat in self.category_list:
+                                if cat.name == json_data[image]["annotations"][i]["title"]:
+                                    annotations.append(Annotation(cat, box))
+                                else:
+                                    category = Category(json_data[image]["annotations"][i]["title"])
+                                    annotations.append(Annotation(category, box))
                         self.add_image(annotate_image)
         f.close()

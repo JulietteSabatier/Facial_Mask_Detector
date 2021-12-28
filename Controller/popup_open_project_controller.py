@@ -49,8 +49,8 @@ class PopupOpenProjectController:
         if (os.path.exists(path + "/Images")
                 and os.path.exists(path + "/annotations.json")
                 and os.path.exists(path + "/categories.json")):
-            self.main_model.from_json_to_annotation(path + "/annotations.json")
             self.main_model.from_json_to_categories(path + "/categories.json")
+            self.main_model.from_json_to_annotation(path + "/annotations.json")
             self.project = path.split("/")[-1]
             self.main_view.choose_image_area.load_all_images()
             self.main_view.popup_open_project.force_close = False
