@@ -1,5 +1,9 @@
 # Facial Mask Detector Help
 
+## Before running code:
+Please run the following command:
+- python -m pip install -r requirement.txt
+
 ## Create a project
 ### Description
 Permit to save all the information in one directory. 
