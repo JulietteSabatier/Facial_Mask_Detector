@@ -53,4 +53,4 @@ class AnnotateImage:
         """ Copy the image on the directory given in parameter"""
         image = Image.open(r''+self.path)
         image.save(new_path+"/"+self.title+".png")
-
+        image.close()

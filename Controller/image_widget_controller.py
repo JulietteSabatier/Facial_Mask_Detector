@@ -12,10 +12,13 @@ class ImageWidgetController:
     main_model: ModelAnnotator
 
     def __init__(self, main_view: MainWindow, main_model: ModelAnnotator):
+        """ Define the functions which permit to update the image_widget
+                which show the image and annotations"""
         self.main_view = main_view
         self.main_model = main_model
 
     def load_image_widget(self, image: AnnotateImage):
+        """ Function which load the scene where the image annotation are create"""
         self.main_view.image_widget.initialize_scene()
 
         self.main_view.image_widget.scene.setCurrentAnnotateImage(image)

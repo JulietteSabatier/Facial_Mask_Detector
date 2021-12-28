@@ -7,19 +7,23 @@ from View.popup_box import PopupBox
 from Model.model_annotator import ModelAnnotator
 from Model.selection_box import Box
 from Model.annotation import Annotation
+
 from Controller.popup_box_controller import PopupBoxController
 
-# Non utilisée pour problème de signaux
-####
+
+# Unused for now from signal problem
 class CustomSceneController:
     custom_scene: CustomScene
     main_model: ModelAnnotator
 
     def __init__(self, custom_scene: CustomScene, main_model: ModelAnnotator):
+        """ Define the functions which permit to update the choose_image_area
+                which contains the names of the annotates image"""
         self.main_model = main_model
         self.custom_scene = custom_scene
 
     def mouse_press_event_action(self, event: QtWidgets.QGraphicsSceneMouseEvent):
+        """ Function which create a new box and rectangle in the given scene"""
         # Left click = creating a new box
         if event.button() == QtCore.Qt.LeftButton:
             if self.custom_scene.currentRect is not None:
@@ -32,23 +36,16 @@ class CustomSceneController:
                                                                       QtGui.QPen(QtCore.Qt.blue))
             self.custom_scene.left_click_pressed = True
 
-        # Right click = removing the most recently registered box
-        # elif event.button() == Qt.RightButton:
-        #    comboBox = QtWidgets.QInputDialog.setComboBoxEditable(True)
-
-        #    if len(self.box_list) > 0:
-        #        self.removeItem(self.box_list[-1].getBox())
-        #        self.box_list.pop()
-
-        #    if len(self.currentAnnotateImage.get_annotation_list()) > 0:
-        #        self.currentAnnotateImage.get_annotation_list().pop()
-
     def mouse_move_event_action(self, event: QtWidgets.QGraphicsSceneMouseEvent):
+        """ Function which update the box and rectangle in the given scene when the pressed mouse (left clicked)
+          move"""
         # If the left click is pressed (we must not do it with right click), we update the box we're creating
         if self.custom_scene.left_click_pressed:
             self.custom_scene.currentRect.updateRect(event.scenePos().x(), event.scenePos().y())
 
     def mouse_release_event_action(self, event: QtWidgets.QGraphicsSceneMouseEvent):
+        """ Function which create the annotation of the rectangle given by the scene when the mousse is released.
+        Use the function finishBox() in order to verify if the box is valid"""
         # If it's the left click (we don't care about the right click), we update the box one last time
         # and then call the function to check its final validity
         if event.button() == QtCore.Qt.LeftButton \
@@ -61,6 +58,8 @@ class CustomSceneController:
             self.custom_scene.left_click_pressed = False
 
     def mouse_double_click_event_action(self, event: QtWidgets.QGraphicsSceneMouseEvent):
+        """ Function which permit to modify the category or delete an annotation which is around the position of the
+        double click on the given scene."""
         if event.button() == QtCore.Qt.LeftButton:
             for rect in self.custom_scene.rect_list:
                 if rect.contains(event.scenePos()):
@@ -79,6 +78,7 @@ class CustomSceneController:
                     break
 
     def updateRect(self, x, y):
+        """ Function which update the coordinates of the current box and rectangle """
         self.custom_scene.currentBox.update()
         self.custom_scene.currentRect.setRect(
             self.custom_scene.currentBox.getTopLeft().getX(),
