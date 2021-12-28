@@ -45,22 +45,50 @@ With the menubar **Annotations > Save**, you could choose to save all the annota
 
 With the menubar **Annotations > Load**, you can load annotations from a json file.
 The json should be like:
-...
+```json 
+{"maksssksksss200": {
+    "path": "Project/Test/Images/maksssksksss200.png", 
+    "annotations": [{
+        "title": "kid", 
+        "box": {
+            "top_left": {"abs": 88.0597014925373, "ord": 75.3731343283582}, 
+            "bottom_right": {"abs": 197.0149253731343, "ord": 195.52238805970148}}}]
+    },
+ "maksssksksss202": {
+    "path": "Project/Test/Images/maksssksksss202.png", 
+    "annotations": []
+    }
+}
+```
 
 ## Main window
 
 ### Left Side: List of images
 
 #### Choose the image to annotate
-#### Delete an image
-#### Rename an image
+In order to choose the image you want to annotate or modify the annotations, 
+you have to double-click on the name of the image.
 
+#### Delete an image
+In order to delete an image you have to make a right-click on the name of the image and choose the menu **Delete**.
+
+#### Rename an image
+In order to rename an image you have to make a right-click on the name of the image and choose the menu **Rename**
 
 ### Right Side: Annotate Image
 
 #### Create an annotation
+In order to create an annotation you have to draw a rectangle on the image, by pressing the left-click,
+move the mouse and release the click wherever you want. 
+After this process, a popup will appear with the coordinate of the annotation and a comboBox
+to choose the category of the annotation.
+This popup contain a button **Save** which save the chosen category for the annotation and a button **Delete**
+which delete the annotation.
+
 
 #### Modify an annotation
+A **double click** inside an annotation permit to fire a popup (the same from the create an annotation) in order to change
+the category or delete the annotation.
 
 
 
