@@ -41,7 +41,7 @@ class ModelAnnotator:
     def save_images(self, new_path: str):
         for image in self.image_list:
             image.save_image(new_path)
-            image.path = new_path + image.title + ".png"
+            image.path = new_path + "/" + image.title + ".png"
 
     # Category
     def get_category_list(self):
@@ -117,9 +117,7 @@ class ModelAnnotator:
                     annotations = []
                     annotate_image = AnnotateImage(json_data[image]["path"], image, annotations)
                     if len(json_data[image]["annotations"]) != 0:
-
                         for i in range(len(json_data[image]["annotations"])):
-                            print(i)
                             top_x = json_data[image]["annotations"][i]["box"]["top_left"]["abs"]
                             top_y = json_data[image]["annotations"][i]["box"]["top_left"]["ord"]
                             box = Box(None, top_x, top_y)
@@ -135,6 +133,4 @@ class ModelAnnotator:
                             annotations.append(Annotation(category, box))
                     self.add_image(annotate_image)
         f.close()
-        for image in self.image_list:
-            for annotation in image.annotation_list:
-                print(annotation)
+

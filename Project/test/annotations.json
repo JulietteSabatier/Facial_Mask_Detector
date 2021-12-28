@@ -1,12 +1,1 @@
-{"maksssksksss200": {
-  "path": "Project/test/Images/maksssksksss200.png",
-  "annotations": [
-    {
-    "title": "",
-    "box": {
-      "top_left": {"abs": 88.0597014925373, "ord": 75.3731343283582},
-      "bottom_right": {"abs": 197.0149253731343, "ord": 195.52238805970148}}}]},
-  "maksssksksss201": {
-    "path": "Project/test/Images/maksssksksss201.png",
-    "annotations": []},
-  "maksssksksss202": {"path": "Project/test/Images/maksssksksss202.png", "annotations": []}}
+{"maksssksksss200": {"path": "Project/Test/Images/maksssksksss200.png", "annotations": [{"title": "kid", "box": {"top_left": {"abs": 88.0597014925373, "ord": 75.3731343283582}, "bottom_right": {"abs": 197.0149253731343, "ord": 195.52238805970148}}}]}, "maksssksksss202": {"path": "Project/Test/Images/maksssksksss202.png", "annotations": [{"title": "head", "box": {"top_left": {"abs": 167.35074626865674, "ord": 106.90298507462688}, "bottom_right": {"abs": 233.95522388059703, "ord": 176.86567164179107}}}]}}
