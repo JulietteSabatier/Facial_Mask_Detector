@@ -17,6 +17,7 @@ class MenuBar(QtWidgets.QMenuBar):
         self.save_images = QtGui.QAction("Save", self.image)
         self.image.addAction(self.save_images)
 
+
         #  Categories
         self.categories = QtWidgets.QMenu("Categories", self)
 
@@ -36,6 +37,7 @@ class MenuBar(QtWidgets.QMenuBar):
         self.save_categories = QtGui.QAction("Save", self.categories)
         self.categories.addAction(self.save_categories)
 
+
         # Annotations
         self.annotations = QtWidgets.QMenu("Annotations", self)
 
@@ -46,6 +48,7 @@ class MenuBar(QtWidgets.QMenuBar):
         # Load Annotations
         self.load_annotation = QtGui.QAction("Load", self.annotations)
         self.annotations.addAction(self.load_annotation)
+
 
         # Project
         self.project = QtWidgets.QMenu("Project", self)
@@ -58,11 +61,45 @@ class MenuBar(QtWidgets.QMenuBar):
         self.close_project = QtGui.QAction("Close (and open new)", self.project)
         self.project.addAction(self.close_project)
 
+
+        # Model
+        self.model = QtWidgets.QMenu("Model", self)
+
+        # Create a model
+        self.new_model = QtGui.QAction("New model", self.model)
+        self.model.addAction(self.new_model)
+
+        # Load model
+        self.load_model = QtGui.QAction("Load model", self.model)
+        self.model.addAction(self.load_model)
+
+
+        #Save model
+        self.save_model = QtGui.QAction("Save model", self.model)
+        self.save_model.setDisabled(True)
+        self.model.addAction(self.save_model)
+
+        # Train the model
+        self.train = QtGui.QAction("Train model", self.model)
+        self.train.setDisabled(True)
+        self.model.addAction(self.train)
+
+        # Process image
+        self.process = QtWidgets.QMenu("Process", self.model)
+        self.process_from_current = QtGui.QAction("Current image", self.process)
+        self.process_from_other = QtGui.QAction("Browse...", self.process)
+        self.process.addAction(self.process_from_current)
+        self.process.addAction(self.process_from_other)
+        self.process.setDisabled(True)
+        self.model.addMenu(self.process)
+
+
         # Add to menuBar
         self.addMenu(self.image)
         self.addMenu(self.categories)
         self.addMenu(self.annotations)
         self.addMenu(self.project)
+        self.addMenu(self.model)
 
     # Images
     def widget_load_image(self):
@@ -78,7 +115,7 @@ class MenuBar(QtWidgets.QMenuBar):
         return QtWidgets.QFileDialog.getOpenFileNames(self, "Open categories", "Categories", "Data files (*.csv *.json)")
 
     def dialog_create_new_category(self):
-        return QtWidgets.QInputDialog.getText(self, "Create a category", "Name of the category")
+        return QtWidgets.QInputDialog.getText(self, "Create a category", "Name of the category", QtWidgets.QLineEdit.Normal)
 
     def dialog_path_save_categories(self):
         # return QtWidgets.QFileDialog.getExistingDirectory(self, "Save Categories", "Categories")
@@ -93,7 +130,7 @@ class MenuBar(QtWidgets.QMenuBar):
 
     # Project
     def dialog_name_project(self):
-        return QtWidgets.QInputDialog.getText(self, "Create a project", "Name of the project")
+        return QtWidgets.QInputDialog.getText(self, "Create a project", "Name of the project", QtWidgets.QLineEdit.Normal)
 
     def dialog_path_save_project(self):
         return QtWidgets.QFileDialog.getExistingDirectory(self, "Save the Project (Images/ Annotations/Categories)", "Categories")
@@ -111,3 +148,6 @@ class MenuBar(QtWidgets.QMenuBar):
                                 " - a file categories.json")
         message.setWindowTitle("Warning Project Directory")
         return message
+
+    def dialog_name_prediction_model(self):
+        return QtWidgets.QInputDialog.getText(self, "Create a model", "Name of the model", QtWidgets.QLineEdit.Normal)
