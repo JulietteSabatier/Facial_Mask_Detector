@@ -52,6 +52,7 @@ class PopupOpenProject(QtWidgets.QDialog):
 
     def dialog_no_project(self):
         message_box = QtWidgets.QMessageBox()
+        message_box.setWindowIcon(QtGui.QIcon("iconMask.png"))
         message_box.setText("This project doesn't exist")
 
     def update_list_project(self) -> None:

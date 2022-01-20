@@ -49,6 +49,10 @@ class MenuBar(QtWidgets.QMenuBar):
         self.load_annotation = QtGui.QAction("Load", self.annotations)
         self.annotations.addAction(self.load_annotation)
 
+        # Crop Annotations
+        self.crop_annotation = QtGui.QAction("Crop annotations", self.annotations)
+        self.annotations.addAction(self.crop_annotation)
+
 
         # Project
         self.project = QtWidgets.QMenu("Project", self)
@@ -140,6 +144,7 @@ class MenuBar(QtWidgets.QMenuBar):
 
     def dialog_not_a_project(self):
         message = QtWidgets.QMessageBox()
+        message.setWindowIcon(QtGui.QIcon("iconMask.png"))
         message.setIcon(QtWidgets.QMessageBox.Warning)
         message.setText("This directory is not a project")
         message.setDetailedText("A project contains:\n"

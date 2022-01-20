@@ -1,8 +1,9 @@
 import os.path
 
+import pre_treatment
 from Model.annotate_image import AnnotateImage
 from Model.model_annotator import ModelAnnotator
-from PySide6 import QtWidgets
+from PySide6 import QtWidgets, QtGui
 from View.main_window import MainWindow
 from View.show_categories_popup import ShowCategoriesPopup
 
@@ -30,6 +31,7 @@ class MenuBarController:
         self.choose_image_area_controller = ChooseImageAreaController(main_view, main_model)
         self.image_widget_controller = ImageWidgetController(main_view, main_model)
 
+
     # Images
     def load_image_menu_bar(self, project_name: str):
         """ Function which loads one or more images,
@@ -52,10 +54,12 @@ class MenuBarController:
                 # Envoyer les infos a au widget image
                 self.image_widget_controller.load_image_widget(image)
 
+
     def save_images(self):
         """ Function which saves only the image in a new directory given by a popup"""
         path = self.main_view.menu_bar.dialog_save_image()
         self.main_model.save_images(path)
+
 
     # Categories
     def import_categories(self):
@@ -68,6 +72,7 @@ class MenuBarController:
             elif import_type == "csv":
                 self.main_model.from_csv_to_categories(categories[0][0])
 
+
     def show_categories(self):
         """ Function which """
         popup = ShowCategoriesPopup()
@@ -79,6 +84,7 @@ class MenuBarController:
 
         popup.exec()
 
+
     def create_new_category(self):
         """ Function which creates a new category on the model,
         verifies if the name doesn't contain a space or is not '' and fires a popup in this case """
@@ -86,6 +92,7 @@ class MenuBarController:
         if result:
             if (name == "") or (' ' in name) or (" " in name):
                 message = QtWidgets.QMessageBox()
+                message.setWindowIcon(QtGui.QIcon("iconMask.png"))
                 message.setText("Invalid category name")
                 message.setWindowTitle("Warning")
                 message.exec()
@@ -94,15 +101,18 @@ class MenuBarController:
                 res = self.main_model.add_category(name)
                 if not res:
                     message = QtWidgets.QMessageBox()
+                    message.setWindowIcon(QtGui.QIcon("iconMask.png"))
                     message.setWindowTitle("Warning")
                     message.setText("This category already exist")
                     message.exec()
+
 
     def save_categories(self):
         """ Function which saves the categories of the program in a json file
         in the directory given by the user through the popup"""
         path, type_file = self.main_view.menu_bar.dialog_path_save_categories()
         self.main_model.from_categories_to_json(path)
+
 
     # Annotations
     def save_annotations(self):
@@ -111,6 +121,7 @@ class MenuBarController:
         path, type_file = self.main_view.menu_bar.dialog_path_save_annotations()
         self.main_model.from_annotation_to_json(path)
 
+
     def load_annotations(self):
         """ Function which loads the annotations present in a json file given by the user through
         the popup """
@@ -118,7 +129,33 @@ class MenuBarController:
         if len(path) != 0:
             self.main_model.from_json_to_annotation(path[0])
 
-    # Project
+
+    def crop_annotations(self):
+        """Display a popup telling the user the cropped image will be saved in the same directory as the .json they
+        will have selected."""
+        message = QtWidgets.QMessageBox()
+        message.setIcon(QtWidgets.QMessageBox.Information)
+        message.setWindowTitle("Information")
+        message.setWindowIcon(QtGui.QIcon("iconMask.png"))
+        message.setText("The images resulting from the crop of the annotations stored in the file you will select will be saved in the same directory as the said file.")
+        message.addButton("Cancel", message.RejectRole)
+        ok_button = message.addButton("Ok", message.AcceptRole)
+        message.exec()
+        if message.clickedButton() == ok_button:
+            choose_json = QtWidgets.QFileDialog()
+            annotations_to_crop = choose_json.getOpenFileName(choose_json, "Select an annotation file", "Annotations", "JSON Files (*.json)")
+
+            if annotations_to_crop is not None:
+                pre_treatment.read_json_cut_and_store(annotations_to_crop[0], os.path.dirname(annotations_to_crop[0]))
+                message = QtWidgets.QMessageBox()
+                message.setIcon(QtWidgets.QMessageBox.Information)
+                message.setWindowTitle("Information")
+                message.setWindowIcon(QtGui.QIcon("iconMask.png"))
+                message.setText("Cropping done.")
+                message.exec()
+
+
+                # Project
     def save_project(self, project_name: str):
         """Saves the current project, copies the images in the right directory, and rewrites annotations.json and
         categories.json """
@@ -127,6 +164,7 @@ class MenuBarController:
             self.main_model.save_images(path + "Images/")
             self.main_model.from_annotation_to_json(path + "annotations.json")
             self.main_model.from_categories_to_json(path + "categories.json")
+
 
     def close_project(self, project_name: str):
         """ Closes the current project, saves it and fires a popup to choose or create another project."""
@@ -152,15 +190,22 @@ class MenuBarController:
             if (name == "") or (' ' in name) or (" " in name):
                 message = QtWidgets.QMessageBox()
                 message.setIcon(QtWidgets.QMessageBox.Critical)
+                message.setWindowIcon(QtGui.QIcon("iconMask.png"))
                 message.setText("Invalid model name")
                 message.setWindowTitle("Warning")
                 message.exec()
 
             else:
-                self.predict_model = MaskRecognitionModel(name, "new")
+                self.predict_model = MaskRecognitionModel(name, "New")
                 self.main_view.menu_bar.train.setDisabled(False)
                 self.main_view.menu_bar.process.setDisabled(False)
                 self.main_view.menu_bar.save_model.setDisabled(False)
+                message = QtWidgets.QMessageBox()
+                message.setIcon(QtWidgets.QMessageBox.Information)
+                message.setWindowIcon(QtGui.QIcon("iconMask.png"))
+                message.setText("Model successfully created.")
+                message.setWindowTitle("Success")
+                message.exec()
 
 
     def load_model(self):
@@ -174,6 +219,12 @@ class MenuBarController:
             self.main_view.menu_bar.train.setDisabled(False)
             self.main_view.menu_bar.process.setDisabled(False)
             self.main_view.menu_bar.save_model.setDisabled(False)
+            message = QtWidgets.QMessageBox()
+            message.setIcon(QtWidgets.QMessageBox.Information)
+            message.setWindowIcon(QtGui.QIcon("iconMask.png"))
+            message.setText("Model successfully loaded.")
+            message.setWindowTitle("Success")
+            message.exec()
 
     def save_model(self):
         save_dialog_window = QtWidgets.QFileDialog()
@@ -187,6 +238,7 @@ class MenuBarController:
         path_separator = os.path.sep
         warning_popup = QtWidgets.QMessageBox()
         warning_popup.setIcon(QtWidgets.QMessageBox.Warning)
+        warning_popup.setWindowIcon(QtGui.QIcon("iconMask.png"))
         warning_popup.setText("Please make sure the folder you will select contains a 'Train' and a 'Validation' folder.")
         warning_popup.addButton("Cancel", warning_popup.RejectRole)
         ok_button = warning_popup.addButton("Ok", warning_popup.AcceptRole)
@@ -198,7 +250,7 @@ class MenuBarController:
             selected_dir = select_dir_dialog.getExistingDirectory(select_dir_dialog,
                                                                   "Select a directory",
                                                                   "Images",
-                                                                  QtWidgets.QFileDialog.ShowDirsOnly)
+                                                                  options = QtWidgets.QFileDialog.ShowDirsOnly)
             train_path = f"{selected_dir}{path_separator}Train"
             validation_path = f"{selected_dir}{path_separator}Validation"
 
@@ -207,7 +259,9 @@ class MenuBarController:
             else:
                 warning_popup = QtWidgets.QMessageBox()
                 warning_popup.setIcon(QtWidgets.QMessageBox.Critical)
-                warning_popup.setText("We couldn't find any folder named 'Train' or 'Validation'.")
+                warning_popup.setWindowIcon(QtGui.QIcon("iconMask.png"))
+                warning_popup.setWindowTitle("Error")
+                warning_popup.setText("We could not find any folder called 'Train' or 'Validation'.")
                 warning_popup.exec()
 
 
@@ -218,6 +272,8 @@ class MenuBarController:
             result = self.predict_model.predict(img_path, mode)
             result_msg_box = QtWidgets.QMessageBox()
             result_msg_box.setIcon(QtWidgets.QMessageBox.Information)
+            result_msg_box.setWindowIcon(QtGui.QIcon("iconMask.png"))
+            result_msg_box.setWindowTitle("Success")
             result_msg_box.setText(result)
             result_msg_box.exec()
 

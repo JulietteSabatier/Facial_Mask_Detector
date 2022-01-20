@@ -75,6 +75,10 @@ class MainController:
             self.menu_bar_controller.save_annotations
         )
 
+        self.main_view.menu_bar.crop_annotation.triggered.connect(
+            self.menu_bar_controller.crop_annotations
+        )
+
         # Project
         self.main_view.menu_bar.save_project.triggered.connect(
             lambda: self.menu_bar_controller.save_project(self.popup_open_project_controller.project)
