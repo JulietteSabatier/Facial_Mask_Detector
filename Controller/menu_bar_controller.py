@@ -256,6 +256,12 @@ class MenuBarController:
 
             if os.path.isdir(train_path) and os.path.isdir(validation_path):
                 self.predict_model.train_model(train_path, validation_path)
+                warning_popup = QtWidgets.QMessageBox()
+                warning_popup.setIcon(QtWidgets.QMessageBox.Critical)
+                warning_popup.setWindowIcon(QtGui.QIcon("iconMask.png"))
+                warning_popup.setWindowTitle("Information")
+                warning_popup.setText("Training done.")
+                warning_popup.exec()
             else:
                 warning_popup = QtWidgets.QMessageBox()
                 warning_popup.setIcon(QtWidgets.QMessageBox.Critical)
