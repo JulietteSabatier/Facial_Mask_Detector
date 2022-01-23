@@ -6,97 +6,67 @@ import graphviz
 import pydot
 from importlib import reload
 import os
+import cv2
+import PIL.Image as Image
 
 reload(keras.utils)
 from tensorflow.keras.utils import plot_model
+
 
 class MaskRecognitionModel:
     model: keras.Model
     name: str
 
-    def __init__(self, name_or_path: str, mode:str):
+    def __init__(self, name_or_path: str, mode: str):
         """If called with 'New' as a second parameter, it will define a new model named after the first parameter.\n
         If called with 'Load' as a second parameter, it will load the model at the path given in the first parameter."""
         image_size = (150, 150)
         if mode == "new" or mode == "New":
             self.name = name_or_path
-            self.model = self.define_model(input_shape=image_size + (3,), num_classes=2)
+            self.model = self.define_model(input_shape=image_size + (3,), num_classes=1)
         elif mode == "load" or mode == "Load":
             if os.path.isfile(name_or_path):
                 self.model = self.load_model(name_or_path)
 
-
     # Function to modify for the test
-    def define_model(self, input_shape, num_classes):
-        inputs = keras.Input(shape=input_shape)
-
-        data_augmentation = keras.Sequential(
+    def define_model(self, input_shape: (int, int), num_classes: int):
+        my_model = keras.Sequential(
             [
                 keras.layers.RandomFlip("horizontal"),
                 keras.layers.RandomRotation(0.1),
             ]
         )
 
-        # Image augmentation block
-        x = data_augmentation(inputs)
+        # filters : peu au début puis de plus en plus, faire par *2
+        # kernel_size : (impair, impair) <=3 pour des images < 128x128 et <=7 pour plus grand, baisser la taille
+        # strides : mostly (1,1) default, sometimes (2,2) in replacement of MaxPooling2D
+        # padding : "same" -> volume size equivalent recommended , "valid" -> natural reduce of spacial dimension
 
-        # Entry block
-        x = keras.layers.Rescaling(1.0 / 255)(x)
-        x = keras.layers.Conv2D(32, 3, strides=2, padding="same")(x)
-        x = keras.layers.BatchNormalization()(x)
-        x = keras.layers.Activation("relu")(x)
+        my_model.add(keras.layers.Conv2D(filters=32, kernel_size=(5, 5), padding="same", activation="relu"))
+        my_model.add(keras.layers.MaxPooling2D(pool_size=(2, 2)))
 
-        x = keras.layers.Conv2D(64, 3, padding="same")(x)
-        x = keras.layers.BatchNormalization()(x)
-        x = keras.layers.Activation("relu")(x)
+        my_model.add(keras.layers.Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
+        my_model.add(keras.layers.MaxPooling2D(pool_size=(2, 2)))
 
-        previous_block_activation = x  # Set aside residual
+        my_model.add(keras.layers.Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
+        my_model.add(keras.layers.MaxPooling2D(pool_size=(2, 2)))
+        my_model.add(keras.layers.Dropout(0.25))
 
-        for size in [128, 256, 512, 728]:
-            x = keras.layers.Activation("relu")(x)
-            x = keras.layers.SeparableConv2D(size, 3, padding="same")(x)
-            x = keras.layers.BatchNormalization()(x)
+        my_model.add(keras.layers.Flatten())
+        my_model.add(keras.layers.Dense(num_classes))
+        my_model.add(keras.layers.Activation("sigmoid"))
 
-            x = keras.layers.Activation("relu")(x)
-            x = keras.layers.SeparableConv2D(size, 3, padding="same")(x)
-            x = keras.layers.BatchNormalization()(x)
+        return my_model
 
-            x = keras.layers.MaxPooling2D(3, strides=2, padding="same")(x)
-
-            # Project residual
-            residual = keras.layers.Conv2D(size, 1, strides=2, padding="same")(
-                previous_block_activation
-            )
-            x = keras.layers.add([x, residual])  # Add back residual
-            previous_block_activation = x  # Set aside next residual
-
-        x = keras.layers.SeparableConv2D(1024, 3, padding="same")(x)
-        x = keras.layers.BatchNormalization()(x)
-        x = keras.layers.Activation("relu")(x)
-
-        x = keras.layers.GlobalAveragePooling2D()(x)
-        if num_classes == 2:
-            activation = "sigmoid"
-            units = 1
-        else:
-            activation = "softmax"
-            units = num_classes
-
-        x = keras.layers.Dropout(0.5)(x)
-        outputs = keras.layers.Dense(units, activation=activation)(x)
-        return keras.Model(inputs, outputs)
-
-
-    def load_model(self, model_path:str):
+    def load_model(self, model_path: str):
         """Calls Keras' load_model method and stores the returned result as the current model.
         Literally what loading a model means."""
-        self.name = model_path.split(f"{os.path.sep}")[-1].split(".")[0] # normalement c'est le dernier nom du path, sans extension (même si un model n'a pas d'extension actuellemnt)
+        self.name = model_path.split(f"{os.path.sep}")[-1].split(".")[
+            0]  # normalement c'est le dernier nom du path, sans extension (même si un model n'a pas d'extension actuellemnt)
         return keras.models.load_model(model_path)
 
-
-    def save_model(self, path_save:str):
+    def save_model(self, path_save: str):
         self.model.save(path_save, save_format='h5')
-
 
     def train_model(self, path_train: str, path_valid: str):
         image_size = (150, 150)
@@ -126,22 +96,18 @@ class MaskRecognitionModel:
              ]
         )
 
-        plot_model(self.model, show_shapes=True)
+        #plot_model(self.model, show_shapes=True)
 
         epochs = 20
 
-        callbacks = [
-            keras.callbacks.ModelCheckpoint("save_at_{epoch}.h5"),
-        ]
         self.model.compile(
             optimizer=keras.optimizers.Adam(1e-3),
             loss="binary_crossentropy",
             metrics=["accuracy"],
         )
         self.model.fit(
-            train_ds, epochs=epochs, callbacks=callbacks, validation_data=val_ds,
+            train_ds, epochs=epochs, validation_data=val_ds,
         )
-
 
     def predict(self, filename: str, mode: str):
         score = self.test_image(filename)
@@ -151,9 +117,8 @@ class MaskRecognitionModel:
             else:
                 return "mask"
         elif mode == "probabilities":
-            return("This image is %.2f percent mask and %.2f percent no mask."
-                  % (100 * (1 - score), 100 * score))
-
+            return ("This image is %.2f percent mask and %.2f percent no mask."
+                    % (100 * (1 - score), 100 * score))
 
     def test_image(self, img_path: str):
         # Run with new
@@ -176,6 +141,62 @@ class MaskRecognitionModel:
         # )
         return predictions[0]
 
+    def test_image_detection(self, img_path: str, mode: str):
+
+        image = cv2.imread(img_path)
+        blob = cv2.dnn.blobFromImage(cv2.resize(image, (300, 300)), 1.0, (300, 300), (104.0, 177.0, 123.0))
+        net = cv2.dnn.readNetFromCaffe("architecture.txt", "weights.caffemodel")
+        net.setInput(blob)
+        detections = net.forward()
+        (height, width) = image.shape[:2]
+        for i in range(0, detections.shape[2]):
+            # extract the confidence (i.e., probability) associated with the
+            # prediction
+            confidence = detections[0, 0, i, 2]
+
+            # greater than the minimum confidence
+            if confidence > 0.5:
+                box = detections[0, 0, i, 3:7] * np.array([width, height, width, height])
+                (x1, y1, x2, y2) = box.astype("int")
+
+                if (x1 >= 0 and x2 >= 0 and x1 <= width and x2 <= width
+                        and y1 >= 0 and y2 >= 0 and y1 <= height and y2 <= height):
+
+                    pil_img = Image.open(img_path)
+                    crop_img = Image.Image.crop(pil_img, (x1, y1, x2, y2))
+                    crop_img.save("crop_img.png")
+                    img = keras.preprocessing.image.load_img(
+                        img_path,
+                        target_size=(150, 150)
+                    )
+                    os.remove("crop_img.png")
+                    img_array = tf.expand_dims(img, 0)  # Create batch axis
+                    mask_predict = self.model.predict(img_array)[0]
+                    if mode == "categories":
+                        if mask_predict > 0.5:
+                            result = "no mask"
+                        else:
+                            result = "mask"
+                    elif mode == "probabilities":
+                        print(("This image is %.2f percent mask and %.2f percent no mask."
+                               % (100 * (1 - mask_predict), 100 * mask_predict)))
+
+                    # text = "{:.2f}%".format(confidence * 100) + " ( " + str(y2 - y1) + ", " + str(x2 - x1) + " )"
+                    text = result
+                    y = y1 - 10 if y1 - 10 > 10 else y1 + 10
+
+                    cv2.rectangle(image, (x1, y1), (x2, y2),
+                                  (0, 0, 255), 2)
+                    cv2.putText(image, text, (x1, y),
+                                cv2.LINE_AA, 0.45, (0, 0, 255), 2)
+                # mask_pred = self.predict(crop_img)
+
+                # draw the bounding box of the face along with the associated
+                # probability
+
+        # show the output image
+        cv2.imshow("Output", image)
+        cv2.waitKey(0)
 
     def test_multiple_image(self, path_dataset: str):
         path_sep = os.path.sep
@@ -205,20 +226,17 @@ class MaskRecognitionModel:
         print(f"TP: {TP} // TN: {TN} // FP: {FP} // FN: {FN} // Total: {total}")
         print(f"Accuracy: {accuracy} // Recall: {recall} // Precision: {precision}")
 
-
     # if __name__ == '__main__':
-        # Creer le model
-        # setup_model("C:\\Users\\julie\\Documents\\M1_Project\\test_nnl\\Train",
-        #              "C:\\Users\\julie\\Documents\\M1_Project\\test_nnl\\Validation",
-        #              r"./mask_model")
+    # Creer le model
+    # setup_model("C:\\Users\\julie\\Documents\\M1_Project\\test_nnl\\Train",
+    #              "C:\\Users\\julie\\Documents\\M1_Project\\test_nnl\\Validation",
+    #              r"./mask_model")
 
-        # Prédire une image
-        # predict("C:\\Users\\julie\\Documents\\M1_Project\\NNL_Mask\\Images\\Images from 0 to 99\\maksssksksss4.png",
-        #        "probabilities",
-        #        "C:\\Users\\julie\\Documents\\M1_Project\\NNL_Mask\\Mask_Recognition\\mask_model")
+    # Prédire une image
+    # predict("C:\\Users\\julie\\Documents\\M1_Project\\NNL_Mask\\Images\\Images from 0 to 99\\maksssksksss4.png",
+    #        "probabilities",
+    #        "C:\\Users\\julie\\Documents\\M1_Project\\NNL_Mask\\Mask_Recognition\\mask_model")
 
-        # Prédire plusieurs images, mesures
-        # test_multiple_image("C:\\Users\\julie\\Documents\\M1_Project\\test_nnl\\Validation",
-        #                    "C:\\Users\\julie\\Documents\\M1_Project\\NNL_Mask\\Mask_Recognition\\mask_model")
-
-
+    # Prédire plusieurs images, mesures
+    # test_multiple_image("C:\\Users\\julie\\Documents\\M1_Project\\test_nnl\\Validation",
+    #                    "C:\\Users\\julie\\Documents\\M1_Project\\NNL_Mask\\Mask_Recognition\\mask_model")

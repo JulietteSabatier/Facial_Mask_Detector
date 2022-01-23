@@ -276,6 +276,7 @@ class MenuBarController:
         mode, did_chose = mode_input.getItem(mode_input, "Mode selection", "Mode", ["categories", "probabilities"], editable=False)
         if did_chose:
             result = self.predict_model.predict(img_path, mode)
+            self.predict_model.test_image_detection(img_path, mode)
             result_msg_box = QtWidgets.QMessageBox()
             result_msg_box.setIcon(QtWidgets.QMessageBox.Information)
             result_msg_box.setWindowIcon(QtGui.QIcon("iconMask.png"))

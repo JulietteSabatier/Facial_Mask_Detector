@@ -39,5 +39,5 @@ def read_json_cut_and_store(json_path: str, save_path: str):
 
 
 if __name__ == '__main__':
-    read_json_cut_and_store(r"C:\Users\julie\Documents\M1_Project\NNL_Mask\Project\test\annotations.json",
-                            r"C:\Users\julie\Documents\M1_Project\test")
+    read_json_cut_and_store(r"C:\Users\julie\Documents\M1_Project\NNL_Mask\Project\Maks_Test\annotations.json",
+                            r"C:\Users\julie\Documents\M1_Project\NNL_Mask\dataset\test")
