@@ -30,6 +30,7 @@ class MaskRecognitionModel:
 
     # Function to modify for the test
     def define_model(self, input_shape: (int, int), num_classes: int):
+        """ Define all the layers of the model we want to create """
         my_model = keras.Sequential(
             [
                 keras.layers.RandomFlip("horizontal"),
@@ -96,7 +97,7 @@ class MaskRecognitionModel:
              ]
         )
 
-        #plot_model(self.model, show_shapes=True)
+        # plot_model(self.model, show_shapes=True)
 
         epochs = 20
 
@@ -110,6 +111,9 @@ class MaskRecognitionModel:
         )
 
     def predict(self, filename: str, mode: str):
+        """ Function which predict if the image at the path filename contain a mask or not.
+        Given the mode: probabilities or categories
+        it will return the probabilities of each possibility or the category  """
         score = self.test_image(filename)
         if mode == "categories":
             if score > 0.5:
@@ -121,6 +125,7 @@ class MaskRecognitionModel:
                     % (100 * (1 - score), 100 * score))
 
     def test_image(self, img_path: str):
+        """ Function which return the result of the model we create """
         # Run with new
 
         image_size = (150, 150)
@@ -134,14 +139,15 @@ class MaskRecognitionModel:
 
         predictions = self.model.predict(img_array)
 
-        # score = predictions[0]
-        # print(
-        #    "This image is %.2f percent mask and %.2f percent no mask."
-        #    % (100 * (1 - score), 100 * score)
-        # )
         return predictions[0]
 
-    def test_image_detection(self, img_path: str, mode: str):
+    def image_detection(self, img_path: str, mode: str):
+        """ Function which detect the faces in the given image.
+        After that it crop the founded faces and use the function predict of our model,
+        which give us it's prediction.
+        Given the model it will set a text who give the category or the probabilities of each categories.
+        Then it will print the image with a rectangle where the face is detected
+        and the text with the necessary informations. """
 
         image = cv2.imread(img_path)
         blob = cv2.dnn.blobFromImage(cv2.resize(image, (300, 300)), 1.0, (300, 300), (104.0, 177.0, 123.0))
@@ -150,12 +156,13 @@ class MaskRecognitionModel:
         detections = net.forward()
         (height, width) = image.shape[:2]
         for i in range(0, detections.shape[2]):
+
             # extract the confidence (i.e., probability) associated with the
             # prediction
-            confidence = detections[0, 0, i, 2]
+            prediction = detections[0, 0, i, 2]
 
             # greater than the minimum confidence
-            if confidence > 0.5:
+            if prediction > 0.5:
                 box = detections[0, 0, i, 3:7] * np.array([width, height, width, height])
                 (x1, y1, x2, y2) = box.astype("int")
 
@@ -172,33 +179,30 @@ class MaskRecognitionModel:
                     os.remove("crop_img.png")
                     img_array = tf.expand_dims(img, 0)  # Create batch axis
                     mask_predict = self.model.predict(img_array)[0]
+                    result = ""
                     if mode == "categories":
                         if mask_predict > 0.5:
                             result = "no mask"
                         else:
                             result = "mask"
                     elif mode == "probabilities":
-                        print(("This image is %.2f percent mask and %.2f percent no mask."
-                               % (100 * (1 - mask_predict), 100 * mask_predict)))
+                        result = str(100 * (1 - mask_predict)) \
+                                 + " % mask and " + str(100 * mask_predict) + " % no mask."
 
-                    # text = "{:.2f}%".format(confidence * 100) + " ( " + str(y2 - y1) + ", " + str(x2 - x1) + " )"
-                    text = result
                     y = y1 - 10 if y1 - 10 > 10 else y1 + 10
 
                     cv2.rectangle(image, (x1, y1), (x2, y2),
                                   (0, 0, 255), 2)
-                    cv2.putText(image, text, (x1, y),
-                                cv2.LINE_AA, 0.45, (0, 0, 255), 2)
-                # mask_pred = self.predict(crop_img)
+                    cv2.putText(image, result, (x1, y),
+                                cv2.LINE_AA, 0.35, (0, 0, 255), 2)
 
-                # draw the bounding box of the face along with the associated
-                # probability
-
-        # show the output image
         cv2.imshow("Output", image)
         cv2.waitKey(0)
 
     def test_multiple_image(self, path_dataset: str):
+        """ Given a path of a directory containing 2 directory named 'mask' and 'no_mask'
+        the model will be used to determine if the image contain a mask or not.
+        Given this information it will calculate the TP, TN,FP,FN and the accuracy, recall and precision """
         path_sep = os.path.sep
         list_category = os.listdir(path_dataset)
         TP = 0
@@ -226,17 +230,3 @@ class MaskRecognitionModel:
         print(f"TP: {TP} // TN: {TN} // FP: {FP} // FN: {FN} // Total: {total}")
         print(f"Accuracy: {accuracy} // Recall: {recall} // Precision: {precision}")
 
-    # if __name__ == '__main__':
-    # Creer le model
-    # setup_model("C:\\Users\\julie\\Documents\\M1_Project\\test_nnl\\Train",
-    #              "C:\\Users\\julie\\Documents\\M1_Project\\test_nnl\\Validation",
-    #              r"./mask_model")
-
-    # Prédire une image
-    # predict("C:\\Users\\julie\\Documents\\M1_Project\\NNL_Mask\\Images\\Images from 0 to 99\\maksssksksss4.png",
-    #        "probabilities",
-    #        "C:\\Users\\julie\\Documents\\M1_Project\\NNL_Mask\\Mask_Recognition\\mask_model")
-
-    # Prédire plusieurs images, mesures
-    # test_multiple_image("C:\\Users\\julie\\Documents\\M1_Project\\test_nnl\\Validation",
-    #                    "C:\\Users\\julie\\Documents\\M1_Project\\NNL_Mask\\Mask_Recognition\\mask_model")

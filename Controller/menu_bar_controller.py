@@ -275,14 +275,14 @@ class MenuBarController:
         mode_input = QtWidgets.QInputDialog()
         mode, did_chose = mode_input.getItem(mode_input, "Mode selection", "Mode", ["categories", "probabilities"], editable=False)
         if did_chose:
-            result = self.predict_model.predict(img_path, mode)
-            self.predict_model.test_image_detection(img_path, mode)
+            #result = self.predict_model.predict(img_path, mode)
+            self.predict_model.image_detection(img_path, mode)
             result_msg_box = QtWidgets.QMessageBox()
-            result_msg_box.setIcon(QtWidgets.QMessageBox.Information)
-            result_msg_box.setWindowIcon(QtGui.QIcon("iconMask.png"))
-            result_msg_box.setWindowTitle("Success")
-            result_msg_box.setText(result)
-            result_msg_box.exec()
+            #result_msg_box.setIcon(QtWidgets.QMessageBox.Information)
+            #result_msg_box.setWindowIcon(QtGui.QIcon("iconMask.png"))
+            #result_msg_box.setWindowTitle("Success")
+            #result_msg_box.setText(result)
+            #result_msg_box.exec()
 
     def process_chosen_image(self):
         select_img = QtWidgets.QFileDialog()
