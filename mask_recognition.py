@@ -43,7 +43,7 @@ class MaskRecognitionModel:
         # strides : mostly (1,1) default, sometimes (2,2) in replacement of MaxPooling2D
         # padding : "same" -> volume size equivalent recommended , "valid" -> natural reduce of spacial dimension
 
-        my_model.add(keras.layers.Conv2D(filters=32, kernel_size=(5, 5), padding="same", activation="relu"))
+        my_model.add(keras.layers.Conv2D(filters=32, kernel_size=(3, 3), padding="same", activation="relu"))
         my_model.add(keras.layers.MaxPooling2D(pool_size=(2, 2)))
 
         my_model.add(keras.layers.Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
@@ -51,7 +51,8 @@ class MaskRecognitionModel:
 
         my_model.add(keras.layers.Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
         my_model.add(keras.layers.MaxPooling2D(pool_size=(2, 2)))
-        my_model.add(keras.layers.Dropout(0.25))
+
+        my_model.add(keras.layers.Dropout(0.2))
 
         my_model.add(keras.layers.Flatten())
         my_model.add(keras.layers.Dense(num_classes))
@@ -106,9 +107,30 @@ class MaskRecognitionModel:
             loss="binary_crossentropy",
             metrics=["accuracy"],
         )
-        self.model.fit(
+        history = self.model.fit(
             train_ds, epochs=epochs, validation_data=val_ds,
         )
+
+        acc = history.history['accuracy']
+        val_acc = history.history['val_accuracy']
+        loss = history.history['loss']
+        val_loss = history.history['val_loss']
+
+        epochs_range = range(epochs)
+
+        plt.figure(figsize=(15, 15))
+        plt.subplot(2, 2, 1)
+        plt.plot(epochs_range, acc, label='Training Accuracy')
+        plt.plot(epochs_range, val_acc, label='Validation Accuracy')
+        plt.legend(loc='lower right')
+        plt.title('Training and Validation Accuracy')
+
+        plt.subplot(2, 2, 2)
+        plt.plot(epochs_range, loss, label='Training Loss')
+        plt.plot(epochs_range, val_loss, label='Validation Loss')
+        plt.legend(loc='upper right')
+        plt.title('Training and Validation Loss')
+        plt.show()
 
     def predict(self, filename: str, mode: str):
         """ Function which predict if the image at the path filename contain a mask or not.
