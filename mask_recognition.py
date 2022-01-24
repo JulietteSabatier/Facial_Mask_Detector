@@ -8,9 +8,7 @@ from importlib import reload
 import os
 import cv2
 import PIL.Image as Image
-
 reload(keras.utils)
-from tensorflow.keras.utils import plot_model
 
 
 class MaskRecognitionModel:
@@ -60,6 +58,7 @@ class MaskRecognitionModel:
 
         return my_model
 
+
     def load_model(self, model_path: str):
         """Calls Keras' load_model method and stores the returned result as the current model.
         Literally what loading a model means."""
@@ -100,7 +99,7 @@ class MaskRecognitionModel:
 
         # plot_model(self.model, show_shapes=True)
 
-        epochs = 20
+        epochs = 50
 
         self.model.compile(
             optimizer=keras.optimizers.Adam(1e-3),
@@ -220,35 +219,3 @@ class MaskRecognitionModel:
 
         cv2.imshow("Output", image)
         cv2.waitKey(0)
-
-    def test_multiple_image(self, path_dataset: str):
-        """ Given a path of a directory containing 2 directory named 'mask' and 'no_mask'
-        the model will be used to determine if the image contain a mask or not.
-        Given this information it will calculate the TP, TN,FP,FN and the accuracy, recall and precision """
-        path_sep = os.path.sep
-        list_category = os.listdir(path_dataset)
-        TP = 0
-        TN = 0
-        FP = 0
-        FN = 0
-        total = 0
-        for category in list_category:
-            for image in os.listdir(path_dataset + path_sep + category):
-                total += 1
-                score = self.test_image(path_dataset + path_sep + category + path_sep + image)
-                if category == "mask":
-                    if score <= 0.5:
-                        TP += 1
-                    else:
-                        FP += 1
-                if category == "no_mask":
-                    if score > 0.5:
-                        TN += 1
-                    else:
-                        FN += 1
-        accuracy = (TP + TN) / total
-        recall = TP / (TP + TN)
-        precision = TP / (TP + FP)
-        print(f"TP: {TP} // TN: {TN} // FP: {FP} // FN: {FN} // Total: {total}")
-        print(f"Accuracy: {accuracy} // Recall: {recall} // Precision: {precision}")
-
