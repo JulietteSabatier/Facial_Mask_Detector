@@ -67,9 +67,13 @@ class MaskRecognitionModel:
         return keras.models.load_model(model_path)
 
     def save_model(self, path_save: str):
+        """ Save the model on the given path """
         self.model.save(path_save, save_format='h5')
 
     def train_model(self, path_train: str, path_valid: str):
+        """ Train the model with the given data set, the path of the directory used to train the model and the path
+        of the directory used for the validation during the training of the model"""
+
         image_size = (150, 150)
         batch_size = 64
 
@@ -97,8 +101,6 @@ class MaskRecognitionModel:
              ]
         )
 
-        # plot_model(self.model, show_shapes=True)
-
         epochs = 50
 
         self.model.compile(
@@ -110,6 +112,7 @@ class MaskRecognitionModel:
             train_ds, epochs=epochs, validation_data=val_ds,
         )
 
+        # Create graphics about the accuracy and the loss of the model
         acc = history.history['accuracy']
         val_acc = history.history['val_accuracy']
         loss = history.history['loss']
@@ -139,6 +142,7 @@ class MaskRecognitionModel:
         """ Function which predict if the image at the path filename contain a mask or not.
         Given the mode: probabilities or categories
         it will return the probabilities of each possibility or the category  """
+        
         score = self.test_image(filename)
         if mode == "categories":
             if score > 0.5:
@@ -174,6 +178,7 @@ class MaskRecognitionModel:
         Then it will print the image with a rectangle where the face is detected
         and the text with the necessary informations. """
 
+        # Detection of face in the images
         image = cv2.imread(img_path)
         blob = cv2.dnn.blobFromImage(cv2.resize(image, (300, 300)), 1.0, (300, 300), (104.0, 177.0, 123.0))
         net = cv2.dnn.readNetFromCaffe("architecture.txt", "weights.caffemodel")
@@ -182,21 +187,25 @@ class MaskRecognitionModel:
         (height, width) = image.shape[:2]
         for i in range(0, detections.shape[2]):
 
-            # extract the confidence (i.e., probability) associated with the
+            # extract the probability associated with the
             # prediction
             prediction = detections[0, 0, i, 2]
 
-            # greater than the minimum confidence
+            # only get the detection if the prediction is sur at 50% or more
             if prediction > 0.5:
                 box = detections[0, 0, i, 3:7] * np.array([width, height, width, height])
                 (x1, y1, x2, y2) = box.astype("int")
 
+                # only use the boxes which are inside the image
                 if (x1 >= 0 and x2 >= 0 and x1 <= width and x2 <= width
                         and y1 >= 0 and y2 >= 0 and y1 <= height and y2 <= height):
 
+                    # crop the face
                     pil_img = Image.open(img_path)
                     crop_img = Image.Image.crop(pil_img, (x1, y1, x2, y2))
                     crop_img.save("crop_img.png")
+
+                    # predict if the face as a mask on it
                     img = keras.preprocessing.image.load_img(
                         img_path,
                         target_size=(150, 150)
@@ -204,6 +213,7 @@ class MaskRecognitionModel:
                     os.remove("crop_img.png")
                     img_array = tf.expand_dims(img, 0)  # Create batch axis
                     mask_predict = self.model.predict(img_array)[0]
+                    # set the text given the result of the prediction of mask
                     result = ""
                     if mode == "categories":
                         if mask_predict > 0.5:
@@ -215,11 +225,12 @@ class MaskRecognitionModel:
                                  + " % mask and " + str(100 * mask_predict) + " % no mask."
 
                     y = y1 - 10 if y1 - 10 > 10 else y1 + 10
-
+                    # put the box and the result on the image
                     cv2.rectangle(image, (x1, y1), (x2, y2),
                                   (0, 0, 255), 2)
                     cv2.putText(image, result, (x1, y),
                                 cv2.LINE_AA, 0.35, (0, 0, 255), 2)
 
+        # show the image
         cv2.imshow("Output", image)
         cv2.waitKey(0)
