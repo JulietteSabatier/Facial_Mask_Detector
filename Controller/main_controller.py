@@ -75,6 +75,10 @@ class MainController:
             self.menu_bar_controller.save_annotations
         )
 
+        self.main_view.menu_bar.crop_annotation.triggered.connect(
+            self.menu_bar_controller.crop_annotations
+        )
+
         # Project
         self.main_view.menu_bar.save_project.triggered.connect(
             lambda: self.menu_bar_controller.save_project(self.popup_open_project_controller.project)
@@ -82,6 +86,31 @@ class MainController:
 
         self.main_view.menu_bar.close_project.triggered.connect(
             lambda: self.menu_bar_controller.close_project(self.popup_open_project_controller.project)
+        )
+
+        # Model
+        self.main_view.menu_bar.new_model.triggered.connect(
+            lambda: self.menu_bar_controller.create_model()
+        )
+
+        self.main_view.menu_bar.load_model.triggered.connect(
+            lambda: self.menu_bar_controller.load_model()
+        )
+
+        self.main_view.menu_bar.save_model.triggered.connect(
+            lambda: self.menu_bar_controller.save_model()
+        )
+
+        self.main_view.menu_bar.train.triggered.connect(
+            lambda: self.menu_bar_controller.train_model()
+        )
+
+        self.main_view.menu_bar.process_from_current.triggered.connect(
+            lambda: self.menu_bar_controller.process_image(self.main_view.image_widget.scene.getCurrentAnnotateImage().path)
+        )
+
+        self.main_view.menu_bar.process_from_other.triggered.connect(
+            lambda: self.menu_bar_controller.process_chosen_image()
         )
 
     def set_image_widget_action(self):

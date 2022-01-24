@@ -55,6 +55,7 @@ class MainWindow(QtWidgets.QMainWindow):  # main window
 
     def closeEvent(self, event:QtGui.QCloseEvent) -> None:
         message_box = QtWidgets.QMessageBox()
+        message_box.setWindowIcon(QtGui.QIcon("iconMask.png"))
         message_box.setText("You may have unsaved changes, are you sure you want to close the application ?")
         message_box.addButton(QtWidgets.QMessageBox.Cancel)
         message_box.addButton(QtWidgets.QMessageBox.Close)
