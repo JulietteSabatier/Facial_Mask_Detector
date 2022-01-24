@@ -8,9 +8,7 @@ from importlib import reload
 import os
 import cv2
 import PIL.Image as Image
-
 reload(keras.utils)
-from tensorflow.keras.utils import plot_model
 
 
 class MaskRecognitionModel:
@@ -60,6 +58,7 @@ class MaskRecognitionModel:
 
         return my_model
 
+
     def load_model(self, model_path: str):
         """Calls Keras' load_model method and stores the returned result as the current model.
         Literally what loading a model means."""
@@ -68,9 +67,13 @@ class MaskRecognitionModel:
         return keras.models.load_model(model_path)
 
     def save_model(self, path_save: str):
+        """ Save the model on the given path """
         self.model.save(path_save, save_format='h5')
 
     def train_model(self, path_train: str, path_valid: str):
+        """ Train the model with the given data set, the path of the directory used to train the model and the path
+        of the directory used for the validation during the training of the model"""
+
         image_size = (150, 150)
         batch_size = 64
 
@@ -98,9 +101,7 @@ class MaskRecognitionModel:
              ]
         )
 
-        # plot_model(self.model, show_shapes=True)
-
-        epochs = 20
+        epochs = 50
 
         self.model.compile(
             optimizer=keras.optimizers.Adam(1e-3),
@@ -111,6 +112,7 @@ class MaskRecognitionModel:
             train_ds, epochs=epochs, validation_data=val_ds,
         )
 
+        # Create graphics about the accuracy and the loss of the model
         acc = history.history['accuracy']
         val_acc = history.history['val_accuracy']
         loss = history.history['loss']
@@ -140,6 +142,7 @@ class MaskRecognitionModel:
         """ Function which predict if the image at the path filename contain a mask or not.
         Given the mode: probabilities or categories
         it will return the probabilities of each possibility or the category  """
+        
         score = self.test_image(filename)
         if mode == "categories":
             if score > 0.5:
@@ -175,6 +178,7 @@ class MaskRecognitionModel:
         Then it will print the image with a rectangle where the face is detected
         and the text with the necessary informations. """
 
+        # Detection of face in the images
         image = cv2.imread(img_path)
         blob = cv2.dnn.blobFromImage(cv2.resize(image, (300, 300)), 1.0, (300, 300), (104.0, 177.0, 123.0))
         net = cv2.dnn.readNetFromCaffe("architecture.txt", "weights.caffemodel")
@@ -183,21 +187,25 @@ class MaskRecognitionModel:
         (height, width) = image.shape[:2]
         for i in range(0, detections.shape[2]):
 
-            # extract the confidence (i.e., probability) associated with the
+            # extract the probability associated with the
             # prediction
             prediction = detections[0, 0, i, 2]
 
-            # greater than the minimum confidence
+            # only get the detection if the prediction is sur at 50% or more
             if prediction > 0.5:
                 box = detections[0, 0, i, 3:7] * np.array([width, height, width, height])
                 (x1, y1, x2, y2) = box.astype("int")
 
+                # only use the boxes which are inside the image
                 if (x1 >= 0 and x2 >= 0 and x1 <= width and x2 <= width
                         and y1 >= 0 and y2 >= 0 and y1 <= height and y2 <= height):
 
+                    # crop the face
                     pil_img = Image.open(img_path)
                     crop_img = Image.Image.crop(pil_img, (x1, y1, x2, y2))
                     crop_img.save("crop_img.png")
+
+                    # predict if the face as a mask on it
                     img = keras.preprocessing.image.load_img(
                         img_path,
                         target_size=(150, 150)
@@ -205,6 +213,7 @@ class MaskRecognitionModel:
                     os.remove("crop_img.png")
                     img_array = tf.expand_dims(img, 0)  # Create batch axis
                     mask_predict = self.model.predict(img_array)[0]
+                    # set the text given the result of the prediction of mask
                     result = ""
                     if mode == "categories":
                         if mask_predict > 0.5:
@@ -216,43 +225,12 @@ class MaskRecognitionModel:
                                  + " % mask and " + str(100 * mask_predict) + " % no mask."
 
                     y = y1 - 10 if y1 - 10 > 10 else y1 + 10
-
+                    # put the box and the result on the image
                     cv2.rectangle(image, (x1, y1), (x2, y2),
                                   (0, 0, 255), 2)
                     cv2.putText(image, result, (x1, y),
                                 cv2.LINE_AA, 0.35, (0, 0, 255), 2)
 
+        # show the image
         cv2.imshow("Output", image)
         cv2.waitKey(0)
-
-    def test_multiple_image(self, path_dataset: str):
-        """ Given a path of a directory containing 2 directory named 'mask' and 'no_mask'
-        the model will be used to determine if the image contain a mask or not.
-        Given this information it will calculate the TP, TN,FP,FN and the accuracy, recall and precision """
-        path_sep = os.path.sep
-        list_category = os.listdir(path_dataset)
-        TP = 0
-        TN = 0
-        FP = 0
-        FN = 0
-        total = 0
-        for category in list_category:
-            for image in os.listdir(path_dataset + path_sep + category):
-                total += 1
-                score = self.test_image(path_dataset + path_sep + category + path_sep + image)
-                if category == "mask":
-                    if score <= 0.5:
-                        TP += 1
-                    else:
-                        FP += 1
-                if category == "no_mask":
-                    if score > 0.5:
-                        TN += 1
-                    else:
-                        FN += 1
-        accuracy = (TP + TN) / total
-        recall = TP / (TP + TN)
-        precision = TP / (TP + FP)
-        print(f"TP: {TP} // TN: {TN} // FP: {FP} // FN: {FN} // Total: {total}")
-        print(f"Accuracy: {accuracy} // Recall: {recall} // Precision: {precision}")
-

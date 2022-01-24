@@ -214,7 +214,7 @@ class MenuBarController:
         model_path = dialog_window.getOpenFileName(dialog_window,
                                                    "Select Model",
                                                    "Images")
-        if model_path is not None:
+        if model_path[0] != "":
             self.predict_model = MaskRecognitionModel(model_path[0], "Load")
             self.main_view.menu_bar.train.setDisabled(False)
             self.main_view.menu_bar.process.setDisabled(False)
@@ -257,12 +257,12 @@ class MenuBarController:
             if os.path.isdir(train_path) and os.path.isdir(validation_path):
                 self.predict_model.train_model(train_path, validation_path)
                 warning_popup = QtWidgets.QMessageBox()
-                warning_popup.setIcon(QtWidgets.QMessageBox.Critical)
+                warning_popup.setIcon(QtWidgets.QMessageBox.Information)
                 warning_popup.setWindowIcon(QtGui.QIcon("iconMask.png"))
                 warning_popup.setWindowTitle("Information")
                 warning_popup.setText("Training done.")
                 warning_popup.exec()
-            else:
+            elif selected_dir:
                 warning_popup = QtWidgets.QMessageBox()
                 warning_popup.setIcon(QtWidgets.QMessageBox.Critical)
                 warning_popup.setWindowIcon(QtGui.QIcon("iconMask.png"))
@@ -275,14 +275,7 @@ class MenuBarController:
         mode_input = QtWidgets.QInputDialog()
         mode, did_chose = mode_input.getItem(mode_input, "Mode selection", "Mode", ["categories", "probabilities"], editable=False)
         if did_chose:
-            #result = self.predict_model.predict(img_path, mode)
             self.predict_model.image_detection(img_path, mode)
-            result_msg_box = QtWidgets.QMessageBox()
-            #result_msg_box.setIcon(QtWidgets.QMessageBox.Information)
-            #result_msg_box.setWindowIcon(QtGui.QIcon("iconMask.png"))
-            #result_msg_box.setWindowTitle("Success")
-            #result_msg_box.setText(result)
-            #result_msg_box.exec()
 
     def process_chosen_image(self):
         select_img = QtWidgets.QFileDialog()
@@ -291,5 +284,5 @@ class MenuBarController:
                                               "Images",
                                               "Image Files (*.png *.jpg *.bpm)")
 
-        if img_path is not None:
+        if img_path[0] != "":
             self.process_image(img_path[0])
