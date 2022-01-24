@@ -262,7 +262,7 @@ class MenuBarController:
                 warning_popup.setWindowTitle("Information")
                 warning_popup.setText("Training done.")
                 warning_popup.exec()
-            else:
+            elif selected_dir:
                 warning_popup = QtWidgets.QMessageBox()
                 warning_popup.setIcon(QtWidgets.QMessageBox.Critical)
                 warning_popup.setWindowIcon(QtGui.QIcon("iconMask.png"))
